@@ -7,6 +7,8 @@ Piccoli giochi e sciocchezze da fare in compagnia o da condividere. Sito statico
 ```
 index.html          home con tutti i giochi
 tombola/            Tombola (tabellone, cartelle con codice, montepremi)
+parola/             Parola in fronte (telefono sulla fronte, inclinazione)
+shared/mazzi.js     categorie personalizzate comuni ai giochi di parole
 impostore/          L'Impostore (gioco della parola segreta, passa il telefono)
 stanza/             Trova una stanza a Bologna (gioco satirico)
 treni/              Quanto ti hanno rubato i treni (calcolatore)

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Parola in fronte: il gioco del telefono sulla fronte · Bazzecole</title>
+<meta name="description" content="Parola in fronte, gratis e senza app: metti il telefono sulla fronte, gli altri ti fanno indovinare. Inclina giù se indovini, su per passare. Categorie italiane, squadre e categorie personalizzate.">
+<meta property="og:title" content="Parola in fronte: indovina la parola che hai sulla fronte">
+<meta property="og:description" content="Gratis, senza app, con categorie italiane e le vostre parole.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#2340A0">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+/* VOICE: il presentatore di un quiz alla festa: veloce, caciarone, chiaro
+   IDEA: il telefono diventa un cartellino da fronte: tutto deve leggersi da tre metri
+   PICTURE: il telefono orizzontale con la parola, le frecce giù per giusto e su per passo
+   COLOUR and TYPE: 60 blu cobalto, 30 crema, 10 corallo per le azioni; verde e ambra solo per giusto e passo; Alfa Slab One + Figtree
+   LAYOUT: impostazioni in una colonna; in gioco schermo intero con la parola enorme al centro */
+:root{color-scheme:light dark;
+ --bg:light-dark(#2340A0,#14245E);--bg2:light-dark(#1C3488,#0F1C4A);
+ --ink:#FFF8EC;--soft:light-dark(#CAD5FF,#A9B6E6);
+ --card:#FFF8EC;--cink:#1B1F3A;--csoft:#5A5F7D;
+ --acc:#FF6B4A;--acc2:#C9472B;--ok:#1FA971;--pass:#F5A524;
+ --mz-bg:#FFF8EC;--mz-ink:#1B1F3A;--mz-acc:#2340A0;--mz-acc-ink:#FFF8EC;--mz-soft:#5A5F7D;--mz-line:#D9D3C4}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.55 Figtree,system-ui,sans-serif;overflow-x:clip}
+[hidden]{display:none!important}
+.wrap{max-width:860px;margin:0 auto;padding-left:max(4vw,16px);padding-right:max(4vw,16px)}
+.top{padding-top:14px;padding-bottom:14px}
+.brand{font:20px/1 'Alfa Slab One',serif;color:var(--card);text-decoration:none}
+h1{font:clamp(44px,10vw,76px)/1 'Alfa Slab One',serif;margin:6px 0 0}
+h2{font:400 clamp(24px,5vw,30px)/1.15 'Alfa Slab One',serif;margin:0 0 12px}
+p{margin:0}
+.lede{color:var(--soft);font-size:clamp(18px,2.4vw,20px);margin-top:12px;max-width:58ch}
+button{font:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--acc);outline-offset:3px}
+.hero{display:grid;gap:18px;padding-bottom:26px}
+.hero svg{width:100%;max-width:560px;height:auto;justify-self:center}
+.panel{background:var(--bg2);border-radius:20px;padding:clamp(16px,3vw,24px);margin-bottom:18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid rgba(255,248,236,.45);background:transparent;color:var(--ink);border-radius:999px;padding:8px 14px;font-weight:700;font-size:16px;min-height:44px;transition:background-color .15s ease-out}
+.chip[aria-pressed=true]{background:var(--card);border-color:var(--card);color:var(--cink)}
+.chip.new{border-style:dashed}
+.mine{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
+.mine .lbl{font-weight:700;font-size:15px;color:var(--soft);width:100%}
+.cc{display:inline-flex;align-items:center}
+.edit{border:0;background:none;color:var(--soft);font:600 14px Figtree,sans-serif;text-decoration:underline;padding:10px 8px;min-height:44px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px 16px;padding:12px 0;flex-wrap:wrap}
+.row+.row{border-top:1px solid rgba(255,248,236,.14)}
+.row .lb{font-weight:700}
+.row .lb small{display:block;font-weight:400;color:var(--soft);font-size:15px}
+.seg{display:flex;background:rgba(0,0,0,.22);border-radius:12px;padding:4px;gap:4px;flex-wrap:wrap}
+.seg button{border:0;border-radius:9px;background:transparent;color:var(--ink);font-weight:700;font-size:16px;padding:8px 12px;min-height:42px}
+.seg button[aria-pressed=true]{background:var(--card);color:var(--cink)}
+.sw{appearance:none;width:52px;height:32px;border-radius:99px;background:rgba(0,0,0,.3);position:relative;margin:0;cursor:pointer;flex:none}
+.sw::after{content:"";position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:50%;background:var(--ink);transition:transform .15s ease-out}
+.sw:checked{background:var(--acc)}.sw:checked::after{transform:translateX(20px)}
+.teams{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:10px;width:100%}
+.teams input{font:700 17px Figtree,sans-serif;padding:10px 12px;border-radius:12px;border:0;background:var(--card);color:var(--cink);min-height:48px;width:100%}
+.score{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:10px;margin-bottom:18px}
+.score div{background:var(--card);color:var(--cink);border-radius:16px;padding:14px 16px;border:3px solid transparent}
+.score div.turn{border-color:var(--acc)}
+.score span{display:block;font-size:15px;color:var(--csoft);font-weight:600}
+.score b{font:34px/1.1 'Alfa Slab One',serif}
+.go{width:100%;border:0;border-radius:16px;background:var(--acc);color:#fff;font:24px/1 'Alfa Slab One',serif;padding:20px;min-height:66px;box-shadow:0 5px 0 var(--acc2);transition:transform .15s ease-out,box-shadow .15s ease-out}
+.go:active{transform:translateY(3px);box-shadow:0 2px 0 var(--acc2)}
+.go.alt{background:var(--card);color:var(--cink);box-shadow:0 5px 0 rgba(0,0,0,.25)}
+.err{color:var(--pass);font-weight:700;min-height:1.5em;margin:10px 0}
+details{color:var(--soft);margin-top:20px}
+summary{color:var(--ink);font-weight:700;cursor:pointer;min-height:44px;display:flex;align-items:center}
+details ul{padding-left:1.2em;margin:0}details li{margin:6px 0}
+/* riepilogo */
+.big{font:clamp(64px,16vw,110px)/1 'Alfa Slab One',serif}
+.list{list-style:none;padding:0;margin:16px 0;display:grid;gap:6px}
+.list li{display:flex;justify-content:space-between;gap:10px;background:var(--bg2);border-radius:12px;padding:10px 14px;font-weight:700}
+.list li span{font-weight:700;font-size:15px;white-space:nowrap}
+.list .y span{color:var(--ok)}.list .n span{color:var(--pass)}
+/* gioco a schermo intero */
+.play{position:fixed;inset:0;z-index:30;background:var(--bg);color:var(--ink);display:grid;grid-template-rows:auto 1fr auto;user-select:none;-webkit-user-select:none;touch-action:manipulation;transition:background-color .15s ease-out;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+.play.ok{background:var(--ok)}.play.pass{background:var(--pass);color:var(--cink)}
+.ptop{display:flex;align-items:center;gap:12px;padding:12px 16px}
+.tbar{flex:1;height:10px;border-radius:9px;background:rgba(0,0,0,.25);overflow:hidden}
+.tbar s{display:block;height:100%;background:var(--card);transform-origin:left}
+.secs{font:22px/1 'Alfa Slab One',serif;min-width:2.2ch;text-align:right;font-variant-numeric:tabular-nums}
+.quit{border:0;background:rgba(0,0,0,.25);color:inherit;border-radius:10px;padding:8px 12px;font-weight:700;font-size:15px;min-height:40px}
+.mid{display:grid;place-items:center;text-align:center;padding:0 4vw;overflow:hidden;position:relative}
+.word{font-family:'Alfa Slab One',serif;line-height:1.02;max-width:94vw;overflow-wrap:normal;word-break:normal;hyphens:none}
+.word.pop{animation:pop .22s ease-out}
+@keyframes pop{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:none}}
+.sub{font-size:clamp(16px,3vw,22px);font-weight:700;opacity:.85;margin-top:10px}
+.pbot{display:flex;justify-content:center;gap:10px;padding:10px 16px 16px;font-weight:700;font-size:15px;opacity:.85}
+.taps{position:absolute;inset:0;display:grid;grid-template-columns:1fr 1fr}
+.taps button{border:0;background:transparent;color:inherit;display:flex;align-items:flex-end;justify-content:center;padding-bottom:16px;font:700 18px Figtree,sans-serif;opacity:.9}
+.taps button:first-child{border-right:2px dashed rgba(255,248,236,.25)}
+footer{color:var(--soft);font-size:15px;padding:30px 0 40px}footer a{color:inherit}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap top"><a class="brand" href="/">Bazzecole</a></div>
+
+<main class="wrap">
+<section id="setup">
+  <div class="hero">
+    <div>
+      <h1>Parola in fronte</h1>
+      <p class="lede">Metti il telefono sulla fronte, girato verso gli altri: loro ti fanno indovinare la parola senza dirla. Inclina in giù se indovini, in su per passare.</p>
+    </div>
+    <svg viewBox="0 0 560 230" role="img" aria-label="Il telefono orizzontale con la parola Giraffa: inclinalo giù se indovini, su per passare">
+      <g transform="rotate(-4 280 118)">
+        <rect x="120" y="52" width="320" height="140" rx="24" fill="#0F1C4A"/>
+        <rect x="134" y="64" width="292" height="116" rx="14" fill="#FFF8EC"/>
+        <text x="280" y="136" text-anchor="middle" font-family="Alfa Slab One, Georgia, serif" font-size="46" fill="#1B1F3A">Giraffa</text>
+      </g>
+      <path d="M62 70v92m0 0-18-20m18 20 18-20" stroke="#1FA971" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <text x="62" y="200" text-anchor="middle" font-family="Figtree, sans-serif" font-weight="800" font-size="22" fill="#FFF8EC">Giù: giusto</text>
+      <path d="M498 162V70m0 0-18 20m18-20 18 20" stroke="#F5A524" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <text x="498" y="200" text-anchor="middle" font-family="Figtree, sans-serif" font-weight="800" font-size="22" fill="#FFF8EC">Su: passo</text>
+    </svg>
+  </div>
+
+  <div class="score" id="score" hidden></div>
+
+  <div class="panel">
+    <h2>Categorie</h2>
+    <div class="chips" id="cats"></div>
+    <div class="mine" id="mine"></div>
+    <p class="err" id="ctoast" role="status" style="color:var(--card);min-height:0;margin:10px 0 0"></p>
+  </div>
+
+  <div class="panel">
+    <div class="row"><span class="lb">Durata del turno</span><div class="seg" id="dur"></div></div>
+    <div class="row"><span class="lb">Comandi<small>Se il telefono non sente l'inclinazione, si gioca toccando.</small></span><div class="seg" id="mode"><button data-m="tilt">Inclina</button><button data-m="tap">Tocca</button></div></div>
+    <div class="row"><label class="lb" for="teamsw">Gioca a squadre<small>I punti si sommano turno dopo turno.</small></label><input type="checkbox" class="sw" id="teamsw"></div>
+    <div class="row" id="teamrow" hidden><div class="teams"><input id="t0" maxlength="20" aria-label="Nome squadra 1"><input id="t1" maxlength="20" aria-label="Nome squadra 2"></div></div>
+    <div class="row"><label class="lb" for="sound">Suoni</label><input type="checkbox" class="sw" id="sound"></div>
+    <div class="row"><label class="lb" for="inv">Inverti giù e su<small>Solo se il tuo telefono li scambia.</small></label><input type="checkbox" class="sw" id="inv"></div>
+  </div>
+
+  <p class="err" id="err" role="alert"></p>
+  <button class="go" id="start">Gioca</button>
+  <details>
+    <summary>Come si gioca</summary>
+    <ul>
+      <li>Chi indovina tiene il telefono sulla fronte, in orizzontale, con lo schermo verso gli altri.</li>
+      <li>Gli altri descrivono, mimano o canticchiano la parola, senza dirla.</li>
+      <li>Indovinata? Inclina il telefono in giù. Troppo difficile? Inclinalo in su e passa alla prossima.</li>
+      <li>Quando finisce il tempo vedete le parole indovinate e quelle passate. A squadre, il telefono passa all'altra squadra.</li>
+      <li>Con "Crea la tua categoria" potete giocare con i nomi dei parenti, le battute del gruppo o i prof del corso.</li>
+    </ul>
+  </details>
+</section>
+
+<section id="summary" hidden>
+  <p class="lede" id="sumwho" style="margin:0 0 6px"></p>
+  <p class="big" id="sumpts"></p>
+  <p id="sumtxt" style="font-weight:700;font-size:20px"></p>
+  <ul class="list" id="sumlist"></ul>
+  <div class="score" id="score2" hidden></div>
+  <button class="go" id="again" style="margin-bottom:12px">Gioca ancora</button>
+  <button class="go alt" id="back">Cambia impostazioni</button>
+</section>
+</main>
+<div class="wrap"><footer>Fatto a Bologna. Altri giochi su <a href="/">Bazzecole</a>. <a href="/privacy/">Privacy</a>. <a href="https://www.paypal.me/DavideMazza626" target="_blank" rel="noopener">Offrimi un caffè</a></footer></div>
+
+<div class="play" id="play" hidden>
+  <div class="ptop"><button class="quit" id="quit">Esci</button><div class="tbar"><s id="tbar"></s></div><span class="secs" id="secs"></span></div>
+  <div class="mid" id="mid">
+    <div><div class="word" id="word"></div><p class="sub" id="sub"></p></div>
+    <div class="taps" id="taps" hidden><button id="tpass">Passo</button><button id="tok">Giusto</button></div>
+  </div>
+  <div class="pbot" id="pbot"></div>
+</div>
+
+<script src="/shared/mazzi.js"></script>
+<script>
+{
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const store={get(k,d){try{const v=localStorage.getItem('bz-pif-'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem('bz-pif-'+k,JSON.stringify(v))}catch(e){}}};
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+
+const WORDS={
+ 'Da mimare':['Lavare i piatti','Fare surf','Pescare','Ballare il liscio','Cambiare un pannolino','Montare un mobile','Guidare un autobus','Fare yoga','Sciare','Dirigere un\'orchestra','Mungere una mucca','Truccarsi','Fare un selfie','Giocare a bowling','Cercare le chiavi','Stirare','Remare','Impastare la pizza','Scalare una montagna','Suonare la batteria','Pattinare','Stendere il bucato','Tirare con l\'arco','Andare a cavallo','Dormire in treno','Rincorrere l\'autobus','Aprire un regalo','Brindare','Fare il caffè con la moka','Cercare campo col telefono'],
+ 'Animali':['Giraffa','Pinguino','Canguro','Polpo','Pavone','Bradipo','Coccodrillo','Gorilla','Fenicottero','Scoiattolo','Ornitorinco','Cammello','Tartaruga','Delfino','Gufo','Riccio','Lumaca','Zanzara','Elefante','Leone','Struzzo','Koala','Pipistrello','Granchio','Medusa','Formichiere','Panda','Lupo','Cavalluccio marino','Gallina'],
+ 'Cibo':['Lasagne','Tortellini','Mortadella','Pizza margherita','Carbonara','Arancino','Tiramisù','Piadina','Cannolo','Polenta','Panettone','Gelato','Spaghetti','Parmigiano','Focaccia','Cotoletta','Risotto','Bruschetta','Cornetto','Supplì','Crescentina','Gnocchi','Pesto','Zampone','Lenticchie','Torrone','Ragù','Burrata','Sushi','Kebab'],
+ 'Personaggi':['Garibaldi','Dante Alighieri','Leonardo da Vinci','Cleopatra','Napoleone','Giulio Cesare','Marco Polo','Cristoforo Colombo','Galileo Galilei','Albert Einstein','Mozart','Michelangelo','Marie Curie','Romolo e Remo','Nerone','Re Artù','Pinocchio','Cappuccetto Rosso','Cenerentola','Biancaneve','Peter Pan','Sherlock Holmes','Dracula','Frankenstein','Robin Hood','Ulisse','Babbo Natale','La Befana','Il Gatto con gli stivali','Alice nel paese delle meraviglie'],
+ 'Natale e Capodanno':['Panettone','Tombola','Presepe','Renna','Cenone','Brindisi','Fuochi d\'artificio','Conto alla rovescia','Lenticchie','Cotechino','Spumante','Mutande rosse','Vischio','Pupazzo di neve','Regalo riciclato','Calendario dell\'avvento','Slitta','Albero di Natale','Stella cometa','Pandoro','Tredicesima','Trenino di Capodanno','Buoni propositi','Calza della Befana','Mercatino','Messa di mezzanotte','Maglione brutto','Torrone','Babbo Natale','Botti'],
+ 'Luoghi':['Spiaggia','Ospedale','Aeroporto','Supermercato','Palestra','Biblioteca','Stazione','Discoteca','Museo','Stadio','Farmacia','Campeggio','Autogrill','Zoo','Luna park','Piscina','Cinema','Sala d\'attesa','Ascensore','Torre di Pisa','Colosseo','Venezia','Polo Nord','Deserto','Giungla','Vulcano','Castello','Prigione','Nave da crociera','Mercato'],
+ 'Mestieri':['Idraulico','Dentista','Pompiere','Cuoco','Insegnante','Astronauta','Avvocato','Barista','Postino','Pilota','Influencer','Elettricista','Infermiere','Muratore','Fotografo','Notaio','Vigile','Panettiere','Programmatore','Giardiniere','Parrucchiere','Veterinario','Mago','Bagnino','Sommelier','Tassista','Chirurgo','Domatore di leoni','Spazzacamino','Arbitro'],
+ 'Bologna':['Portici','Due Torri','Nettuno','San Luca','Piazza Maggiore','Tortellino','Osteria','Fuorisede','Via Zamboni','Montagnola','Bolognina','Archiginnasio','Garisenda','Santo Stefano','Crescentina','Mortadella','Tram','Pratello','Piazza Verdi','Canale delle Moline','Asinelli','Lucio Dalla','Ragù','Sala Borsa','Quadrilatero','Giardini Margherita','Finestrella di via Piella','Stanza singola','Bici rubata','Aperitivo'],
+ 'Anni 2000':['Tamagotchi','MSN','Nokia 3310','Floppy disk','Lettore MP3','Videonoleggio','Suoneria polifonica','Webcam','Walkman','Fotocamera usa e getta','Squillo','Masterizzatore','Album di figurine','Diario segreto','Videocassetta','Game Boy','Chat','Smalto glitter','Pokémon','Lucidalabbra','Messaggino da 160 caratteri','Modem 56k','Cd masterizzato','Polaroid','Fermaglio a farfalla','Pantaloni a zampa','Blog','Squillo e riattacca','Gelato al puffo','Carta prepagata del telefono'],
+ 'Sport':['Calcio','Tennis','Nuoto','Sci','Pallavolo','Ciclismo','Boxe','Golf','Scherma','Padel','Formula 1','Basket','Rugby','Surf','Maratona','Ginnastica','Bowling','Biliardo','Pesca','Arrampicata','Curling','Salto con l\'asta','Sumo','Canottaggio','Pattinaggio artistico','Bocce','Calcio balilla','Ping pong','Equitazione','Tuffi']
+};
+const DURS=[45,60,90,120];
+
+let S={cats:store.get('cats',['Natale e Capodanno','Da mimare','Cibo']),dur:store.get('dur',60),mode:store.get('mode','tilt'),teams:store.get('teams',false),names:store.get('names',['Squadra rossa','Squadra blu']),pts:store.get('pts',[0,0]),turn:store.get('turn',0),sound:store.get('sound',true),inv:store.get('inv',false)};
+function save(){for(const k of['cats','dur','mode','teams','names','pts','turn','sound','inv'])store.set(k,S[k])}
+
+/* ---------- categorie (anche personalizzate) ---------- */
+const decks=()=>window.BzMazzi?BzMazzi.load():[];
+function catWords(c){if(c.startsWith('c:')){const d=decks().find(x=>'c:'+x.id===c);return d?d.words:[]}return WORDS[c]||[]}
+function catName(c){if(c.startsWith('c:')){const d=decks().find(x=>'c:'+x.id===c);return d?d.name:''}return c}
+function renderCats(){
+  const ds=decks();S.cats=S.cats.filter(c=>!c.startsWith('c:')||ds.some(d=>'c:'+d.id===c));
+  $('cats').innerHTML=Object.keys(WORDS).map(c=>`<button class="chip" aria-pressed="${S.cats.includes(c)}" data-c="${esc(c)}">${esc(c)}</button>`).join('')+`<button class="chip new" id="newcat">+ Crea la tua categoria</button>`;
+  $('mine').innerHTML=ds.length?`<span class="lbl">Le tue categorie</span>`+ds.map(d=>`<span class="cc"><button class="chip" aria-pressed="${S.cats.includes('c:'+d.id)}" data-c="c:${esc(d.id)}">${esc(d.name)} (${d.words.length})</button><button class="edit" data-edit="${esc(d.id)}" aria-label="Modifica ${esc(d.name)}">Modifica</button></span>`).join(''):'';
+}
+function openEditor(deck){
+  if(!window.BzMazzi)return;
+  BzMazzi.editor({deck,min:5,onChange(d){if(d&&!S.cats.includes('c:'+d.id))S.cats.push('c:'+d.id);save();renderCats();$('ctoast').textContent=d?`Categoria «${d.name}» salvata e selezionata.`:'Categoria eliminata.'}});
+}
+function catClick(e){
+  if(e.target.id==='newcat'){openEditor(null);return}
+  const ed=e.target.dataset.edit;if(ed){openEditor(BzMazzi.get(ed));return}
+  const c=e.target.dataset.c;if(!c)return;S.cats=S.cats.includes(c)?S.cats.filter(x=>x!==c):[...S.cats,c];save();renderCats();
+}
+$('cats').addEventListener('click',catClick);$('mine').addEventListener('click',catClick);
+
+/* ---------- impostazioni ---------- */
+function renderSettings(){
+  $('dur').innerHTML=DURS.map(d=>`<button data-d="${d}" aria-pressed="${S.dur===d}">${d} s</button>`).join('');
+  for(const b of $('mode').children)b.setAttribute('aria-pressed',b.dataset.m===S.mode);
+  $('teamsw').checked=S.teams;$('teamrow').hidden=!S.teams;$('t0').value=S.names[0];$('t1').value=S.names[1];
+  $('sound').checked=S.sound;$('inv').checked=S.inv;
+  renderScore();
+}
+function renderScore(){
+  const html=S.teams?S.names.map((n,i)=>`<div class="${i===S.turn?'turn':''}"><span>${i===S.turn?'Tocca a':'Squadra'}</span>${esc(n)}<br><b>${S.pts[i]}</b></div>`).join(''):'';
+  for(const id of['score','score2']){$(id).hidden=!S.teams;$(id).innerHTML=html}
+  $('start').textContent=S.teams?`Gioca: tocca a ${S.names[S.turn]}`:'Gioca';
+}
+$('dur').addEventListener('click',e=>{const d=+e.target.dataset.d;if(d){S.dur=d;save();renderSettings()}});
+$('mode').addEventListener('click',e=>{const m=e.target.dataset.m;if(m){S.mode=m;save();renderSettings()}});
+$('teamsw').onchange=e=>{S.teams=e.target.checked;S.pts=[0,0];S.turn=0;save();renderSettings()};
+for(const i of[0,1])$('t'+i).addEventListener('input',e=>{S.names[i]=e.target.value.trim()||(i?'Squadra blu':'Squadra rossa');save();renderScore()});
+$('sound').onchange=e=>{S.sound=e.target.checked;save()};
+$('inv').onchange=e=>{S.inv=e.target.checked;save()};
+
+/* ---------- suoni ---------- */
+let ac=null;
+function beep(f,d,type){if(!S.sound)return;try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();const o=ac.createOscillator(),g=ac.createGain();o.type=type||'sine';o.frequency.value=f;g.gain.setValueAtTime(.0001,ac.currentTime);g.gain.exponentialRampToValueAtTime(.25,ac.currentTime+.02);g.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+d);o.connect(g).connect(ac.destination);o.start();o.stop(ac.currentTime+d+.02)}catch(e){}}
+const sOk=()=>{beep(660,.12);setTimeout(()=>beep(990,.18),110)},sPass=()=>beep(300,.22,'triangle'),sTick=()=>beep(880,.06,'square'),sEnd=()=>{beep(520,.25,'sawtooth');setTimeout(()=>beep(390,.4,'sawtooth'),220)};
+
+/* ---------- inclinazione ---------- */
+let lastZ=null,motionSeen=false,faceUp=null,armed=false,calibUntil=0;
+function onMotion(e){
+  const g=e.accelerationIncludingGravity;if(!g||g.z==null)return;
+  motionSeen=true;lastZ=g.z;
+  if(faceUp==null&&performance.now()<calibUntil&&Math.abs(g.z)>4)faceUp=Math.sign(g.z);
+  if(!R||R.state!=='word'||S.mode!=='tilt'||faceUp==null)return;
+  const z=g.z*faceUp*(S.inv?-1:1);
+  if(Math.abs(z)<3.5){armed=true;return}
+  if(!armed||performance.now()-R.shownAt<500)return;
+  if(z>6.5){armed=false;result(false)}else if(z<-6.5){armed=false;result(true)}
+}
+addEventListener('devicemotion',onMotion);
+
+/* ---------- partita ---------- */
+let R=null,wake=null,raf=0,queue=[];
+function buildQueue(){const pool=[];for(const c of S.cats)for(const w of catWords(c))pool.push([catName(c),w]);return shuffle(pool)}
+$('start').onclick=()=>{
+  const pool=buildQueue();
+  if(!pool.length){$('err').textContent='Scegli almeno una categoria.';return}
+  $('err').textContent='';
+  // tutto ciò che chiede un permesso va chiamato subito, dentro il tocco
+  calibUntil=performance.now()+2500;faceUp=(lastZ!=null&&Math.abs(lastZ)>4)?Math.sign(lastZ):null;
+  if(S.mode==='tilt'&&typeof DeviceMotionEvent!=='undefined'&&typeof DeviceMotionEvent.requestPermission==='function'){
+    DeviceMotionEvent.requestPermission().then(r=>{if(r!=='granted')forceTap('Permesso negato: si gioca toccando lo schermo.')}).catch(()=>forceTap('Si gioca toccando lo schermo.'));
+  }
+  try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();ac.resume&&ac.resume()}catch(e){}
+  try{const el=document.documentElement;if(el.requestFullscreen)el.requestFullscreen().then(()=>{try{screen.orientation.lock('landscape').catch(()=>{})}catch(e){}}).catch(()=>{})}catch(e){}
+  try{navigator.wakeLock&&navigator.wakeLock.request('screen').then(l=>wake=l).catch(()=>{})}catch(e){}
+  queue=pool;begin();
+};
+function forceTap(msg){if(!R)return;R.tap=true;$('taps').hidden=false;$('pbot').textContent=msg}
+function begin(){
+  R={state:'ready',log:[],tap:S.mode==='tap',shownAt:0,end:0,lastSec:-1};
+  $('play').hidden=false;$('play').className='play';$('taps').hidden=!R.tap;
+  $('tbar').style.transform='scaleX(1)';$('secs').textContent=S.dur;
+  $('pbot').textContent=R.tap?'Tocca a destra se indovini, a sinistra per passare':'Giù: giusto · Su: passo';
+  let n=3;const count=()=>{
+    if(!R)return;
+    if(n>0){show(String(n),'Metti il telefono sulla fronte');beep(440,.08);n--;setTimeout(count,1000)}
+    else{
+      if(!R.tap&&S.mode==='tilt'){
+        if(!motionSeen)forceTap('Il telefono non sente l\'inclinazione: tocca lo schermo.');
+        if(faceUp==null)faceUp=/iPhone|iPad|iPod/.test(navigator.userAgent)?-1:1;
+      }
+      R.state='word';R.end=performance.now()+S.dur*1000;next();tick();
+    }
+  };
+  count();
+}
+function show(text,sub){
+  const w=$('word');w.textContent=text;$('sub').textContent=sub||'';
+  w.classList.remove('pop');void w.offsetWidth;w.classList.add('pop');fit();
+}
+function fit(){
+  const w=$('word');let size=Math.min(innerWidth*.15,innerHeight*.32);
+  w.style.fontSize=size+'px';
+  const maxH=innerHeight*.55;
+  for(let i=0;i<30&&(w.scrollWidth>w.clientWidth+1||w.offsetHeight>maxH)&&size>18;i++){size*=.9;w.style.fontSize=size+'px'}
+}
+addEventListener('resize',()=>{if(R)fit()});
+function next(){
+  if(!queue.length){finish('Parole finite!');return}
+  const [cat,word]=queue.pop();R.cur=word;R.shownAt=performance.now();armed=false;
+  $('play').className='play';show(word,cat);
+}
+function result(ok){
+  if(!R||R.state!=='word')return;
+  R.state='flash';R.log.push([R.cur,ok]);
+  $('play').className='play '+(ok?'ok':'pass');show(ok?'Giusto!':'Passo','');
+  ok?sOk():sPass();try{navigator.vibrate&&navigator.vibrate(ok?60:[30,40,30])}catch(e){}
+  setTimeout(()=>{if(!R)return;if(performance.now()>=R.end){finish('Tempo!');return}R.state='word';next()},RM?300:650);
+}
+function tick(){
+  if(!R)return;
+  const left=Math.max(0,R.end-performance.now()),sec=Math.ceil(left/1000);
+  $('tbar').style.transform=`scaleX(${left/(S.dur*1000)})`;$('secs').textContent=sec;
+  if(sec!==R.lastSec){R.lastSec=sec;if(sec<=5&&sec>0&&R.state==='word')sTick()}
+  if(left<=0&&R.state==='word'){finish('Tempo!');return}
+  raf=requestAnimationFrame(tick);
+}
+$('tok').onclick=()=>result(true);$('tpass').onclick=()=>result(false);
+addEventListener('keydown',e=>{if(!R||R.state!=='word')return;if(e.key==='ArrowDown'||e.key==='Enter'){e.preventDefault();result(true)}if(e.key==='ArrowUp'||e.key===' '){e.preventDefault();result(false)}});
+$('quit').onclick=()=>finish('Turno interrotto');
+function finish(why){
+  if(!R||R.state==='end')return;
+  const log=R.log;R.state='end';cancelAnimationFrame(raf);
+  $('play').className='play';show(why,'');sEnd();
+  setTimeout(()=>{
+    R=null;$('play').hidden=true;
+    try{document.fullscreenElement&&document.exitFullscreen()}catch(e){}
+    try{wake&&wake.release();wake=null}catch(e){}
+    summary(log);
+  },RM?200:1200);
+}
+function summary(log){
+  const pts=log.filter(x=>x[1]).length;
+  $('sumwho').textContent=S.teams?S.names[S.turn]:'Il tuo turno';
+  $('sumpts').textContent=pts===1?'1 punto':pts+' punti';
+  $('sumtxt').textContent=pts>=12?'Fenomeno. Sospettiamo che qualcuno abbia sbirciato.':pts>=7?'Ottimo turno.':pts>=3?'Niente male, si può fare di meglio.':'Il telefono era girato dalla parte giusta?';
+  $('sumlist').innerHTML=log.length?log.map(([w,ok])=>`<li class="${ok?'y':'n'}">${esc(w)}<span>${ok?'Indovinata':'Passata'}</span></li>`).join(''):'<li>Nessuna parola giocata.</li>';
+  if(S.teams){S.pts[S.turn]+=pts;S.turn=1-S.turn;save()}
+  renderScore();
+  $('again').textContent=S.teams?`Tocca a ${S.names[S.turn]}`:'Gioca ancora';
+  $('setup').hidden=true;$('summary').hidden=false;scrollTo(0,0);
+}
+$('again').onclick=()=>{$('summary').hidden=true;$('setup').hidden=false;$('start').click()};
+$('back').onclick=()=>{$('summary').hidden=true;$('setup').hidden=false;scrollTo(0,0)};
+
+/* ---------- avvio ---------- */
+{const imp=window.BzMazzi&&BzMazzi.importHash();if(imp){if(!S.cats.includes('c:'+imp.id))S.cats.push('c:'+imp.id);save();$('ctoast').textContent=`Hai ricevuto la categoria «${imp.name}» con ${imp.words.length} parole. È già selezionata.`}}
+renderCats();renderSettings();
+}
+</script>
+</body>
+</html>

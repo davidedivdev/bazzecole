@@ -56,6 +56,13 @@ section[hidden]{display:none!important}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{border:2px solid rgba(255,243,230,.4);background:none;color:var(--ink);border-radius:999px;padding:8px 14px;font:600 15px Figtree,sans-serif;min-height:44px;cursor:pointer}
 .chip[aria-pressed=true]{background:var(--gold);border-color:var(--gold);color:var(--cink)}
+.chip.new{border-style:dashed}
+.mine{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px}
+.mine .lbl{font-weight:700;font-size:15px;color:var(--soft);width:100%}
+.cc{display:inline-flex;align-items:center;gap:2px}
+.edit{border:0;background:none;color:var(--soft);font:600 14px Figtree,sans-serif;text-decoration:underline;padding:10px 8px;min-height:44px;cursor:pointer}
+.toastline{color:var(--gold);font-weight:700;margin:10px 0 0;min-height:1.4em}
+:root{--mz-bg:#FFFDF8;--mz-ink:#2B0D0E;--mz-acc:#B61F26;--mz-acc-ink:#FFF8EC;--mz-soft:#7A5A52;--mz-line:#E2CFC6}
 .row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:6px 0}
 .row+.row{border-top:1px solid rgba(255,243,230,.15)}
 .step{display:flex;align-items:center;gap:6px}
@@ -118,6 +125,8 @@ footer{color:var(--soft);font-size:13px;text-align:center;padding-top:24px}
   <div class="panel">
     <p class="label">Categorie <small>scegline una o più</small></p>
     <div class="chips" id="cats"></div>
+    <div class="mine" id="mine"></div>
+    <p class="toastline" id="ctoast" role="status"></p>
   </div>
   <div class="panel">
     <div class="row"><span>Impostori</span><div class="step"><button id="im-" aria-label="Meno impostori">−</button><output id="imn">1</output><button id="im+" aria-label="Più impostori">+</button></div></div>
@@ -171,6 +180,7 @@ footer{color:var(--soft);font-size:13px;text-align:center;padding-top:24px}
 <footer>Fatto a Bologna · Gratis, senza app, senza registrazione · <a href="/privacy/" style="color:inherit">Privacy</a> · <a href="https://www.paypal.me/DavideMazza626" target="_blank" rel="noopener" style="color:inherit">Offrimi un caffè</a></footer>
 </div>
 
+<script src="/shared/mazzi.js"></script>
 <script>
 {
 const WORDS={
@@ -202,12 +212,29 @@ function renderPlayers(){
   $('pcount').textContent=S.players.length+' giocatori';
   if(S.imp>maxImp())S.imp=maxImp();$('imn').textContent=S.imp;
 }
-function renderCats(){$('cats').innerHTML=Object.keys(WORDS).map(c=>`<button class="chip" aria-pressed="${S.cats.includes(c)}" data-c="${esc(c)}">${esc(c)}</button>`).join('')}
+function decks(){return window.BzMazzi?BzMazzi.load():[]}
+function catWords(c){if(c.startsWith('c:')){const d=decks().find(x=>'c:'+x.id===c);return d?d.words:[]}return WORDS[c]||[]}
+function catName(c){if(c.startsWith('c:')){const d=decks().find(x=>'c:'+x.id===c);return d?d.name:''}return c}
+function renderCats(){
+  const ds=decks();
+  S.cats=S.cats.filter(c=>!c.startsWith('c:')||ds.some(d=>'c:'+d.id===c));
+  $('cats').innerHTML=Object.keys(WORDS).map(c=>`<button class="chip" aria-pressed="${S.cats.includes(c)}" data-c="${esc(c)}">${esc(c)}</button>`).join('')+`<button class="chip new" id="newcat">+ Crea la tua categoria</button>`;
+  $('mine').innerHTML=ds.length?`<span class="lbl">Le tue categorie</span>`+ds.map(d=>`<span class="cc"><button class="chip" aria-pressed="${S.cats.includes('c:'+d.id)}" data-c="c:${esc(d.id)}">${esc(d.name)} (${d.words.length})</button><button class="edit" data-edit="${esc(d.id)}" aria-label="Modifica ${esc(d.name)}">Modifica</button></span>`).join(''):'';
+}
+function openEditor(deck){
+  if(!window.BzMazzi)return;
+  BzMazzi.editor({deck,min:3,onChange(d){if(d&&!S.cats.includes('c:'+d.id))S.cats.push('c:'+d.id);save();renderCats();$('ctoast').textContent=d?`Categoria «${d.name}» salvata e selezionata.`:'Categoria eliminata.'}});
+}
 
 $('players').addEventListener('input',e=>{const i=e.target.dataset.i;if(i!==undefined){S.players[i]=e.target.value;save()}});
 $('players').addEventListener('click',e=>{const d=e.target.dataset.del;if(d!==undefined){if(S.players.length<=3){$('err').textContent='Servono almeno 3 giocatori.';return}S.players.splice(+d,1);save();renderPlayers()}});
 $('addp').onclick=()=>{if(S.players.length>=16)return;S.players.push('Giocatore '+(S.players.length+1));save();renderPlayers();const ins=$('players').querySelectorAll('input');const l=ins[ins.length-1];l.focus();l.select()};
-$('cats').addEventListener('click',e=>{const c=e.target.dataset.c;if(!c)return;S.cats=S.cats.includes(c)?S.cats.filter(x=>x!==c):[...S.cats,c];save();renderCats()});
+function toggleCat(e){
+  if(e.target.id==='newcat'){openEditor(null);return}
+  const ed=e.target.dataset.edit;if(ed){openEditor(BzMazzi.get(ed));return}
+  const c=e.target.dataset.c;if(!c)return;S.cats=S.cats.includes(c)?S.cats.filter(x=>x!==c):[...S.cats,c];save();renderCats();
+}
+$('cats').addEventListener('click',toggleCat);$('mine').addEventListener('click',toggleCat);
 $('im-').onclick=()=>{S.imp=Math.max(1,S.imp-1);$('imn').textContent=S.imp;save()};
 $('im+').onclick=()=>{S.imp=Math.min(maxImp(),S.imp+1);$('imn').textContent=S.imp;save()};
 $('tm-').onclick=()=>{S.mins=Math.max(1,S.mins-1);$('tmn').textContent=S.mins;save()};
@@ -215,7 +242,7 @@ $('tm+').onclick=()=>{S.mins=Math.min(10,S.mins+1);$('tmn').textContent=S.mins;s
 $('hint').onchange=e=>{S.hint=e.target.checked;save()};
 
 function pickWord(){
-  const pool=[];for(const c of S.cats)for(const w of WORDS[c])pool.push([c,w]);
+  const pool=[];for(const c of S.cats)for(const w of catWords(c))pool.push([catName(c),w]);
   let fresh=pool.filter(([,w])=>!used.includes(w));
   if(!fresh.length){used=used.filter(w=>!pool.some(([,x])=>x===w));fresh=pool}
   const pick=fresh[rnd(fresh.length)];used.push(pick[1]);if(used.length>300)used=used.slice(-300);store.set('used',used);return pick;
@@ -223,7 +250,7 @@ function pickWord(){
 function deal(){
   const names=S.players.map((p,i)=>p.trim()||'Giocatore '+(i+1));
   if(names.length<3){$('err').textContent='Servono almeno 3 giocatori.';return}
-  if(!S.cats.length){$('err').textContent='Scegli almeno una categoria.';return}
+  if(!S.cats.length||!S.cats.some(c=>catWords(c).length)){$('err').textContent='Scegli almeno una categoria.';return}
   $('err').textContent='';
   const [cat,word]=pickWord();const idx=names.map((_,i)=>i);const imps=[];
   while(imps.length<S.imp){const k=idx.splice(rnd(idx.length),1)[0];imps.push(k)}
@@ -275,6 +302,7 @@ $('back').onclick=$('home').onclick=()=>{clearInterval(tick);show('s-setup')};
 $('start').onclick=deal;
 
 $('hint').checked=S.hint;$('tmn').textContent=S.mins;
+{const imp=window.BzMazzi&&BzMazzi.importHash();if(imp){if(!S.cats.includes('c:'+imp.id))S.cats.push('c:'+imp.id);save();$('ctoast').textContent=`Hai ricevuto la categoria «${imp.name}» con ${imp.words.length} parole. È già selezionata.`}}
 renderPlayers();renderCats();
 }
 </script>
