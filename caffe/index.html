@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quanti caffè hai bevuto · Bazzecole</title>
+<meta name="description" content="Calcola quanti caffè hai bevuto nella tua vita, quanto hai speso al bar e quanti litri di espresso sono. Il conto arriva come uno scontrino.">
+<meta property="og:title" content="Quanti caffè hai bevuto nella tua vita?">
+<meta property="og:description" content="Tazzine, euro spesi al bar, litri di espresso. Ecco lo scontrino.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#3A2216">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Courier+Prime:wght@400;700&family=Figtree:wght@400;600;800&family=Shrikhand&display=swap" rel="stylesheet">
+<style>
+/* VOICE: il barista sotto casa, confidenziale e un po' impertinente
+   IDEA: il bancone del bar: alla fine ti arriva lo scontrino di tutta la vita
+   PICTURE: lo scontrino termico, lungo, con il bordo strappato e il codice a barre
+   COLOUR and TYPE: marrone espresso dominante, crema, carta bianca, oro tazzina; Shrikhand per l'insegna, Courier Prime per lo scontrino, Figtree per il resto
+   LAYOUT: insegna in alto; da 820px scontrino a destra e comandi a sinistra, sotto si impilano */
+:root{color-scheme:light dark;--bg:light-dark(#4A2C1C,#24150D);--ink:#F6E7CD;--soft:light-dark(#E1C7A2,#C9AD88);--panel:rgba(0,0,0,.2);--paper:#FFFEFB;--pink:#1E1A17;--gold:#E2A54E}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Figtree,system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1040px;margin:0 auto;padding:14px max(4vw,16px) 48px}
+header{padding:4px 0 14px}
+.brand{font:20px/1 'Alfa Slab One',serif;color:var(--gold);text-decoration:none}
+h1{font:400 clamp(38px,8.5vw,64px)/1.05 Shrikhand,serif;margin:0;text-wrap:balance;color:var(--ink)}
+.lede{color:var(--soft);margin:10px 0 26px;font-size:17px;max-width:36em}
+.grid{display:grid;gap:28px;align-items:start}
+@media(min-width:820px){.grid{grid-template-columns:minmax(0,1fr) minmax(0,400px)}.rcpt{grid-column:2;grid-row:1/3;position:sticky;top:16px}}
+.rcpt{background:var(--paper);color:var(--pink);font:15px/1.45 'Courier Prime',monospace;padding:26px 22px 30px;position:relative;box-shadow:0 18px 34px rgba(0,0,0,.35);transform:rotate(.6deg);--z:linear-gradient(-45deg,transparent 7px,var(--paper) 0),linear-gradient(45deg,transparent 7px,var(--paper) 0)}
+.rcpt::before,.rcpt::after{content:"";position:absolute;left:0;right:0;height:10px;background:var(--z);background-size:14px 14px}
+.rcpt::before{top:-10px;background-position:left bottom;transform:scaleY(-1)}
+.rcpt::after{bottom:-10px}
+.c{text-align:center}
+.shop{font:700 20px/1.1 'Courier Prime',monospace;letter-spacing:.05em}
+.hr{border-top:2px dashed #9A928A;margin:12px 0}
+.l{display:flex;justify-content:space-between;gap:10px}
+.l span:last-child{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.l small{display:block;color:#6E655D;font-size:13px}
+.tot{font:700 26px/1.2 'Courier Prime',monospace;margin:4px 0}
+.big{font:700 clamp(40px,11vw,56px)/1 'Courier Prime',monospace;margin:8px 0 2px;font-variant-numeric:tabular-nums}
+.bar{height:46px;margin:14px auto 4px;width:80%;background:repeating-linear-gradient(90deg,var(--pink) 0 2px,transparent 2px 4px,var(--pink) 4px 7px,transparent 7px 9px,var(--pink) 9px 10px,transparent 10px 13px)}
+.panel{background:var(--panel);border-radius:16px;padding:4px 18px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:15px 0;flex-wrap:wrap}
+.row+.row{border-top:1px solid rgba(246,231,205,.15)}
+.row label,.row .lb{font-weight:600;flex:1 1 190px}
+.row small{display:block;font-weight:400;color:var(--soft);font-size:14px}
+.step{display:flex;align-items:center;gap:6px}
+.step button{width:44px;height:44px;border-radius:50%;border:0;background:var(--ink);color:#3A2216;font:800 22px Figtree,sans-serif;cursor:pointer}
+.step input{width:72px;height:44px;text-align:center;font:700 20px 'Courier Prime',monospace;border:2px solid transparent;border-radius:10px;background:rgba(0,0,0,.25);color:var(--ink)}
+.range{flex:1 1 100%;display:flex;align-items:center;gap:14px}
+.range input{flex:1;accent-color:var(--gold);height:44px}
+.range output{font:700 20px 'Courier Prime',monospace;min-width:4.5ch;text-align:right}
+.go{width:100%;border:0;border-radius:14px;background:var(--gold);color:#2A170C;font:400 24px/1 Shrikhand,serif;padding:18px;min-height:60px;cursor:pointer;box-shadow:0 5px 0 #9E6C26}
+.go:active{transform:translateY(3px);box-shadow:0 2px 0 #9E6C26}
+.toast{min-height:1.5em;margin:10px 0 0;font-weight:600;text-align:center}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.note{font-size:14px;color:var(--soft)}
+footer{margin-top:34px;font-size:14px;color:var(--soft)}footer a{color:inherit}
+@media(max-width:400px){.rcpt{padding:24px 16px 28px;font-size:14px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><a class="brand" href="/">Bazzecole</a></header>
+<h1>Quanti caffè hai bevuto</h1>
+<p class="lede">Tre domande al bancone e ti portiamo lo scontrino di tutta la vita.</p>
+
+<div class="grid">
+  <div class="rcpt" id="rcpt" aria-live="polite"></div>
+
+  <div>
+    <div class="panel">
+      <div class="row"><label for="day">Caffè al giorno</label>
+        <div class="step"><button data-s="day" data-d="-1" aria-label="Un caffè in meno">−</button><input id="day" type="number" inputmode="decimal" min="0.5" max="15" step="0.5" value="3"><button data-s="day" data-d="1" aria-label="Un caffè in più">+</button></div></div>
+      <div class="row"><label for="age">Quanti anni hai</label>
+        <div class="step"><button data-s="age" data-d="-1" aria-label="Meno anni">−</button><input id="age" type="number" inputmode="numeric" min="10" max="100" value="25"><button data-s="age" data-d="1" aria-label="Più anni">+</button></div></div>
+      <div class="row"><label for="start">A che età hai iniziato</label>
+        <div class="step"><button data-s="start" data-d="-1" aria-label="Prima">−</button><input id="start" type="number" inputmode="numeric" min="5" max="100" value="17"><button data-s="start" data-d="1" aria-label="Dopo">+</button></div></div>
+      <div class="row"><span class="lb">Quanti li prendi al bar<small>Il resto è moka, capsule o macchinetta dell'università.</small></span>
+        <div class="range"><input id="pct" type="range" min="0" max="100" step="5" value="40" aria-label="Percentuale di caffè presi al bar"><output id="pcto">40%</output></div></div>
+      <div class="row"><label for="pbar">Prezzo al bar<small>In euro, a tazzina.</small></label>
+        <div class="step"><button data-s="pbar" data-d="-0.05" aria-label="Meno">−</button><input id="pbar" type="number" inputmode="decimal" min="0" max="5" step="0.05" value="1.30"><button data-s="pbar" data-d="0.05" aria-label="Più">+</button></div></div>
+      <div class="row"><label for="phome">Costo a casa<small>Caffè macinato o capsula, a tazzina.</small></label>
+        <div class="step"><button data-s="phome" data-d="-0.05" aria-label="Meno">−</button><input id="phome" type="number" inputmode="decimal" min="0" max="2" step="0.05" value="0.20"><button data-s="phome" data-d="0.05" aria-label="Più">+</button></div></div>
+    </div>
+    <p class="note">Conti approssimati: 30 ml e 7 g di caffè per tazzina, 5 minuti al bancone per ogni caffè al bar, stanza a Bologna a 500 € al mese.</p>
+    <button class="go" id="share">Condividi lo scontrino</button>
+    <p class="toast" id="toast" role="status"></p>
+  </div>
+</div>
+<footer>Altri giochi su <a href="/">Bazzecole</a>.</footer>
+</div>
+
+<script>
+{
+const $=id=>document.getElementById(id);
+const L={day:[0.5,15],age:[10,100],start:[5,100],pbar:[0,5],phome:[0,2]};
+const KEY='bz-caffe';
+try{const s=JSON.parse(localStorage.getItem(KEY)||'null');if(s)for(const k in s)if($(k))$(k).value=s[k]}catch(e){}
+const n0=new Intl.NumberFormat('it-IT',{maximumFractionDigits:0,useGrouping:'always'});
+const n1=new Intl.NumberFormat('it-IT',{maximumFractionDigits:1});
+const eur=new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR',maximumFractionDigits:0,useGrouping:'always'});
+const eur2=new Intl.NumberFormat('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2,useGrouping:'always'});
+const num=k=>{const [a,b]=L[k];let v=parseFloat(String($(k).value).replace(',','.'));if(!isFinite(v))v=a;return Math.min(b,Math.max(a,v))};
+const pick=x=>x>=10?n0.format(x):n1.format(x);
+function tipo(d){if(d<1)return'Occasionale';if(d<2)return'Educato';if(d<4)return'Abituale';if(d<6)return'Cliente d\'oro';return'Socio del bar'}
+let msg='';
+function calc(){
+  const d=num('day'),age=num('age'),pct=+$('pct').value/100,pb=num('pbar'),ph=num('phome');
+  const start=Math.min(num('start'),age),yrs=Math.max(0,age-start);
+  try{localStorage.setItem(KEY,JSON.stringify({day:d,age,start,pct:$('pct').value,pbar:pb,phome:ph}))}catch(e){}
+  $('pcto').textContent=Math.round(pct*100)+'%';
+  const cups=Math.round(d*365.25*yrs),bar=Math.round(cups*pct),home=cups-bar;
+  const spent=bar*pb+home*ph,litres=cups*0.03,kg=cups*0.007,barH=bar*5/60,rent=spent/500;
+  msg=`In ${n0.format(yrs)} anni ho bevuto ${n0.format(cups)} caffè e speso circa ${eur.format(spent)}. Tu?`;
+  $('rcpt').innerHTML=`
+   <div class="c shop">BAR BAZZECOLE</div>
+   <div class="c">Sotto i portici, Bologna</div>
+   <div class="c">Cliente: ${tipo(d)}</div>
+   <div class="hr"></div>
+   <div class="c">Tazzine bevute in ${n0.format(yrs)} anni</div>
+   <div class="c big">${n0.format(cups)}</div>
+   <div class="hr"></div>
+   <div class="l"><span>Caffè al bar<small>${n0.format(bar)} x ${eur2.format(pb)}</small></span><span>€ ${eur2.format(bar*pb)}</span></div>
+   <div class="l"><span>Caffè a casa<small>${n0.format(home)} x ${eur2.format(ph)}</small></span><span>€ ${eur2.format(home*ph)}</span></div>
+   <div class="hr"></div>
+   <div class="l tot"><span>TOTALE</span><span>${eur.format(spent)}</span></div>
+   <div class="hr"></div>
+   <div class="l"><span>Espresso bevuto<small>${litres/150<1.05&&litres/150>=0.95?'una vasca':pick(litres/150)+' vasche'} da bagno</small></span><span>${n0.format(litres)} l</span></div>
+   <div class="l"><span>Caffè macinato<small>${kg/60<1.05?'circa un sacco':pick(kg/60)+' sacchi'} di juta da 60 kg</small></span><span>${n0.format(kg)} kg</span></div>
+   <div class="l"><span>Tempo al bancone<small>${pick(barH/24)} giorni interi</small></span><span>${n0.format(barH)} ore</span></div>
+   <div class="l"><span>Moke da 3 caricate</span><span>${n0.format(home/3)}</span></div>
+   <div class="hr"></div>
+   <div class="c">Con questi soldi pagavi<br><b>${pick(rent)} mesi</b> di stanza singola a Bologna</div>
+   <div class="bar" aria-hidden="true"></div>
+   <div class="c">Grazie e arrivederci</div>`;
+}
+document.addEventListener('click',e=>{const s=e.target.dataset.s;if(!s)return;const v=Math.round((num(s)+(+e.target.dataset.d))*100)/100;$(s).value=s[0]==='p'?Math.max(0,v).toFixed(2):v;$(s).value=s[0]==='p'?num(s).toFixed(2):num(s);calc()});
+for(const k of[...Object.keys(L),'pct']){$(k).addEventListener('input',calc)}
+for(const k of Object.keys(L))$(k).addEventListener('change',()=>{$(k).value=k[0]==='p'?num(k).toFixed(2):num(k);calc()});
+$('share').onclick=async()=>{
+  const url=location.origin+'/caffe/';
+  try{if(navigator.share){await navigator.share({title:'Quanti caffè hai bevuto',text:msg,url});return}}catch(e){if(e.name==='AbortError')return}
+  try{await navigator.clipboard.writeText(msg+' '+url);$('toast').textContent='Copiato. Mandalo a chi ti offre sempre il caffè.'}
+  catch(e){$('toast').textContent=msg+' '+url}
+};
+for(const k of['pbar','phome'])$(k).value=num(k).toFixed(2);
+calc();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quanto ti hanno rubato i treni · Bazzecole</title>
+<meta name="description" content="Calcola quanto tempo della tua vita hai passato ad aspettare treni in ritardo. Giorni, ore e minuti rubati dal tabellone.">
+<meta property="og:title" content="Quanto ti hanno rubato i treni?">
+<meta property="og:description" content="Giorni, ore e minuti della tua vita passati ad aspettare treni in ritardo.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#121418">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Barlow+Condensed:wght@500;700&family=Figtree:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: rassegnazione ironica da pendolare, frasi da annuncio in stazione
+   IDEA: il binario: il tabellone delle partenze sopra, la linea gialla da non oltrepassare, i comandi sotto
+   PICTURE: il tabellone a palette che mostra il tempo rubato e le "destinazioni" che avresti raggiunto
+   COLOUR and TYPE: cemento della banchina, tabellone nero, lettere bianche, giallo linea di sicurezza, rosso ritardo; Barlow Condensed + Figtree
+   LAYOUT: colonna unica, titolo, tabellone, linea gialla, comandi, condivisione */
+:root{color-scheme:light dark;--bg:light-dark(#D3D5D8,#1B1E23);--ink:light-dark(#17191D,#ECEDEF);--soft:light-dark(#4A4F57,#A9AEB6);--panel:light-dark(#E6E7E9,#24282E);--board:#121418;--flap:#25282E;--letter:#F4F4EE;--yellow:#F6C700;--red:#E0362B}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Figtree,system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:720px;margin:0 auto;padding:14px max(4vw,16px) 48px}
+header{padding:4px 0 14px}
+.brand{font:20px/1 'Alfa Slab One',serif;color:var(--ink);text-decoration:none}
+h1{font:700 clamp(40px,10vw,64px)/1 'Barlow Condensed',sans-serif;margin:0;text-wrap:balance;letter-spacing:.005em}
+.lede{color:var(--soft);margin:10px 0 22px;font-size:17px}
+.board{background:var(--board);color:var(--letter);border-radius:10px;padding:18px clamp(14px,3vw,24px) 14px;box-shadow:0 10px 26px rgba(0,0,0,.28)}
+.bhead{display:flex;justify-content:space-between;font:500 15px 'Barlow Condensed',sans-serif;color:#9BA1AA;letter-spacing:.04em;border-bottom:1px solid #2C3036;padding-bottom:8px}
+.bhead b{color:var(--yellow);font-weight:700}
+.total{display:flex;flex-wrap:wrap;gap:clamp(10px,3vw,22px);padding:16px 0 6px}
+.unit{display:flex;flex-direction:column;gap:6px}
+.tiles{display:flex;gap:4px}
+.tile{position:relative;width:clamp(38px,10vw,58px);height:clamp(54px,14vw,82px);background:var(--flap);border-radius:5px;display:grid;place-items:center;font:700 clamp(36px,10vw,58px)/1 'Barlow Condensed',sans-serif;overflow:hidden}
+.tile::after{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:var(--board)}
+.tile.flip{animation:flip .32s ease-out}
+@keyframes flip{0%{transform:rotateX(70deg);filter:brightness(.6)}100%{transform:none}}
+.unit span{font:500 15px 'Barlow Condensed',sans-serif;color:#9BA1AA}
+.verdict{font:700 clamp(20px,5vw,26px)/1.15 'Barlow Condensed',sans-serif;color:var(--yellow);margin:12px 0 4px}
+table{width:100%;border-collapse:collapse;margin-top:14px;font:500 clamp(17px,4.4vw,21px)/1.2 'Barlow Condensed',sans-serif}
+th{font-weight:500;font-size:14px;color:#9BA1AA;text-align:left;padding:0 0 6px;letter-spacing:.04em}
+th:last-child,td:last-child{text-align:right;white-space:nowrap}
+td{padding:9px 0;border-top:1px solid #2C3036}
+td:last-child{color:var(--yellow);font-weight:700;padding-left:12px;font-variant-numeric:tabular-nums}
+.line{height:16px;margin:26px -100vw;background:var(--yellow);box-shadow:0 -6px 0 var(--bg),0 -10px 0 light-dark(#BFC2C6,#2A2E34)}
+.line+p{font-size:13px;color:var(--soft);margin:8px 0 18px;text-align:center}
+.panel{background:var(--panel);border-radius:14px;padding:6px 16px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:14px 0;flex-wrap:wrap}
+.row+.row{border-top:1px solid light-dark(#CCCED2,#33373E)}
+.row label,.row .lb{font-weight:600;flex:1 1 200px}
+.row small{display:block;font-weight:400;color:var(--soft);font-size:14px}
+.step{display:flex;align-items:center;gap:6px}
+.step button{width:44px;height:44px;border-radius:10px;border:0;background:var(--ink);color:var(--bg);font:800 22px Figtree,sans-serif;cursor:pointer}
+.step input{width:64px;height:44px;text-align:center;font:700 22px 'Barlow Condensed',sans-serif;border:2px solid transparent;border-radius:10px;background:var(--bg);color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;flex:1 1 100%}
+.chip{border:2px solid var(--ink);background:none;color:var(--ink);border-radius:999px;padding:8px 14px;font:600 15px Figtree,sans-serif;min-height:44px;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.share{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.go{flex:1 1 220px;border:0;border-radius:12px;background:var(--yellow);color:#17191D;font:700 22px 'Barlow Condensed',sans-serif;padding:16px;min-height:56px;cursor:pointer;box-shadow:0 4px 0 #B89400}
+.go:active{transform:translateY(2px);box-shadow:0 2px 0 #B89400}
+.toast{min-height:1.5em;margin:10px 0 0;font-weight:600;text-align:center}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--red);outline-offset:3px}
+.note{font-size:14px;color:var(--soft);margin-top:26px}
+.note a{color:inherit}
+footer{margin-top:30px;font-size:14px;color:var(--soft)}footer a{color:inherit}
+@media (prefers-reduced-motion:reduce){.tile.flip{animation:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><a class="brand" href="/">Bazzecole</a></header>
+<h1>Quanto ti hanno rubato i treni</h1>
+<p class="lede">Dicci quanto viaggi e di quanto ritarda di solito il tuo treno. Il tabellone fa il resto.</p>
+
+<div class="board" aria-live="polite">
+  <div class="bhead"><span>Tempo perso in banchina</span><b id="late">Ritardo 8'</b></div>
+  <div class="total" id="total"></div>
+  <p class="verdict" id="verdict"></p>
+  <table>
+    <thead><tr><th>Con quel tempo avresti potuto</th><th>Volte</th></tr></thead>
+    <tbody id="eq"></tbody>
+  </table>
+</div>
+
+<div class="line" aria-hidden="true"></div>
+<p>Si prega di non oltrepassare la linea gialla</p>
+
+<div class="panel">
+  <div class="row"><label for="trips">Viaggi a settimana<small>Andata e ritorno contano come due.</small></label>
+    <div class="step"><button data-s="trips" data-d="-1" aria-label="Meno viaggi">−</button><input id="trips" type="number" inputmode="numeric" min="1" max="40" value="10"><button data-s="trips" data-d="1" aria-label="Più viaggi">+</button></div></div>
+  <div class="row"><span class="lb">Di quanto ritarda di solito</span>
+    <div class="step"><button data-s="delay" data-d="-1" aria-label="Meno minuti">−</button><input id="delay" type="number" inputmode="numeric" min="0" max="180" value="8" aria-label="Minuti di ritardo"><button data-s="delay" data-d="1" aria-label="Più minuti">+</button></div>
+    <div class="chips" id="presets"></div></div>
+  <div class="row"><label for="years">Da quanti anni lo prendi</label>
+    <div class="step"><button data-s="years" data-d="-1" aria-label="Meno anni">−</button><input id="years" type="number" inputmode="numeric" min="1" max="60" value="5"><button data-s="years" data-d="1" aria-label="Più anni">+</button></div></div>
+  <div class="row"><label for="weeks">Settimane di viaggio all'anno<small>Tolte ferie, feste e sessione a casa.</small></label>
+    <div class="step"><button data-s="weeks" data-d="-1" aria-label="Meno settimane">−</button><input id="weeks" type="number" inputmode="numeric" min="1" max="52" value="44"><button data-s="weeks" data-d="1" aria-label="Più settimane">+</button></div></div>
+</div>
+
+<div class="share"><button class="go" id="share">Condividi il risultato</button></div>
+<p class="toast" id="toast" role="status"></p>
+
+<p class="note">Il ritardo medio lo scegli tu, perché cambia tantissimo da tratta a tratta. Per avere un'idea: secondo una classifica europea del 2026 sui dati 2025, in Italia arriva in orario circa il 62% dei treni (<a href="https://siviaggia.it/notizie/treni-ritardo-tratte-peggiori-italia-europa-classifica-2026/579913/">SiViaggia</a>).</p>
+<footer>Altri giochi su <a href="/">Bazzecole</a>.</footer>
+</div>
+
+<script>
+{
+const $=id=>document.getElementById(id);
+const PRESETS=[['Quasi puntuale',3],['Il solito',8],['Regionale all\'ora di punta',15],['Lasciamo stare',30]];
+const EQ=[['Salire a piedi a San Luca',60],['Cuocere un ragù come si deve',240],['Andare da Bologna a Roma in alta velocità',140],['Dormire una notte intera',480],['Guardare un film di due ore',120]];
+const LIMITS={trips:[1,40],delay:[0,180],years:[1,60],weeks:[1,52]};
+const store={get(k,d){try{const v=localStorage.getItem('bz-treni');return v?JSON.parse(v):d}catch(e){return d}},set(v){try{localStorage.setItem('bz-treni',JSON.stringify(v))}catch(e){}}};
+const saved=store.get(0,null);
+if(saved)for(const k in LIMITS)if(saved[k]!=null)$(k).value=saved[k];
+const nf=new Intl.NumberFormat('it-IT');
+const val=k=>{const [a,b]=LIMITS[k];let v=Math.round(+$(k).value);if(!isFinite(v))v=a;return Math.min(b,Math.max(a,v))};
+let prev={};
+
+function tiles(key,num,pad){
+  const s=String(num).padStart(pad,'0'),old=prev[key];prev[key]=s;
+  return [...s].map((c,i)=>`<div class="tile${old&&old[i]!==c?' flip':''}">${c}</div>`).join('');
+}
+function verdictFor(h){
+  if(h<1)return'Fortunato. O non prendi mai il treno.';
+  if(h<10)return'Ti è andata bene, per ora.';
+  if(h<50)return'Pendolare temprato.';
+  if(h<200)return'Veterano della banchina.';
+  if(h<600)return'Ormai il capotreno ti saluta per nome.';
+  return'A questo punto il treno è casa tua.';
+}
+function human(min){
+  const d=Math.floor(min/1440),h=Math.floor(min%1440/60),m=min%60,p=[];
+  if(d)p.push(d+(d===1?' giorno':' giorni'));if(h)p.push(h+(h===1?' ora':' ore'));if(m||!p.length)p.push(m+' minuti');
+  return p.length>1?p.slice(0,-1).join(', ')+' e '+p[p.length-1]:p[0];
+}
+let total=0;
+function calc(){
+  const t=val('trips'),d=val('delay'),y=val('years'),w=val('weeks');
+  store.set({trips:t,delay:d,years:y,weeks:w});
+  total=Math.round(t*w*y*d);
+  const days=Math.floor(total/1440),hrs=Math.floor(total%1440/60),mins=total%60;
+  $('total').innerHTML=`<div class="unit"><div class="tiles">${tiles('d',days,days>99?3:2)}</div><span>giorni</span></div><div class="unit"><div class="tiles">${tiles('h',hrs,2)}</div><span>ore</span></div><div class="unit"><div class="tiles">${tiles('m',mins,2)}</div><span>minuti</span></div>`;
+  $('late').textContent=`Ritardo ${d}'`;
+  $('verdict').textContent=verdictFor(total/60);
+  $('eq').innerHTML=EQ.map(([l,m])=>{const n=total/m;return`<tr><td>${l}</td><td>${n>=10?nf.format(Math.round(n)):nf.format(Math.round(n*10)/10)}</td></tr>`}).join('');
+  for(const b of document.querySelectorAll('.chip'))b.setAttribute('aria-pressed',+b.dataset.m===d);
+}
+$('presets').innerHTML=PRESETS.map(([l,m])=>`<button class="chip" data-m="${m}">${l} · ${m} min</button>`).join('');
+$('presets').addEventListener('click',e=>{const m=e.target.dataset.m;if(m){$('delay').value=m;calc()}});
+document.addEventListener('click',e=>{const s=e.target.dataset.s;if(!s)return;$(s).value=val(s)+(+e.target.dataset.d);$(s).value=val(s);calc()});
+for(const k in LIMITS){$(k).addEventListener('input',calc);$(k).addEventListener('change',()=>{$(k).value=val(k);calc()})}
+
+$('share').onclick=async()=>{
+  const text=`I treni mi hanno rubato ${human(total)} di vita. A te quanto?`;
+  const url=location.origin+'/treni/';
+  try{if(navigator.share){await navigator.share({title:'Quanto ti hanno rubato i treni',text,url});return}}catch(e){if(e.name==='AbortError')return}
+  try{await navigator.clipboard.writeText(text+' '+url);$('toast').textContent='Copiato. Incollalo nel gruppo dei pendolari.'}
+  catch(e){$('toast').textContent=text+' '+url}
+};
+calc();
+}
+</script>
+</body>
+</html>
