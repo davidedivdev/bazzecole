@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L'Impostore · Bazzecole</title>
+<meta name="description" content="Il gioco dell'impostore in italiano: un telefono, una parola segreta, un bugiardo. Gratis, senza app, perfetto per Natale con i parenti.">
+<meta property="og:title" content="L'Impostore: il gioco della parola segreta">
+<meta property="og:description" content="Un telefono, una parola segreta, un bugiardo. Gratis, senza app.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#A3191F">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Figtree:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: festa in famiglia, chiassosa ma ordinata, frasi brevi da leggere ad alta voce
+   IDEA: un mazzo di carte sulla tovaglia rossa del cenone; il telefono è la carta che passa di mano
+   PICTURE: la carta stessa, grande, dorso a rombi oro; tenendo premuto si gira
+   COLOUR and TYPE: rosso tovaglia, carta bianca, oro, verde abete per "preso"; Alfa Slab One + Figtree
+   LAYOUT: una colonna da telefono al centro, carta sopra, comandi sotto */
+:root{color-scheme:light dark;--bg:light-dark(#A3191F,#3A0A0D);--bg2:light-dark(#8A1218,#2A0709);--ink:#FFF3E6;--soft:light-dark(#FFD9CF,#E9B9AE);--paper:#FFFDF8;--cink:#2B0D0E;--gold:#F2B632;--pine:#1E5A43}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{height:100%}
+body{margin:0;background:var(--bg) radial-gradient(120% 80% at 50% 0%,transparent 40%,var(--bg2) 100%) fixed;color:var(--ink);font:16px/1.5 Figtree,system-ui,sans-serif;overflow-x:clip;-webkit-tap-highlight-color:transparent}
+.wrap{max-width:540px;margin:0 auto;padding:14px max(4vw,16px) 40px;min-height:100%;display:flex;flex-direction:column}
+header{display:flex;justify-content:space-between;align-items:center;padding:4px 0 10px}
+.brand{font:20px/1 'Alfa Slab One',serif;color:var(--gold);text-decoration:none}
+.ghost{background:none;border:0;color:var(--soft);font:600 15px Figtree,sans-serif;padding:10px 4px;cursor:pointer;min-height:44px}
+h1,h2{font-family:'Alfa Slab One',serif;font-weight:400;line-height:1.05;margin:0;text-wrap:balance}
+h1{font-size:clamp(40px,11vw,52px)}
+h2{font-size:clamp(28px,7.5vw,36px)}
+.lede{color:var(--soft);margin:8px 0 0;font-size:17px}
+section[hidden]{display:none!important}
+.screen{display:flex;flex-direction:column;gap:20px;flex:1}
+/* carte */
+.fan{position:relative;height:170px;margin:6px 0 0}
+.fan .card{position:absolute;width:112px;height:160px;left:50%;top:6px;margin-left:-56px}
+.fan .card:nth-child(1){transform:rotate(-14deg) translateX(-58px)}
+.fan .card:nth-child(2){transform:rotate(1deg) translateY(-6px)}
+.fan .card:nth-child(3){transform:rotate(15deg) translateX(58px)}
+.card{border-radius:14px;background:var(--paper);color:var(--cink);box-shadow:0 2px 0 rgba(0,0,0,.15),0 14px 30px rgba(40,0,0,.35)}
+.back{background:#B61F26;padding:9px}
+.back::before{content:"";display:block;height:100%;border-radius:8px;border:2px solid var(--gold);background:repeating-linear-gradient(45deg,transparent 0 9px,rgba(242,182,50,.55) 9px 11px),repeating-linear-gradient(-45deg,transparent 0 9px,rgba(242,182,50,.55) 9px 11px)}
+.face{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:16px}
+.face .q{font:46px/1 'Alfa Slab One',serif;color:#B61F26}
+/* form */
+.panel{background:rgba(0,0,0,.16);border-radius:18px;padding:16px}
+.label{font-weight:800;font-size:15px;margin:0 0 10px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.label small{font-weight:400;color:var(--soft);font-size:14px}
+.players{display:flex;flex-direction:column;gap:8px}
+.prow{display:flex;gap:8px}
+.prow input{flex:1;font:16px Figtree,sans-serif;padding:11px 12px;border-radius:12px;border:2px solid transparent;background:var(--paper);color:var(--cink);min-height:46px}
+.prow input:focus{outline:none;border-color:var(--gold)}
+.x{width:46px;border-radius:12px;border:0;background:rgba(0,0,0,.2);color:var(--ink);font-size:22px;cursor:pointer}
+.add{margin-top:8px;width:100%;border:2px dashed rgba(255,243,230,.45);background:none;color:var(--ink);border-radius:12px;padding:10px;font:600 16px Figtree,sans-serif;min-height:46px;cursor:pointer}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid rgba(255,243,230,.4);background:none;color:var(--ink);border-radius:999px;padding:8px 14px;font:600 15px Figtree,sans-serif;min-height:44px;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--gold);border-color:var(--gold);color:var(--cink)}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:6px 0}
+.row+.row{border-top:1px solid rgba(255,243,230,.15)}
+.step{display:flex;align-items:center;gap:6px}
+.step button{width:44px;height:44px;border-radius:12px;border:0;background:var(--paper);color:var(--cink);font:800 22px Figtree,sans-serif;cursor:pointer}
+.step output{min-width:28px;text-align:center;font:24px 'Alfa Slab One',serif}
+.sw{appearance:none;width:52px;height:32px;border-radius:99px;background:rgba(0,0,0,.3);position:relative;cursor:pointer;flex:none;margin:0}
+.sw::after{content:"";position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:50%;background:var(--paper);transition:left .15s}
+.sw:checked{background:var(--gold)}.sw:checked::after{left:24px}
+.go{width:100%;border:0;border-radius:16px;background:var(--gold);color:var(--cink);font:22px/1 'Alfa Slab One',serif;padding:20px;cursor:pointer;box-shadow:0 5px 0 #B9831A;min-height:60px}
+.go:active{transform:translateY(3px);box-shadow:0 2px 0 #B9831A}
+.go.alt{background:var(--paper);box-shadow:0 5px 0 rgba(0,0,0,.25)}
+.err{color:var(--gold);font-weight:600;margin:0;min-height:1.5em}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+details{color:var(--soft)}
+summary{cursor:pointer;font-weight:600;color:var(--ink);min-height:44px;display:flex;align-items:center}
+details ol{margin:0;padding-left:1.2em}details li{margin:4px 0}
+/* turno */
+.who{text-align:center}
+.who b{color:var(--gold)}
+.big{position:relative;width:min(76vw,300px);aspect-ratio:5/7;margin:4px auto 0;perspective:1200px;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:none;cursor:pointer}
+.big .in{position:absolute;inset:0;transition:transform .35s cubic-bezier(.3,1.4,.5,1);transform-style:preserve-3d}
+.big.up .in{transform:rotateY(180deg)}
+.big .card{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.big .face{transform:rotateY(180deg)}
+.big .hint{position:absolute;left:0;right:0;bottom:-34px;text-align:center;color:var(--soft);font-size:15px}
+.word{font:clamp(28px,8vw,40px)/1.1 'Alfa Slab One',serif;overflow-wrap:anywhere}
+.cat{font-size:14px;color:#8A5A52;margin-bottom:10px}
+.imp .word{color:#B61F26}
+.mask{width:88px;height:auto;margin-bottom:10px}
+.timer{font:clamp(64px,20vw,96px)/1 'Alfa Slab One',serif;text-align:center;font-variant-numeric:tabular-nums}
+.timer.late{color:var(--gold)}
+.tbtns{display:flex;gap:10px}.tbtns .go{font-size:18px;padding:16px}
+.accuse{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.accuse button{border:0;border-radius:14px;background:var(--paper);color:var(--cink);font:700 17px Figtree,sans-serif;padding:14px 10px;min-height:56px;cursor:pointer;overflow-wrap:anywhere}
+.verdict{text-align:center;padding:22px 16px}
+.verdict.win{background:var(--pine)}.verdict.lose{background:rgba(0,0,0,.25)}
+.verdict{border-radius:18px}
+.verdict p{margin:8px 0 0;color:var(--soft)}
+.verdict .word{color:var(--gold);margin-top:6px}
+.spacer{flex:1}
+footer{color:var(--soft);font-size:13px;text-align:center;padding-top:24px}
+@media (prefers-reduced-motion:reduce){.big .in,.sw::after{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><a class="brand" href="/">Bazzecole</a><button class="ghost" id="home" hidden>Impostazioni</button></header>
+
+<section class="screen" id="s-setup">
+  <div class="fan" aria-hidden="true"><div class="card back"></div><div class="card face"><span class="q">?</span></div><div class="card back"></div></div>
+  <div>
+    <h1>L'Impostore</h1>
+    <p class="lede">Un telefono, una parola segreta, un bugiardo. Tutti ricevono la stessa parola tranne l'impostore, che deve fingere di saperla.</p>
+  </div>
+  <div class="panel">
+    <p class="label">Chi gioca <small id="pcount"></small></p>
+    <div class="players" id="players"></div>
+    <button class="add" id="addp">+ Aggiungi giocatore</button>
+  </div>
+  <div class="panel">
+    <p class="label">Categorie <small>scegline una o più</small></p>
+    <div class="chips" id="cats"></div>
+  </div>
+  <div class="panel">
+    <div class="row"><span>Impostori</span><div class="step"><button id="im-" aria-label="Meno impostori">−</button><output id="imn">1</output><button id="im+" aria-label="Più impostori">+</button></div></div>
+    <div class="row"><label for="hint">L'impostore vede la categoria</label><input type="checkbox" class="sw" id="hint" checked></div>
+    <div class="row"><span>Minuti per discutere</span><div class="step"><button id="tm-" aria-label="Meno minuti">−</button><output id="tmn">3</output><button id="tm+" aria-label="Più minuti">+</button></div></div>
+  </div>
+  <p class="err" id="err" role="alert"></p>
+  <button class="go" id="start">Distribuisci le carte</button>
+  <details>
+    <summary>Come si gioca</summary>
+    <ol>
+      <li>Il telefono passa di mano: ognuno tiene premuta la carta per vedere la sua parola, poi la passa.</li>
+      <li>A turno, ognuno dice una sola parola collegata a quella segreta. Abbastanza vaga da non regalarla all'impostore, abbastanza precisa da non sembrare sospetti.</li>
+      <li>L'impostore ascolta e bluffa.</li>
+      <li>Allo scadere del tempo si vota. Se l'impostore viene scoperto può ancora vincere indovinando la parola.</li>
+    </ol>
+  </details>
+</section>
+
+<section class="screen" id="s-turn" hidden>
+  <div class="who"><p class="lede" style="margin:0">Passa il telefono a</p><h2 id="turnname"></h2></div>
+  <div class="big" id="card" role="button" tabindex="0" aria-label="Tieni premuto per vedere la tua carta">
+    <div class="in"><div class="card back"></div><div class="card face" id="cardface"></div></div>
+    <div class="hint" id="cardhint">Tieni premuto per vedere</div>
+  </div>
+  <div class="spacer"></div>
+  <button class="go" id="next" disabled>Ho visto, passa</button>
+</section>
+
+<section class="screen" id="s-talk" hidden>
+  <div><h2>Si parte da <span id="first" style="color:var(--gold)"></span></h2>
+  <p class="lede">Una parola a testa, in senso orario. Fate pure più giri.</p></div>
+  <div class="timer" id="timer" aria-live="polite">3:00</div>
+  <div class="tbtns"><button class="go alt" id="tpause">Pausa</button><button class="go alt" id="tplus">+30 secondi</button></div>
+  <div class="spacer"></div>
+  <button class="go" id="tovote">Si vota</button>
+</section>
+
+<section class="screen" id="s-vote" hidden>
+  <div><h2>Chi è l'impostore?</h2><p class="lede">Mettetevi d'accordo e toccate il nome dell'accusato.</p></div>
+  <div class="accuse" id="accuse"></div>
+</section>
+
+<section class="screen" id="s-end" hidden>
+  <div class="verdict" id="verdict"></div>
+  <div class="spacer"></div>
+  <button class="go" id="again">Nuova parola, stessi giocatori</button>
+  <button class="go alt" id="back">Cambia giocatori o categorie</button>
+</section>
+
+<footer>Fatto a Bologna · Gratis, senza app, senza registrazione</footer>
+</div>
+
+<script>
+{
+const WORDS={
+ 'Natale in famiglia':['Panettone','Tombola','Presepe','Albero di Natale','Babbo Natale','Renna','Calza della Befana','Cenone','Tortellini in brodo','Pandoro','Regalo riciclato','Vischio','Spumante','Zampone','Lenticchie','Luminarie','Mercatino','Carbone','Slitta','Neve','Messa di mezzanotte','Tredicesima','Fuochi d\'artificio','Calendario dell\'avvento','Maglione brutto','Torrone'],
+ 'Cibo italiano':['Lasagne','Mortadella','Pizza','Carbonara','Arancino','Tiramisù','Piadina','Parmigiano','Gelato','Cannolo','Risotto','Polenta','Bruschetta','Espresso','Cornetto','Ragù','Focaccia','Burrata','Supplì','Amatriciana','Gnocchi','Pesto','Cotoletta','Crescentina'],
+ 'Bologna':['Portici','Due Torri','Nettuno','San Luca','Piazza Maggiore','Tortellino','Osteria','Fuorisede','Via Zamboni','Montagnola','Bolognina','Archiginnasio','Garisenda','Santo Stefano','Aperitivo','Stanza singola','Bici rubata','Canale delle Moline','Tram','Lucio Dalla'],
+ 'Oggetti di casa':['Lavatrice','Frigorifero','Divano','Telecomando','Ombrello','Moka','Ferro da stiro','Aspirapolvere','Cuscino','Specchio','Forno','Scopa','Termosifone','Tostapane','Comodino','Lampadina','Phon','Caricabatterie','Tappeto','Stendino'],
+ 'Animali':['Giraffa','Pinguino','Gatto','Cane','Delfino','Elefante','Zanzara','Piccione','Polpo','Canguro','Lupo','Gufo','Riccio','Cavallo','Squalo','Formica','Camaleonte','Orso','Lumaca','Fenicottero'],
+ 'Luoghi':['Spiaggia','Ospedale','Aeroporto','Supermercato','Palestra','Biblioteca','Stazione','Discoteca','Museo','Stadio','Farmacia','Ufficio postale','Campeggio','Chiesa','Autogrill','Banca','Zoo','Parrucchiere','Sala d\'attesa','Luna park'],
+ 'Mestieri':['Idraulico','Dentista','Pompiere','Cuoco','Insegnante','Astronauta','Avvocato','Barista','Postino','Pilota','Influencer','Elettricista','Infermiere','Muratore','Fotografo','Notaio','Vigile','Panettiere','Programmatore','Giardiniere'],
+ 'Sport':['Calcio','Tennis','Nuoto','Sci','Pallavolo','Ciclismo','Boxe','Golf','Scherma','Padel','Formula 1','Basket','Rugby','Surf','Maratona','Ginnastica','Bowling','Biliardo','Pesca','Arrampicata'],
+ 'Anni 2000':['Tamagotchi','MSN','Nokia 3310','Floppy disk','Lettore MP3','Videonoleggio','Suoneria polifonica','Webcam','Walkman','Usa e getta','Squillo','Masterizzatore','Album di figurine','Diario segreto','Videocassetta','Game Boy','Chat','Smalto glitter','Pokémon','Lucidalabbra']
+};
+const MASK='<svg class="mask" viewBox="0 0 120 70" aria-hidden="true"><path d="M8 14c22-10 82-10 104 0 2 24-8 46-30 48-10 1-14-10-22-10S48 63 38 62C16 60 6 38 8 14Z" fill="#2B0D0E"/><ellipse cx="38" cy="30" rx="13" ry="8" fill="#FFFDF8"/><ellipse cx="82" cy="30" rx="13" ry="8" fill="#FFFDF8"/><path d="M8 14c-6-2-8 6-4 10M112 14c6-2 8 6 4 10" stroke="#B61F26" stroke-width="4" fill="none" stroke-linecap="round"/></svg>';
+const $=id=>document.getElementById(id);
+const store={get(k,d){try{const v=localStorage.getItem('bz-imp-'+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem('bz-imp-'+k,JSON.stringify(v))}catch(e){}}};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rnd=n=>Math.floor(Math.random()*n);
+let S={players:store.get('players',['Giocatore 1','Giocatore 2','Giocatore 3','Giocatore 4']),cats:store.get('cats',['Natale in famiglia','Cibo italiano']),imp:store.get('imp',1),hint:store.get('hint',true),mins:store.get('mins',3)};
+let used=store.get('used',[]);
+let G=null,tick=null,left=0,paused=false;
+
+function show(id){for(const s of document.querySelectorAll('.screen'))s.hidden=s.id!==id;$('home').hidden=id==='s-setup';window.scrollTo(0,0)}
+function save(){store.set('players',S.players);store.set('cats',S.cats);store.set('imp',S.imp);store.set('hint',S.hint);store.set('mins',S.mins)}
+function maxImp(){return Math.max(1,Math.floor((S.players.length-1)/2))}
+
+function renderPlayers(){
+  $('players').innerHTML=S.players.map((p,i)=>`<div class="prow"><input value="${esc(p)}" data-i="${i}" aria-label="Nome giocatore ${i+1}" maxlength="20" autocomplete="off"><button class="x" data-del="${i}" aria-label="Togli ${esc(p)}">×</button></div>`).join('');
+  $('pcount').textContent=S.players.length+' giocatori';
+  if(S.imp>maxImp())S.imp=maxImp();$('imn').textContent=S.imp;
+}
+function renderCats(){$('cats').innerHTML=Object.keys(WORDS).map(c=>`<button class="chip" aria-pressed="${S.cats.includes(c)}" data-c="${esc(c)}">${esc(c)}</button>`).join('')}
+
+$('players').addEventListener('input',e=>{const i=e.target.dataset.i;if(i!==undefined){S.players[i]=e.target.value;save()}});
+$('players').addEventListener('click',e=>{const d=e.target.dataset.del;if(d!==undefined){if(S.players.length<=3){$('err').textContent='Servono almeno 3 giocatori.';return}S.players.splice(+d,1);save();renderPlayers()}});
+$('addp').onclick=()=>{if(S.players.length>=16)return;S.players.push('Giocatore '+(S.players.length+1));save();renderPlayers();const ins=$('players').querySelectorAll('input');const l=ins[ins.length-1];l.focus();l.select()};
+$('cats').addEventListener('click',e=>{const c=e.target.dataset.c;if(!c)return;S.cats=S.cats.includes(c)?S.cats.filter(x=>x!==c):[...S.cats,c];save();renderCats()});
+$('im-').onclick=()=>{S.imp=Math.max(1,S.imp-1);$('imn').textContent=S.imp;save()};
+$('im+').onclick=()=>{S.imp=Math.min(maxImp(),S.imp+1);$('imn').textContent=S.imp;save()};
+$('tm-').onclick=()=>{S.mins=Math.max(1,S.mins-1);$('tmn').textContent=S.mins;save()};
+$('tm+').onclick=()=>{S.mins=Math.min(10,S.mins+1);$('tmn').textContent=S.mins;save()};
+$('hint').onchange=e=>{S.hint=e.target.checked;save()};
+
+function pickWord(){
+  const pool=[];for(const c of S.cats)for(const w of WORDS[c])pool.push([c,w]);
+  let fresh=pool.filter(([,w])=>!used.includes(w));
+  if(!fresh.length){used=used.filter(w=>!pool.some(([,x])=>x===w));fresh=pool}
+  const pick=fresh[rnd(fresh.length)];used.push(pick[1]);if(used.length>300)used=used.slice(-300);store.set('used',used);return pick;
+}
+function deal(){
+  const names=S.players.map((p,i)=>p.trim()||'Giocatore '+(i+1));
+  if(names.length<3){$('err').textContent='Servono almeno 3 giocatori.';return}
+  if(!S.cats.length){$('err').textContent='Scegli almeno una categoria.';return}
+  $('err').textContent='';
+  const [cat,word]=pickWord();const idx=names.map((_,i)=>i);const imps=[];
+  while(imps.length<S.imp){const k=idx.splice(rnd(idx.length),1)[0];imps.push(k)}
+  G={names,cat,word,imps,turn:0};turn();
+}
+function turn(){
+  const i=G.turn,imp=G.imps.includes(i),c=$('card');
+  c.classList.remove('up');$('next').disabled=true;$('cardhint').textContent='Tieni premuto per vedere';
+  $('turnname').textContent=G.names[i];
+  $('cardface').className='card face'+(imp?' imp':'');
+  $('cardface').innerHTML=imp?`${MASK}<div class="word">Sei l'impostore</div>${S.hint?`<div class="cat" style="margin:10px 0 0">Categoria: ${esc(G.cat)}</div>`:''}`:`<div class="cat">La parola segreta è</div><div class="word">${esc(G.word)}</div>`;
+  $('next').textContent=i===G.names.length-1?'Ho visto, si comincia':'Ho visto, passa a '+G.names[i+1];
+  show('s-turn');
+}
+const card=$('card');
+const up=()=>{card.classList.add('up');$('next').disabled=false;$('cardhint').textContent='Lascia per nasconderla'};
+const down=()=>card.classList.remove('up');
+card.addEventListener('pointerdown',e=>{e.preventDefault();up()});
+for(const ev of['pointerup','pointerleave','pointercancel'])card.addEventListener(ev,down);
+card.addEventListener('contextmenu',e=>e.preventDefault());
+card.addEventListener('keydown',e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();up()}});
+card.addEventListener('keyup',down);
+$('next').onclick=()=>{down();if(G.turn<G.names.length-1){G.turn++;turn()}else talk()};
+
+function fmt(s){return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')}
+function talk(){
+  $('first').textContent=G.names[rnd(G.names.length)];
+  left=S.mins*60;paused=false;$('tpause').textContent='Pausa';$('timer').textContent=fmt(left);$('timer').classList.remove('late');
+  run();show('s-talk');
+}
+function run(){
+  clearInterval(tick);
+  tick=setInterval(()=>{if(paused)return;left=Math.max(0,left-1);$('timer').textContent=left?fmt(left):'Tempo!';$('timer').classList.toggle('late',left<=15);if(!left)clearInterval(tick)},1000);
+}
+$('tpause').onclick=()=>{paused=!paused;$('tpause').textContent=paused?'Riprendi':'Pausa'};
+$('tplus').onclick=()=>{const was=left;left+=30;$('timer').textContent=fmt(left);$('timer').classList.toggle('late',left<=15);if(!was)run()};
+$('tovote').onclick=()=>{clearInterval(tick);$('accuse').innerHTML=G.names.map((n,i)=>`<button data-a="${i}">${esc(n)}</button>`).join('');show('s-vote')};
+$('accuse').addEventListener('click',e=>{const a=e.target.dataset.a;if(a===undefined)return;end(+a)});
+function end(a){
+  const caught=G.imps.includes(a),many=G.imps.length>1,who=G.imps.map(i=>G.names[i]).join(' e ');
+  const v=$('verdict');v.className='verdict '+(caught?'win':'lose');
+  v.innerHTML=caught
+   ?`<h2>Preso!</h2><p>${esc(G.names[a])} era ${many?'uno degli impostori':'l\'impostore'}.${many?' Gli impostori erano '+esc(who)+'.':''} Ultima chance: se indovina la parola, vince lo stesso.</p><p style="margin-top:16px">La parola era</p><div class="word">${esc(G.word)}</div>`
+   :`<h2>Sbagliato</h2><p>${esc(G.names[a])} era innocente. ${many?'Gli impostori erano':'L\'impostore era'} <b style="color:var(--ink)">${esc(who)}</b>, che vince la mano.</p><p style="margin-top:16px">La parola era</p><div class="word">${esc(G.word)}</div>`;
+  show('s-end');
+}
+$('again').onclick=deal;
+$('back').onclick=$('home').onclick=()=>{clearInterval(tick);show('s-setup')};
+$('start').onclick=deal;
+
+$('hint').checked=S.hint;$('tmn').textContent=S.mins;
+renderPlayers();renderCats();
+}
+</script>
+</body>
+</html>

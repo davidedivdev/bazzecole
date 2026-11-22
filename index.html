@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bazzecole · giochini e sciocchezze</title>
+<meta name="description" content="Bazzecole: piccoli giochi e sciocchezze da fare in compagnia o da condividere. Gratis, nel browser, senza app. Fatto a Bologna.">
+<meta property="og:title" content="Bazzecole">
+<meta property="og:description" content="Piccoli giochi e sciocchezze da condividere. Fatto a Bologna.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#E39B2E">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Figtree:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+/* VOICE: bottega di cianfrusaglie, ironica, frasi corte
+   IDEA: il bancone di un mercatino: ogni gioco è un oggetto con il suo cartellino del prezzo (gratis)
+   PICTURE: l'insegna Bazzecole in grande sopra una fila di "oggetti" colorati
+   COLOUR and TYPE: ocra dei portici dominante, inchiostro bruno, ogni gioco porta il suo colore; Alfa Slab One + Figtree
+   LAYOUT: insegna in alto, griglia di oggetti, piede minimo */
+:root{color-scheme:light dark;--bg:light-dark(#E39B2E,#2A1709);--ink:light-dark(#2B140E,#FBE6C4);--soft:light-dark(#5A3420,#D9B98E);--paper:#FFFDF8}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Figtree,system-ui,sans-serif;overflow-x:clip}
+.band{padding:clamp(28px,5vw,64px) max(5vw,16px);max-width:1240px;margin:0 auto}
+.sign{font:clamp(56px,15vw,140px)/.9 'Alfa Slab One',serif;margin:0;letter-spacing:-.01em;text-shadow:4px 4px 0 light-dark(#B86F12,#000)}
+.lede{font-size:clamp(17px,2.2vw,21px);max-width:34em;margin:18px 0 0;color:var(--soft)}
+.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));gap:22px;margin-top:clamp(28px,4vw,48px)}
+.item{position:relative;display:flex;flex-direction:column;border-radius:20px;color:#fff;text-decoration:none;padding:22px 22px 20px;min-height:250px;box-shadow:0 6px 0 rgba(0,0,0,.2);transition:transform .15s}
+a.item:hover{transform:rotate(-1deg) translateY(-3px)}
+a.item:focus-visible{outline:4px solid var(--ink);outline-offset:4px}
+.item svg{width:96px;height:96px;margin-bottom:auto}
+.item h2{font:30px/1.05 'Alfa Slab One',serif;margin:18px 0 6px;font-weight:400;text-wrap:balance}
+.item p{margin:0;font-size:16px;opacity:.9}
+.tag{position:absolute;top:18px;right:-6px;background:var(--paper);color:#2B140E;font:800 14px Figtree,sans-serif;padding:6px 12px 6px 14px;border-radius:6px 0 0 6px;transform:rotate(4deg);box-shadow:0 2px 0 rgba(0,0,0,.2)}
+.soon{opacity:.72}
+.soon .tag{background:#2B140E;color:#FBE6C4}
+.imp{background:#A3191F}.casa{background:#2F5D8A}.treni{background:#1E5A43}.caffe{background:#5B3420}
+footer{color:var(--soft);font-size:14px}
+footer a{color:inherit}
+@media (prefers-reduced-motion:reduce){.item{transition:none}}
+</style>
+</head>
+<body>
+<main class="band">
+  <h1 class="sign">Bazzecole</h1>
+  <p class="lede">Piccoli giochi e sciocchezze da fare in compagnia o da mandare agli amici. Tutto gratis, nel browser, senza scaricare niente.</p>
+
+  <div class="shelf">
+    <a class="item imp" href="/impostore/">
+      <span class="tag">Gioca ora</span>
+      <svg viewBox="0 0 96 96" aria-hidden="true"><rect x="14" y="10" width="50" height="70" rx="8" fill="#B61F26" stroke="#F2B632" stroke-width="3" transform="rotate(-10 39 45)"/><rect x="32" y="14" width="50" height="70" rx="8" fill="#FFFDF8" transform="rotate(8 57 49)"/><path d="M41 47c10-5 26-5 34 0 1 10-4 17-11 17-3 0-5-4-6-4s-3 4-6 4c-7 0-12-7-11-17Z" fill="#2B0D0E" transform="rotate(8 57 49)"/></svg>
+      <h2>L'Impostore</h2>
+      <p>Un telefono, una parola segreta, un bugiardo. Da 3 a 16 giocatori.</p>
+    </a>
+    <div class="item casa soon">
+      <span class="tag">In arrivo</span>
+      <svg viewBox="0 0 96 96" aria-hidden="true"><path d="M8 88V44h80v44" fill="#F2B632"/><path d="M14 88V56a10 10 0 0 1 20 0v32M38 88V56a10 10 0 0 1 20 0v32M62 88V56a10 10 0 0 1 20 0v32" fill="#2F5D8A"/><path d="M4 44 48 16l44 28Z" fill="#C2452D"/></svg>
+      <h2>Trova una stanza a Bologna</h2>
+      <p>Sopravvivi agli annunci, ai coinquilini e al budget.</p>
+    </div>
+    <div class="item treni soon">
+      <span class="tag">In arrivo</span>
+      <svg viewBox="0 0 96 96" aria-hidden="true"><circle cx="48" cy="48" r="38" fill="#FFFDF8"/><path d="M48 22v26l16 10" stroke="#1E5A43" stroke-width="7" stroke-linecap="round" fill="none"/><circle cx="48" cy="48" r="38" fill="none" stroke="#F2B632" stroke-width="5"/></svg>
+      <h2>Quanto ti hanno rubato i treni</h2>
+      <p>Il tempo della tua vita passato a guardare il tabellone.</p>
+    </div>
+    <div class="item caffe soon">
+      <span class="tag">In arrivo</span>
+      <svg viewBox="0 0 96 96" aria-hidden="true"><path d="M20 40h48v18a22 22 0 0 1-22 22h-4a22 22 0 0 1-22-22Z" fill="#FFFDF8"/><path d="M68 46h6a9 9 0 0 1 0 18h-8" stroke="#FFFDF8" stroke-width="6" fill="none"/><path d="M36 30c-4-6 4-8 0-16M50 30c-4-6 4-8 0-16" stroke="#F2B632" stroke-width="4" fill="none" stroke-linecap="round"/><rect x="12" y="80" width="64" height="6" rx="3" fill="#F2B632"/></svg>
+      <h2>Quanti caffè hai bevuto</h2>
+      <p>Tazzine, euro spesi e chilometri di moka.</p>
+    </div>
+  </div>
+</main>
+<footer class="band">Fatto a Bologna. Altre bazzecole in arrivo.</footer>
+</body>
+</html>
