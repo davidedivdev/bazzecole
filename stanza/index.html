@@ -49,11 +49,12 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(-
 .poster h1{font-size:clamp(44px,9vw,68px)}
 .poster .sub{font:600 24px/1.2 Caveat,cursive;color:var(--red);margin:10px 0 18px}
 .tape{position:absolute;top:-12px;left:50%;width:110px;height:26px;margin-left:-55px;background:rgba(255,250,235,.55);border:1px solid rgba(255,255,255,.35);transform:rotate(3deg);box-shadow:0 1px 2px rgba(0,0,0,.08)}
-.strips{display:flex;border-top:2px dashed #CDBFA8;margin:0 -26px;height:70px}
-.strips span{flex:1;writing-mode:vertical-rl;transform:rotate(180deg);display:grid;place-items:center;font:600 17px Caveat,cursive;color:#5B463A;border-left:1px dashed #CDBFA8;transition:transform .25s ease-out,opacity .25s ease-out}
-.strips span:last-child{border-right:0}
-.strips span.gone{opacity:0}
-.strips span.rip{transform:rotate(180deg) translateY(-30px) rotate(14deg);opacity:0}
+.strips{display:flex;margin:0 -26px;height:70px}
+.strips span{flex:1;writing-mode:vertical-rl;transform:rotate(180deg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:var(--paper);font:600 17px Caveat,cursive;color:#5B463A;border-left:1px dashed #CDBFA8;border-bottom:2px dashed #CDBFA8;white-space:nowrap;overflow:hidden;transition:transform .25s ease-out,opacity .25s ease-out}
+.strips span:first-child{border-left:0}
+.strips span i{font:400 12.5px Figtree,sans-serif;font-style:normal;letter-spacing:.03em;color:#7A6252}
+.strips span.gone{-webkit-mask:linear-gradient(#000,#000) bottom/100% 12px no-repeat;mask:linear-gradient(#000,#000) bottom/100% 12px no-repeat}
+.strips span.rip{transform:rotate(180deg) translateY(-40px) rotate(12deg);opacity:0}
 .intro{display:grid;gap:26px;padding:30px 0 50px;max-width:760px}
 .lede{font-size:clamp(18px,2.3vw,21px);max-width:62ch}
 .who{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:14px}
@@ -96,8 +97,28 @@ details ul{margin:0;padding-left:1.2em}details li{margin:6px 0}
 .ad .vibe{font-size:17px;margin-top:12px;color:#4A3329;line-height:1.45;padding:10px 12px;background:#F3EBDD;border-radius:10px}
 .ad .req{font:800 18px/1.3 Figtree,sans-serif;color:var(--red);margin-top:12px;padding-left:12px;border-left:4px solid var(--red)}
 .ad .calls{font-size:16px;font-weight:600;color:#6B4A38;margin-top:14px}
-.ad .strips{margin:8px -22px 0;height:46px}
-.ad .strips span{font:600 13px Figtree,sans-serif}
+.ad .strips{margin:0 -22px;height:104px}
+.ad .strips span{font:700 15px/1 Figtree,sans-serif;color:#3E2A20}
+.ad.str{background:linear-gradient(var(--paper),var(--paper)) top/100% calc(100% - 104px) no-repeat;box-shadow:none;filter:drop-shadow(0 2px 0 rgba(0,0,0,.06)) drop-shadow(0 12px 14px rgba(40,10,0,.3))}
+.ad.boss{background:linear-gradient(160deg,#25222C,#3B3344);color:#F5E7C6;border:2px solid #C9A24A;padding-bottom:0}
+.ad.boss .bosstag{display:inline-block;font:800 14px Figtree,sans-serif;background:#C9A24A;color:#1C1A21;border-radius:999px;padding:5px 12px;margin-bottom:12px}
+.ad.boss .kind{color:#E8C36A}
+.ad.boss .price small,.ad.boss .calls{color:#D9CBB0}
+.ad.boss .vibe{background:rgba(255,255,255,.08);color:#F5E7C6}
+.ad.boss .tear{background:#C9A24A;color:#1C1A21}
+.ad.boss .fine{font-size:13px;color:#B9AC93;margin:12px 0 14px}
+.endings{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,210px),1fr));gap:10px}
+.endings div{background:var(--wall2);border-radius:14px;padding:12px 14px;border:2px solid transparent}
+.endings b{display:block;font-size:17px;line-height:1.25}
+.endings small{display:block;color:var(--soft);font-size:15px;margin-top:4px;line-height:1.35}
+.endings .got{border-color:var(--green)}
+.endings .got b{color:var(--green)}
+.endings .no b{color:var(--soft)}
+.why{background:var(--wall2);border-radius:20px;padding:clamp(18px,3vw,28px);display:grid;gap:12px}
+.why h2{font-size:clamp(34px,6vw,44px);color:var(--terra)}
+.why p{max-width:68ch}
+.why a{color:var(--terra);font-weight:600}
+.newend{font-weight:800;color:var(--green)}
 .ad .tear{width:calc(100% + 44px);margin:0 -22px;border-radius:0;box-shadow:none;font-size:19px;min-height:60px}
 .ad .tear:active{transform:none}
 .actions{display:flex;flex-wrap:wrap;gap:12px;padding:24px 0 60px}
@@ -178,7 +199,7 @@ footer{color:var(--soft);font-size:15px;padding:0 0 40px}footer a{color:inherit}
     </div>
   </div>
 
-  <div class="intro">
+  <div class="intro" id="introbox">
     <p class="lede">Mancano due settimane all'inizio delle lezioni. Hai un budget, una notte in ostello che costa sempre di più e una pazienza limitata. Sotto i portici ti aspettano annunci, colloqui di gruppo e proprietari che vivono in Scozia.</p>
     <fieldset class="who" style="border:0;padding:0;margin:0" id="who"><legend class="hand" style="font-size:32px;margin-bottom:12px">Chi sei?</legend></fieldset>
     <button class="btn" id="start">Inizia a cercare</button>
@@ -190,8 +211,20 @@ footer{color:var(--soft);font-size:15px;padding:0 0 40px}footer a{color:inherit}
         <li>Leggi i requisiti e lo stile della casa. Al colloquio con i coinquilini ti serviranno.</li>
         <li>Per entrare servono un mese di caparra e il primo affitto. Ogni notte in ostello costa 35 €, e anche la visita a una stanza ti costa un giorno.</li>
         <li>Se un affare sembra troppo bello per essere vero, probabilmente lo è.</li>
+        <li>Prima o poi arriva il boss finale. Non dire che non ti avevamo avvisato.</li>
       </ul>
     </details>
+    <div>
+      <h2 class="hand" style="font-size:36px;margin-bottom:6px">Finali da scoprire</h2>
+      <p style="color:var(--soft);margin-bottom:14px" id="endcount">Ci sono 9 finali diversi, alcuni nascosti. Riesci a trovarli tutti?</p>
+      <div class="endings" id="endings"></div>
+    </div>
+    <section class="why" id="perche">
+      <h2>Perché esiste questo gioco</h2>
+      <p>È tutto inventato: annunci, proprietari, coinquilini, l'ingegnere in Scozia e lo studentato con la borraccia. La frustrazione invece è vera, ed è voluta. Il gioco è costruito per farti perdere tempo, soldi e pazienza come succede ogni settembre a migliaia di studenti e lavoratori fuorisede: stanze sparite in quattro minuti, requisiti assurdi, spese "da dividere", caparre impossibili, proprietari introvabili e truffe.</p>
+      <p>I numeri veri fanno meno ridere. Secondo Immobiliare.it Insights, tra il 2021 e il 2025 il prezzo medio di una stanza singola a Bologna è salito del 73%, fino a 651 € al mese (<a href="https://www.ilpost.it/2025/04/23/aumento-affitti-stanze-studenti-citta-universitarie/">Il Post</a>). Nel 2026 è sceso un po', ma una stanza costa ancora in media 585 € al mese (<a href="https://lespresso.it/c/economia/2026/08/11/caro-affitti-studenti-citta-lavoratori-condivisione-prezzi/64020">L'Espresso</a>).</p>
+      <p>Non ce l'abbiamo con chi affitta in modo onesto: ce l'abbiamo con un mercato che fa sembrare normale l'assurdo. Se ridi, condividilo. Se ti arrabbi, condividilo di più.</p>
+    </section>
   </div>
 </section>
 
@@ -281,11 +314,11 @@ $('who').insertAdjacentHTML('beforeend',PROFILES.map((p,i)=>`<label><input type=
 $('who').addEventListener('change',e=>{profile=PROFILES[+e.target.value]});
 $('start').onclick=()=>newGame(profile);
 
-function show(id){for(const s of['intro','game','end'])$(s).hidden=s!==id;window.scrollTo(0,0)}
+function show(id){for(const s of['intro','game','end'])$(s).hidden=s!==id;if(id==='intro')renderEndings();window.scrollTo(0,0)}
 
 /* ---------- stato ---------- */
 function newGame(p){
-  S={p,money:p.money,start:p.money,pat:p.pat,days:DAYS,couch:0,lead:false,found:null,busy:false,used:new Set()};
+  S={p,money:p.money,start:p.money,pat:p.pat,days:DAYS,couch:0,lead:false,found:null,busy:false,boss:false,scammed:0,endKind:null};
   show('game');$('tip').hidden=false;hud();
   news(['Prima notte in ostello. Il letto di sopra russa.']);deal();
 }
@@ -314,6 +347,7 @@ function passNight(){
 }
 function checkEnd(){
   if(S.found){endFound();return true}
+  if(S.endKind){endFail(S.endKind);return true}
   if(S.pat<=0){endFail('ferrara');return true}
   if(S.days<=0){endFail('pendolare');return true}
   if(S.money<560){endFail('casa');return true}
@@ -322,7 +356,7 @@ function checkEnd(){
 function nextDay(){
   $('tip').hidden=true;
   if(checkEnd())return;
-  const lines=[passNight()];
+  const lines=[passNight()];change('pat',-3);
   if(R()<.3){const e=pick(DAILY);lines.push(e.t);if(e.pat)change('pat',e.pat);if(e.money)change('money',e.money);if(e.couch)S.couch+=e.couch}
   if(checkEnd())return;
   news(lines);deal();window.scrollTo({top:0,behavior:RM?'auto':'smooth'});
@@ -341,14 +375,15 @@ function gen(good){
   const qs=shuffle(QUIRKS).slice(0,good?1:2);
   const a=expected/(price+spese.c*.6);
   const torn=scam?5:good?0:clamp(Math.round((a-.75)*9+R()*2),0,5);
-  return{type,zone,expected,price,spese,vibe,req,qs,scam,good,name:pick(NAMES),torn,
+  return{type,zone,expected,price,spese,vibe,req,qs,scam,good,name:pick(NAMES),torn,pre:pick(['347','333','339','328','320','366','388']),
     pTaken:good?.04:clamp(.1+(a-.9)*.9+torn*.05,.08,.72),q:qs.reduce((s,x)=>s+x[1],0)+(type.q||0),r:(R()*2-1).toFixed(1)};
 }
 function adHTML(ad,i,static_){
-  const gone=[1,4,0,3,5,2].slice(0,ad.torn);
-  const strips=Array.from({length:6},(_,k)=>`<span class="${gone.includes(k)?'gone':''}">${esc(ad.name)}</span>`).join('');
+  if(ad.boss)return bossHTML(ad,i,static_);
+  const gone=[1,4,0,3,5,2].slice(0,ad.torn),short=ad.name.split(' ').pop();
+  const strips=Array.from({length:6},(_,k)=>`<span class="${gone.includes(k)?'gone':''}">${esc(short)}<i>${ad.pre} ··· ····</i></span>`).join('');
   const notes=[...ad.qs.map(x=>x[0])];if(ad.scam)notes.push('Proprietario all\'estero, chiavi per posta');
-  return `<article class="ad" style="--r:${ad.r}deg" ${i!=null?`data-i="${i}"`:''}>
+  return `<article class="ad str" style="--r:${ad.r}deg" ${i!=null?`data-i="${i}"`:''}>
     <div class="tape" aria-hidden="true"></div>
     <p class="kind">${esc(ad.type.n)}</p>
     <p class="price">${ad.price} €<small>${esc(ad.spese.t)}</small></p>
@@ -357,13 +392,27 @@ function adHTML(ad,i,static_){
     <p class="vibe">${esc(VIBES[ad.vibe])}</p>
     ${ad.req?`<p class="req">${esc(ad.req.t)}</p>`:''}
     <p class="calls">${ad.torn?`${ad.torn} ${ad.torn===1?'persona ha':'persone hanno'} già chiamato`:'Nessuno ha ancora chiamato'}</p>
+    ${static_?'<div style="height:14px"></div>':`<button class="btn tear" data-i="${i}">Strappa il numero</button>`}
     <div class="strips" aria-hidden="true">${strips}</div>
-    ${static_?'':`<button class="btn tear" data-i="${i}">Strappa il numero</button>`}
+  </article>`;
+}
+function bossHTML(ad,i,static_){
+  return `<article class="ad boss" style="--r:0deg" ${i!=null?`data-i="${i}"`:''}>
+    <span class="bosstag">Boss finale</span>
+    <p class="kind">Il Portico Dorato, luxury student living</p>
+    <p class="price">1.000 €<small>al mese. Sì, al mese. Sembra a notte.</small></p>
+    <ul><li>Palestra, rooftop e sala studio con kombucha</li><li>Lavatrice a gettoni: 6 € a lavaggio</li><li>Caparra di tre mesi più 350 € di iscrizione</li><li>Ospiti fino alle 22, previa registrazione</li></ul>
+    <p class="vibe">Più che una stanza, un lifestyle. Più che un affitto, un mutuo.</p>
+    <p class="calls">Disponibilità immediata. Sempre. Chissà perché.</p>
+    ${static_?'':`<button class="btn tear" data-i="${i}">Affronta il boss</button>`}
+    <p class="fine">Struttura immaginaria. Ogni riferimento a residenze reali è puramente... dai, lo sai.</p>
   </article>`;
 }
 function deal(){
   S.ads=[];
   if(S.lead){S.ads.push(gen(true));S.lead=false}
+  const day=DAYS-S.days+1;
+  if(!S.boss&&day>=5&&(R()<.35||S.days<=4)){S.boss=true;S.ads.push({boss:true,r:0})}
   while(S.ads.length<2)S.ads.push(gen(false));
   S.ads=shuffle(S.ads);
   $('board').innerHTML=S.ads.map((a,i)=>adHTML(a,i)).join('');
@@ -374,9 +423,9 @@ $('board').addEventListener('click',async e=>{
   S.busy=true;const ad=S.ads[+b.dataset.i];
   const strip=b.closest('.ad').querySelector('.strips span:not(.gone)');
   if(strip){strip.classList.add('rip');await wait(260)}
-  await contact(ad);S.busy=false;nextDay();
+  await (ad.boss?bossFight():contact(ad));S.busy=false;nextDay();
 });
-$('skip').onclick=()=>{if(!S.busy){change('pat',2);nextDay()}};
+$('skip').onclick=()=>{if(!S.busy){change('pat',3);nextDay()}};
 $('post').onclick=async()=>{if(S.busy)return;S.busy=true;await groupPost();S.busy=false;nextDay()};
 
 /* ---------- telefono ---------- */
@@ -400,8 +449,8 @@ async function contact(ad){
   await me(`Ciao! Ho visto l'annuncio sotto il portico: ${ad.type.n.toLowerCase()} in ${ad.zone.n}. È ancora libera?`);
   if(ad.scam)return scam(ad);
   const r=R();
-  if(r<ad.pTaken){await them(pick(TAKEN));change('pat',-5);return close()}
-  if(r<ad.pTaken+.1){await sys(`Visualizzato alle ${hhmm()}. Nessuna risposta.`);change('pat',-6);return close()}
+  if(r<ad.pTaken){await them(pick(TAKEN));change('pat',-9);return close()}
+  if(r<ad.pTaken+.1){await sys(`Visualizzato alle ${hhmm()}. Nessuna risposta.`);change('pat',-10);return close()}
   let fee=0;
   if(r<ad.pTaken+.18){
     fee=Math.round(ad.price*1.22);
@@ -411,7 +460,7 @@ async function contact(ad){
   }
   if(ad.req&&!S.p.tags.includes(ad.req.tag)){
     await them(`Ciao! Era scritto nell'annuncio: ${ad.req.t.toLowerCase()}.`);
-    await sys('Leggere i requisiti fa risparmiare una giornata.');change('pat',-5);return close();
+    await sys('Leggere i requisiti fa risparmiare una giornata.');change('pat',-9);return close();
   }
   await them('Sì, è libera! Facciamo una videochiamata veloce con gli altri coinquilini?');
   await me('Certo!');
@@ -419,7 +468,7 @@ async function contact(ad){
   const Q=pick(QUESTIONS);await them(Q.q);
   const opts=shuffle([ad.vibe,...shuffle(Object.keys(Q.a).filter(v=>v!==ad.vibe)).slice(0,2)]);
   const i=await ask(opts.map(v=>({t:Q.a[v]})));
-  if(opts[i]!==ad.vibe){await them(pick(REJECT));await sys('Non ti hanno fatto sapere.');change('pat',-8);return close()}
+  if(opts[i]!==ad.vibe){await them(pick(REJECT));await sys('Non ti hanno fatto sapere.');change('pat',-14);return close()}
   await them('Ci piaci! Passi a vederla domani?');
   await me('Assolutamente sì.');
   await sys(`Il giorno dopo, in ${ad.zone.n}. ${passNight()}`);
@@ -430,8 +479,8 @@ async function contact(ad){
   if(R()<.4){const f=pick(FLAWS);await sys(f[0],true);q+=f[1]}
   const total=ad.price*2+fee;
   await them(`Allora? Se la vuoi servono un mese di caparra più il primo affitto${fee?', più l\'agenzia':''}: ${eur(total)}.`);
-  if(S.money<total){await sys(`Hai ${eur(S.money)}. Non bastano.`,true);change('pat',-12);await ask([{t:'Ehm, ci penso e ti faccio sapere'}]);return close()}
-  if(await ask([{t:`La prendo (${eur(total)})`},{t:'Ci penso',alt:true}])===1){await them('Ok! Guarda che ho altre 30 persone in lista.');change('pat',-4);return close()}
+  if(S.money<total){await sys(`Hai ${eur(S.money)}. Non bastano.`,true);change('pat',-18);await ask([{t:'Ehm, ci penso e ti faccio sapere'}]);return close()}
+  if(await ask([{t:`La prendo (${eur(total)})`},{t:'Ci penso',alt:true}])===1){await them('Ok! Guarda che ho altre 30 persone in lista.');change('pat',-6);return close()}
   change('money',-total);
   await them('Benvenuto in casa! Le chiavi sono tre, una non si sa cosa apra.');
   S.found={ad,q,extra,fee,total};
@@ -440,9 +489,10 @@ async function contact(ad){
 async function scam(ad){
   await them('Ciao caro, io sono ingegnere e lavoro in Scozia. Stanza libera, bellissima. Tu mandi caparra di 400 € con bonifico e io spedisco chiavi per posta.');
   if(await ask([{t:'Mando i 400 €'},{t:'Prima voglio vederla',alt:true}])===0){
-    change('money',-400);change('pat',-15);
+    change('money',-400);change('pat',-22);S.scammed++;
     await sys('Numero inesistente. Forse anche la Scozia.',true);
     await sys('Regola d\'oro: mai mandare soldi prima di aver visto la stanza e firmato il contratto.');
+    if(S.scammed>=2){await sys('Ci sei cascato due volte. Prendi una decisione drastica.',true);S.endKind='scozia'}
   }else{
     await them('Io non posso, sono in Scozia. Tu fidati.');
     await ask([{t:'Blocca il contatto'}]);
@@ -450,17 +500,59 @@ async function scam(ad){
   }
   return close();
 }
+async function bossFight(){
+  open('Il Portico Dorato','Luxury student living, community team');
+  await them('Ciao! Benvenut* nella community del Portico Dorato! Ti va un tour virtuale della tua prossima esperienza abitativa?');
+  await me('Ciao. Vorrei solo sapere il prezzo vero.');
+  await them('Certo! 1.000 € al mese, più 120 € di servizi, più 350 € di iscrizione, più tre mesi di caparra. Per entrare bastano 4.470 €. Ti regaliamo una borraccia.');
+  await sys(`Hai ${eur(S.money)}. Il boss ha ${eur(4470)} di punti vita.`,true);
+  let asked=false;
+  for(;;){
+    const opts=[...(asked?[]:[{t:'Chiedo uno sconto'}]),{t:'Chiamo i miei per un prestito'},{t:'Scappo',alt:true}];
+    const k=opts[await ask(opts)].t;
+    if(k==='Chiedo uno sconto'){asked=true;await them('Lo sconto c\'è: se firmi entro dieci minuti la borraccia diventa termica.');change('pat',-10);continue}
+    if(k==='Chiamo i miei per un prestito'){
+      await sys('Chiami casa. Squilla a lungo.');
+      await them('MAMMA: Mille euro AL MESE?? Va bene, ma a Natale niente regali per dieci anni.');
+      await sys('Il boss ha vinto. Ma almeno hai una stanza.',true);
+      S.endKind='studentato';return close('Firma con mano tremante');
+    }
+    await sys('Esci dalla brochure in punta di piedi. Il community manager ti saluta, sempre sorridente.');change('pat',-12);return close();
+  }
+}
 async function groupPost(){
   open('Cerco stanza Bologna','12.403 membri, 12.402 cercano stanza');
   await me(`Ciao a tutti! ${S.p.n}, cerco singola o posto letto, max ${S.p.money>1700?600:500} €. Persona tranquilla e pulita, referenze disponibili.`);
   for(const t of shuffle(GROUP).slice(0,2))await them(t);
   if(R()<.35){await them('Ciao! Si libera una singola a Cirenaica, 480 € spese incluse. Domani la attacco in bacheca: arriva per primo.');S.lead=true;await sys('Domani in bacheca ci sarà un annuncio buono. Forse.')}
-  else{await sys('Nessun altro messaggio utile. Solo un meme sui prezzi.');change('pat',-3)}
+  else{await sys('Nessun altro messaggio utile. Solo un meme sui prezzi.');change('pat',-6)}
   return close();
 }
 
 /* ---------- finali ---------- */
+const ENDINGS=[
+ ['leggenda','Leggenda dei portici','Trova una stanza a un prezzo onesto, e in fretta.'],
+ ['sopravvissuto','Sopravvissuto','Trova una stanza dignitosa.'],
+ ['piuomeno','Hai vinto, più o meno','Accontentati di una stanza con qualche difetto.'],
+ ['tetto','Almeno hai un tetto','Firma per la stanza peggiore che ti capita.'],
+ ['pendolare','Iniziano le lezioni','Arriva all\'ultimo giorno senza casa.'],
+ ['casa','Torni dai tuoi','Resta senza soldi per la caparra.'],
+ ['ferrara','Ti trasferisci a Ferrara','Finisci la pazienza.'],
+ ['studentato','Ostaggio dello studentato','Affronta il boss finale e cedi.'],
+ ['scozia','Destinazione Scozia','Un finale nascosto. Fidati di chi non dovresti.']];
+const TITLE_ID={'Leggenda dei portici':'leggenda','Sopravvissuto':'sopravvissuto','Hai vinto, più o meno':'piuomeno','Almeno hai un tetto':'tetto'};
+function gotEndings(){try{return JSON.parse(localStorage.getItem('bz-stanza-endings')||'[]')}catch(e){return[]}}
+function unlock(id){const g=gotEndings();if(g.includes(id))return false;g.push(id);try{localStorage.setItem('bz-stanza-endings',JSON.stringify(g))}catch(e){}return true}
+function renderEndings(){
+  const g=gotEndings();
+  $('endcount').textContent=g.length?`Hai scoperto ${g.length} finali su ${ENDINGS.length}. ${g.length===ENDINGS.length?'Li hai trovati tutti: sei pronto per il mercato immobiliare vero.':'Ne mancano ancora, alcuni sono nascosti.'}`:`Ci sono ${ENDINGS.length} finali diversi, alcuni nascosti. Riesci a trovarli tutti?`;
+  $('endings').innerHTML=ENDINGS.map(([id,t,hint])=>g.includes(id)?`<div class="got"><b>${t}</b><small>${hint}</small></div>`:`<div class="no"><b>???</b><small>${hint}</small></div>`).join('');
+}
+function endNote(id){const isNew=unlock(id),n=gotEndings().length;return`<p class="${isNew?'newend':'count'}">${isNew?'Nuovo finale sbloccato!':'Finale già scoperto.'} Ne hai trovati ${n} su ${ENDINGS.length}.</p>`}
+const WHY=`<section class="why"><h2 style="font-size:32px">È tutto finto. La frustrazione no.</h2><p>Annunci, proprietari e studentati sono inventati, ma il gioco è fatto apposta per farti arrabbiare come succede davvero a chi cerca casa a Bologna. <button class="btn line" id="whybtn" style="margin-top:12px">Perché esiste questo gioco</button></p></section>`;
 const FAILS={
+ studentato:{stamp:'Boss finale',h:'Ostaggio dello studentato',p:'Hai una stanza da 12 m² con palestra, rooftop e una pianta finta. I tuoi genitori hanno chiesto un prestito, tu hai una borraccia. Benvenuto nella community.'},
+ scozia:{stamp:'Finale nascosto',h:'Destinazione Scozia',p:'Hai mandato la caparra all\'ingegnere in Scozia due volte. Ora parti per cercarlo di persona: almeno il volo costa meno di una caparra.'},
  pendolare:{stamp:'Tempo scaduto',h:'Iniziano le lezioni',p:'Fai il pendolare da Imola: sveglia alle 5:40, regionale delle 6:12. In ritardo, ovviamente.',link:['/treni/','Quanto ti ruberanno i treni?']},
  casa:{stamp:'Fondi esauriti',h:'Torni dai tuoi',p:'Hai finito i soldi per la caparra. Tua madre ha già rifatto il letto della cameretta e la password del wifi è ancora quella del 2014.'},
  ferrara:{stamp:'Pazienza finita',h:'Ti trasferisci a Ferrara',p:'Biciclette, silenzio, affitti umani. Ogni tanto ripensi alle Due Torri, ma passa.'}};
@@ -468,7 +560,7 @@ function stats(){const used=DAYS-S.days;return`<div class="score"><div><span>Gio
 function endFail(k){
   const f=FAILS[k];show('end');
   const txt=`Ho cercato una stanza a Bologna per ${DAYS-S.days} giorni. Finale: ${f.h.toLowerCase()}. Tu sopravvivi?`;
-  $('endbox').innerHTML=`<p class="stamp">${f.stamp}</p><h2>${f.h}</h2><p class="lede">${f.p}</p>${stats()}${buttons()}${f.link?`<p><a href="${f.link[0]}">${f.link[1]}</a></p>`:''}`;
+  $('endbox').innerHTML=`<p class="stamp">${f.stamp}</p><h2>${f.h}</h2><p class="lede">${f.p}</p>${endNote(k)}${stats()}${buttons()}${f.link?`<p><a href="${f.link[0]}">${f.link[1]}</a></p>`:''}${WHY}`;
   wire(txt);
 }
 function endFound(){
@@ -483,18 +575,20 @@ function endFound(){
   const txt=`Ho cercato una stanza a Bologna: in ${DAYS-S.days} giorni ho trovato ${ad.type.n.toLowerCase()} in ${ad.zone.n} a ${ad.price} €. Voto casa ${score}/100: ${title.toLowerCase()}. Tu sopravvivi?`;
   $('endbox').innerHTML=`<p class="stamp ok">Contratto firmato</p><h2>${title}</h2><p class="lede">${line}</p>
    <div class="score"><div><span>Voto casa</span><b>${score}/100</b></div><div><span>Record personale</span><b>${Math.max(best,score)}/100</b></div><div><span>Affitto vero al mese</span><b>${eur(ad.price+extra)}</b></div></div>
-   ${stats()}<div class="kept">${adHTML(ad,null,true)}</div>${buttons()}`;
+   ${endNote(TITLE_ID[title])}${stats()}<div class="kept">${adHTML(ad,null,true)}</div>${buttons()}${WHY}`;
   wire(txt);
 }
 function buttons(){return`<div class="endbtns"><button class="btn" id="share">Condividi il finale</button><button class="btn line" id="again">Gioca ancora</button></div><p class="toast" id="toast" role="status"></p>`}
 function wire(txt){
   $('again').onclick=()=>show('intro');
+  $('whybtn').onclick=()=>{show('intro');$('perche').scrollIntoView({behavior:RM?'auto':'smooth'})};
   $('share').onclick=async()=>{
     const url=location.origin+'/stanza/';
     try{if(navigator.share){await navigator.share({title:'Trova una stanza a Bologna',text:txt,url});return}}catch(e){if(e.name==='AbortError')return}
     try{await navigator.clipboard.writeText(txt+' '+url);$('toast').textContent='Copiato. Incollalo nel gruppo della casa (se ce l\'hai).'}catch(e){$('toast').textContent=txt+' '+url}
   };
 }
+renderEndings();
 }
 </script>
 </body>
