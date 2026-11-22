@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Generatore di scuse: per saltare lezione, parenti e riunioni · Bazzecole</title>
+<meta name="description" content="Generatore di scuse gratis: per saltare lezione, il pranzo dai parenti, la riunione di condominio o per dare buca agli amici. Credibili, così così o assurde, pronte da mandare su WhatsApp.">
+<meta property="og:title" content="Generatore di scuse">
+<meta property="og:description" content="Credibili, così così o assurde. Pronte da mandare. Usare con moderazione.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#DDE3EA">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+/* VOICE: burocrazia italiana che prende in giro se stessa: formale fuori, assurda dentro
+   IDEA: il modulo prestampato per le giustificazioni, con timbro e firma
+   PICTURE: il modulo compilato con la scusa e il timbro rosso dell'esito
+   COLOUR and TYPE: 60 grigio azzurro da ufficio, 30 carta avorio del modulo, 10 blu inchiostro per le azioni; rosso solo per il timbro; Figtree per tutto, Caveat solo per la firma
+   LAYOUT: una colonna: titolo, modulo con le scelte, scusa generata subito sotto */
+:root{color-scheme:light dark;
+ --bg:light-dark(#DDE3EA,#141A22);--ink:light-dark(#1F2A44,#E6ECF5);--soft:light-dark(#54627A,#9EABC0);
+ --paper:#FFFDF6;--pink:#1F2A44;--psoft:#5D6880;--rule:#D9DEE8;--blue:#1F3B8C;--blue2:#152A66;--stamp:#C0392B}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.55 Figtree,system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:720px;margin:0 auto;padding:0 max(4vw,16px)}
+.top{padding-top:14px;padding-bottom:6px}
+.brand{font:20px/1 'Alfa Slab One',serif;color:var(--ink);text-decoration:none}
+h1{font:800 clamp(38px,8.5vw,58px)/1.02 Figtree,sans-serif;letter-spacing:-.02em;margin:12px 0 0;text-wrap:balance}
+.lede{color:var(--soft);font-size:clamp(18px,2.3vw,20px);margin:10px 0 24px;max-width:56ch}
+p{margin:0}
+button{font:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+.form{background:var(--paper);color:var(--pink);border-radius:6px;padding:clamp(18px,4vw,30px);box-shadow:0 1px 0 rgba(0,0,0,.05),0 18px 36px rgba(20,30,50,.18);position:relative}
+.fhead{display:flex;justify-content:space-between;gap:12px;align-items:baseline;border-bottom:2px solid var(--pink);padding-bottom:10px;margin-bottom:6px;flex-wrap:wrap}
+.fhead b{font-size:clamp(17px,3.6vw,20px)}
+.fhead span{font-size:14px;color:var(--psoft)}
+.field{padding:14px 0;border-bottom:1px solid var(--rule)}
+.field>span{display:block;font-weight:700;font-size:15px;color:var(--psoft);margin-bottom:8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--rule);background:#fff;color:var(--pink);border-radius:999px;padding:8px 14px;font-weight:700;font-size:16px;min-height:44px;transition:background-color .15s ease-out}
+.chip[aria-pressed=true]{background:var(--pink);border-color:var(--pink);color:var(--paper)}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:#EEF1F6;border-radius:12px;padding:5px}
+.seg button{border:0;border-radius:9px;background:transparent;color:var(--pink);font-weight:800;font-size:16px;padding:10px 6px;min-height:46px}
+.seg button[aria-pressed=true]{background:var(--blue);color:#fff}
+.field input{font:17px Figtree,sans-serif;padding:10px 12px;border-radius:10px;border:2px solid var(--rule);background:#fff;color:var(--pink);min-height:48px;width:100%}
+.go{width:100%;margin-top:18px;border:0;border-radius:14px;background:var(--blue);color:#fff;font-weight:800;font-size:20px;padding:16px;min-height:60px;box-shadow:0 4px 0 var(--blue2);transition:transform .15s ease-out,box-shadow .15s ease-out}
+.go:active{transform:translateY(3px);box-shadow:0 1px 0 var(--blue2)}
+.out{margin-top:22px}
+.out .form{padding-top:clamp(22px,4vw,30px)}
+.msg{font-size:clamp(19px,3.8vw,22px);line-height:1.55;white-space:pre-line;padding-right:min(120px,26%);min-height:5em}
+.msg.pop{animation:pop .25s ease-out}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.sign{font:700 32px/1 Caveat,cursive;color:var(--blue);margin-top:12px;text-align:right}
+.stamp{position:absolute;top:18px;right:16px;border:4px solid var(--stamp);color:var(--stamp);border-radius:10px;padding:6px 10px;font:800 15px/1.1 Figtree,sans-serif;text-align:center;transform:rotate(9deg);max-width:120px;opacity:.88}
+.stamp.hit{animation:stamp .25s ease-out}
+@keyframes stamp{from{opacity:0;transform:rotate(9deg) scale(1.6)}to{opacity:.88;transform:rotate(9deg) scale(1)}}
+.meter{margin-top:18px;border-top:1px solid var(--rule);padding-top:14px}
+.meter p{display:flex;justify-content:space-between;font-weight:700;font-size:15px;color:var(--psoft)}
+.meter p b{color:var(--pink);font-variant-numeric:tabular-nums}
+.bar{height:10px;border-radius:9px;background:#EEF1F6;margin-top:6px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--blue);transform-origin:left;transition:transform .3s ease-out}
+.acts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:10px;margin-top:16px}
+.btn{border:0;border-radius:12px;background:var(--blue);color:#fff;font-weight:800;font-size:17px;padding:14px;min-height:54px;text-decoration:none;text-align:center;display:grid;place-items:center}
+.btn.line{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px var(--soft)}
+.toast{min-height:1.5em;font-weight:700;margin-top:10px}
+.fine{color:var(--soft);font-size:15px;margin-top:18px}
+footer{color:var(--soft);font-size:15px;padding:30px 0 40px}footer a{color:inherit}
+@media(max-width:480px){.msg{padding-right:0;padding-top:46px}.stamp{top:14px;right:12px}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap top"><a class="brand" href="/">Bazzecole</a></div>
+<main class="wrap">
+  <h1>Generatore di scuse</h1>
+  <p class="lede">Scegli a chi scrivere e cosa vuoi evitare. Noi compiliamo il modulo, timbriamo e te lo diamo pronto da mandare.</p>
+
+  <div class="form">
+    <div class="fhead"><b>Modulo G-27/bis</b><span>Richiesta di giustificazione universale</span></div>
+    <div class="field"><span>Destinatario</span><div class="chips" id="to"></div></div>
+    <div class="field"><span>Cosa vuoi evitare</span><div class="chips" id="what"></div></div>
+    <div class="field"><span>Livello della scusa</span><div class="seg" id="tone"><button data-t="cred">Credibile</button><button data-t="meh">Così così</button><button data-t="lol">Assurda</button></div></div>
+    <div class="field" style="border-bottom:0"><span>Firma (facoltativa)</span><input id="name" maxlength="30" autocomplete="off" placeholder="Il tuo nome"></div>
+    <button class="go" id="gen">Genera la scusa</button>
+  </div>
+
+  <div class="out">
+    <div class="form" id="card">
+      <div class="stamp" id="stamp" aria-hidden="true"></div>
+      <p class="msg" id="msg" aria-live="polite"></p>
+      <p class="sign" id="sign"></p>
+      <div class="meter"><p><span>Credibilità stimata</span><b id="pct"></b></p><div class="bar"><i id="pbar"></i></div></div>
+    </div>
+    <div class="acts">
+      <button class="btn" id="again">Un'altra</button>
+      <button class="btn line" id="copy">Copia</button>
+      <a class="btn line" id="wa" target="_blank" rel="noopener">Manda su WhatsApp</a>
+    </div>
+    <p class="toast" id="toast" role="status"></p>
+    <p class="fine">Usare con moderazione. Non rispondiamo di bocciature, diseredamenti, multe condominiali e coinquilini offesi.</p>
+  </div>
+</main>
+<div class="wrap"><footer>Fatto a Bologna. Altri giochi su <a href="/">Bazzecole</a>. <a href="/privacy/">Privacy</a>. <a href="https://www.paypal.me/DavideMazza626" target="_blank" rel="noopener">Offrici un caffè</a></footer></div>
+
+<script>
+{
+const $=id=>document.getElementById(id);
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const store={get(k,d){try{const v=localStorage.getItem('bz-scuse-'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem('bz-scuse-'+k,JSON.stringify(v))}catch(e){}}};
+
+const TO={
+ prof:{n:'Prof',f:true,hi:['Buongiorno professore,','Gentile professoressa,','Buongiorno,'],bye:['La ringrazio per la comprensione.','Mi scuso per il disagio e resto a disposizione.','Cordiali saluti.']},
+ mamma:{n:'Mamma',f:false,hi:['Ciao mà,','Mamma,','Ciao mamma,'],bye:['Ti chiamo stasera, giuro.','Ti voglio bene, non arrabbiarti.','Salutami il gatto.']},
+ amici:{n:'Amici',f:false,pl:true,hi:['Raga,','Ciao a tutti,','Gente,'],bye:['Recupero la prossima, giuro.','Offro io la prossima. Forse.','Vi voglio bene lo stesso.']},
+ capo:{n:'Capo',f:true,hi:['Buongiorno,','Gentile responsabile,','Buongiorno, scusi il disturbo:'],bye:['Recupero il tempo nei prossimi giorni.','Resto raggiungibile per le urgenze.','Grazie per la comprensione.']},
+ casa:{n:'Coinquilini',f:false,pl:true,hi:['Ciao casa,','Coinquilini,','Ciao a tutti,'],bye:['Lascio comunque una moka pronta.','I piatti li lavo domani, promesso.','Non toccate il mio yogurt.']},
+ amm:{n:'Amministratore',f:true,hi:['Gentile amministratore,','Buongiorno,','Spettabile amministrazione,'],bye:['Distinti saluti.','Resto in attesa del verbale.','Cordiali saluti.']}
+};
+const WHAT={
+ lezione:{n:'Lezione',i:'oggi non riesco a venire a lezione',f:'oggi purtroppo non potrò essere presente a lezione'},
+ parenti:{n:'Pranzo dai parenti',i:'domenica non riesco a venire a pranzo',f:'domenica non potrò essere presente al pranzo'},
+ uscita:{n:'Uscita di stasera',i:'stasera non ce la faccio a uscire',f:'stasera non potrò raggiungervi'},
+ consegna:{n:'Una consegna',i:'la consegna arriverà con qualche giorno di ritardo',f:'la consegna subirà un breve ritardo'},
+ condominio:{n:'Riunione di condominio',i:'non riesco a venire alla riunione di condominio',f:'non potrò partecipare all\'assemblea condominiale'},
+ lavoro:{n:'Arrivare puntuale',i:'arrivo un po\' in ritardo',f:'questa mattina arriverò con qualche minuto di ritardo'},
+ palestra:{n:'Palestra',i:'oggi salto la palestra',f:'oggi non potrò allenarmi'},
+ chat:{n:'Rispondere ai messaggi',i:'scusate se non ho risposto',f:'mi scuso per non aver risposto prima'}
+};
+const BECAUSE={i:['perché','visto che','dato che'],f:['a causa di un imprevisto:','per un motivo improvviso:','poiché']};
+const WHY={
+ cred:['mi è arrivato un idraulico senza preavviso e devo restare in casa','ho un mal di testa che non passa da stamattina','il treno è stato soppresso e il prossimo è tra due ore','si è rotta la caldaia e aspetto il tecnico','devo accompagnare mio nonno a una visita','mi si è bloccato il telefono e ho appena recuperato i messaggi','ho una scadenza che mi sta mangiando vivo','ho qualche linea di febbre e non voglio contagiare nessuno','mi hanno spostato il turno all\'ultimo momento','è saltata la corrente in tutto il palazzo'],
+ meh:['il gatto si è chiuso in bagno e non si trova la chiave','il coinquilino ha cucinato il pesce e la casa è inagibile','ho fatto una lavatrice e ora possiedo solo calzini spaiati e un accappatoio','un piccione è entrato in camera e ne rivendica la proprietà','il padrone di casa è passato "solo un attimo" tre ore fa','ho iniziato una serie e sono al settimo episodio: è una questione di principio','la moka è esplosa e sto ancora cercando il manico','la porta si è chiusa con me fuori, in pigiama','l\'autobus è passato pieno tre volte di fila','aspetto un corriere che è "nei paraggi" da stamattina'],
+ lol:['mi hanno preso come comparsa in un film sui portici e non posso uscire dall\'inquadratura','la Garisenda mi ha guardato storto e preferisco non rischiare','il mio oroscopo sconsiglia vivamente gli spostamenti verso nord','una signora mi ha coinvolto in una partita a briscola che non accenna a finire','ho perso una scommessa e devo salire a San Luca camminando all\'indietro','il mio sosia è stato avvistato in zona e devo chiarire la situazione','un tortellino è finito nel lavandino e la casa è in lutto','ho adottato una pianta e oggi è il suo primo giorno di scuola','per errore risulto iscritto a una maratona e mi aspettano alla partenza','è in corso una discussione su chi ha inventato il ragù e non posso arrendermi proprio ora']
+};
+const EXTRA={
+ cred:{i:['Mi rifaccio presto.','Ti aggiorno appena posso.',''],f:['Recupererò al più presto.','Aggiornerò appena possibile.','']},
+ meh:{i:['Giuro che è vero.','Ho le foto, ma sono imbarazzanti.',''],f:['Posso fornire documentazione, se necessario.','Mi rendo conto di quanto possa sembrare strano.','']},
+ lol:{i:['Ho le prove, ma sono sotto sequestro.','Non fate domande.','Ne parleremo quando sarà tutto finito.'],f:['Allego documentazione a parte.','Confido nella Sua discrezione.','Preferirei non entrare nei dettagli.']}
+};
+const RANGE={cred:[68,94],meh:[32,64],lol:[2,24]};
+
+let S={to:store.get('to','amici'),what:store.get('what','uscita'),tone:store.get('tone','meh'),name:store.get('name','')};
+let last='',text='';
+function save(){for(const k of['to','what','tone','name'])store.set(k,S[k])}
+function chips(){
+  $('to').innerHTML=Object.entries(TO).map(([k,v])=>`<button class="chip" data-k="${k}" aria-pressed="${S.to===k}">${v.n}</button>`).join('');
+  $('what').innerHTML=Object.entries(WHAT).map(([k,v])=>`<button class="chip" data-k="${k}" aria-pressed="${S.what===k}">${v.n}</button>`).join('');
+  for(const b of $('tone').children)b.setAttribute('aria-pressed',b.dataset.t===S.tone);
+}
+$('to').addEventListener('click',e=>{const k=e.target.dataset.k;if(k){S.to=k;save();chips();gen()}});
+$('what').addEventListener('click',e=>{const k=e.target.dataset.k;if(k){S.what=k;save();chips();gen()}});
+$('tone').addEventListener('click',e=>{const t=e.target.dataset.t;if(t){S.tone=t;save();chips();gen()}});
+$('name').value=S.name;$('name').addEventListener('input',e=>{S.name=e.target.value.trim();save();sign()});
+function sign(){$('sign').textContent=S.name||''}
+
+function gen(){
+  const to=TO[S.to],w=WHAT[S.what],form=to.f?'f':'i';
+  let reason,tries=0;do{reason=pick(WHY[S.tone])}while(reason===last&&tries++<10);last=reason;
+  let extra=pick(EXTRA[S.tone][form]);if(to.pl)extra=extra.replace(/^Ti /,'Vi ');
+  const because=pick(BECAUSE[form]);
+  let lead=w[form];if(S.what==='chat'&&form==='i')lead=(to.pl?'scusate':'scusa')+' se non ho risposto prima';
+  const body=`${lead.charAt(0).toUpperCase()+lead.slice(1)} ${because} ${reason}.${extra?' '+extra:''}`;
+  text=`${pick(to.hi)}\n${body}\n${pick(to.bye)}`;
+  const [a,b]=RANGE[S.tone],pct=a+Math.floor(Math.random()*(b-a+1));
+  const m=$('msg');m.textContent=text;m.classList.remove('pop');void m.offsetWidth;m.classList.add('pop');
+  sign();
+  $('pct').textContent=pct+'%';$('pbar').style.transform=`scaleX(${pct/100})`;
+  const st=$('stamp');st.textContent=pct>=68?'Approvata':pct>=30?'Approvata con riserva':'Respinta, ma con stile';
+  st.classList.remove('hit');void st.offsetWidth;st.classList.add('hit');
+  $('wa').href='https://wa.me/?text='+encodeURIComponent(full());
+  $('toast').textContent='';
+}
+function full(){return text+(S.name?`\n${S.name}`:'')}
+$('gen').onclick=gen;$('again').onclick=gen;
+$('copy').onclick=async()=>{try{await navigator.clipboard.writeText(full());$('toast').textContent='Copiata. Ora tocca a te essere convincente.'}catch(e){$('toast').textContent='Non riesco a copiare: tieni premuto sul testo per selezionarlo.'}};
+chips();gen();
+}
+</script>
+<script src="/shared/altri.js"></script>
+</body>
+</html>
