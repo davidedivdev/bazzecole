@@ -6,12 +6,15 @@ Piccoli giochi e sciocchezze da fare in compagnia o da condividere. Sito statico
 
 ```
 index.html          home con tutti i giochi
+tombola/            Tombola (tabellone, cartelle con codice, montepremi)
 impostore/          L'Impostore (gioco della parola segreta, passa il telefono)
 stanza/             Trova una stanza a Bologna (gioco satirico)
 treni/              Quanto ti hanno rubato i treni (calcolatore)
 caffe/              Quanti caffè hai bevuto (calcolatore)
 404.html            pagina non trovata
 favicon.svg
+fonts/              font ospitati sul sito (OFL), niente Google Fonts
+privacy/            informativa privacy e note legali
 netlify.toml        configurazione Netlify (publish = ".")
 ```
 

@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tombola online gratis: tabellone e cartelle · Bazzecole</title>
+<meta name="description" content="Tombola di Natale gratis nel browser: tabellone con estrazione e smorfia napoletana (e bolognese), cartelle sul telefono di ognuno, stampa per i nonni e calcolo del montepremi. Senza app e senza registrazione.">
+<meta property="og:title" content="Tombola: tabellone, cartelle e montepremi in un link">
+<meta property="og:description" content="Uno estrae, gli altri giocano dal telefono o su carta. Gratis, senza app.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#1F4D3A">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+/* VOICE: la zia che tiene il tabellone: allegra, chiara, un filo di ironia
+   IDEA: il tavolo del dopo-cenone: panno verde, tabellone di cartone crema, numeri rossi, fagioli come segnalini
+   PICTURE: il numero appena estratto su un gettone di legno, grande, con la smorfia sotto
+   COLOUR and TYPE: 60 verde panno, 30 cartone crema, 10 rosso tombola per le azioni; Alfa Slab One per numeri e titoli, Figtree per il resto
+   LAYOUT: titolo, tre schede; tabellone: gettone e comandi a sinistra, griglia dei 90 a destra, sotto si impilano */
+:root{color-scheme:light dark;
+ --bg:light-dark(#1F4D3A,#10291F);--bg2:light-dark(#18402F,#0B1F17);
+ --ink:#F7EEDC;--soft:light-dark(#CFE0D3,#A9C2B2);
+ --card:#FBF4E4;--card2:#F0E3C6;--cink:#2A1712;--csoft:#6B5544;
+ --red:#C8202F;--red2:#9E1824;--gold:#F2B632}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.55 Figtree,system-ui,sans-serif;overflow-x:clip}
+[hidden]{display:none!important}
+.wrap{max-width:1160px;margin:0 auto;padding:0 max(4vw,16px)}
+.top{padding-top:14px;padding-bottom:14px}
+.brand{font:20px/1 'Alfa Slab One',serif;color:var(--gold);text-decoration:none}
+h1{font:clamp(48px,11vw,84px)/1 'Alfa Slab One',serif;margin:10px 0 0;letter-spacing:.01em}
+h2{font:clamp(24px,5vw,30px)/1.15 'Alfa Slab One',serif;margin:0 0 6px;font-weight:400}
+p{margin:0}
+.lede{color:var(--soft);font-size:clamp(18px,2.3vw,20px);margin-top:12px;max-width:60ch}
+button{font:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.tabs{display:flex;gap:8px;margin:26px 0 24px;background:var(--bg2);padding:6px;border-radius:16px;max-width:620px}
+.tabs button{flex:1;border:0;border-radius:12px;background:transparent;color:var(--ink);font-weight:800;font-size:17px;padding:12px 8px;min-height:52px;transition:background-color .15s ease-out}
+.tabs button[aria-pressed=true]{background:var(--card);color:var(--cink)}
+.btn{border:0;border-radius:14px;background:var(--red);color:#FFF8EC;font-weight:800;font-size:18px;padding:14px 20px;min-height:54px;box-shadow:0 4px 0 var(--red2);transition:transform .15s ease-out,box-shadow .15s ease-out}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--red2)}
+.btn.line{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px rgba(247,238,220,.6)}
+.btn.line:active{transform:scale(.98)}
+.btn.sm{font-size:16px;padding:10px 14px;min-height:46px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.panel{background:var(--bg2);border-radius:20px;padding:clamp(16px,3vw,24px)}
+.paper{background:var(--card);color:var(--cink);border-radius:18px;box-shadow:0 12px 28px rgba(0,0,0,.25)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.sw{display:flex;align-items:center;gap:10px;min-height:44px;cursor:pointer;font-weight:600}
+.sw input{appearance:none;width:50px;height:30px;border-radius:99px;background:rgba(0,0,0,.3);position:relative;margin:0;cursor:pointer;flex:none}
+.sw input::after{content:"";position:absolute;top:4px;left:4px;width:22px;height:22px;border-radius:50%;background:var(--ink);transition:transform .15s ease-out}
+.sw input:checked{background:var(--red)}.sw input:checked::after{transform:translateX(20px)}
+select{font:600 16px Figtree,sans-serif;padding:10px 12px;border-radius:12px;border:0;background:var(--card);color:var(--cink);min-height:44px}
+
+/* ---- tabellone ---- */
+.deck{display:grid;gap:24px;align-items:start}
+@media(min-width:900px){.deck{grid-template-columns:minmax(0,400px) minmax(0,1fr)}}
+.draw{display:grid;gap:16px;justify-items:center;text-align:center}
+.ball{width:clamp(170px,42vw,220px);aspect-ratio:1;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 34% 28%,#FFFDF6,#F1E2C2 62%,#D6BD8F);box-shadow:inset 0 -8px 16px rgba(120,80,20,.25),0 16px 30px rgba(0,0,0,.35)}
+.ball span{font:clamp(76px,19vw,104px)/1 'Alfa Slab One',serif;color:var(--red)}
+.ball.pop span{animation:pop .28s ease-out}
+@keyframes pop{from{opacity:0;transform:scale(.55)}to{opacity:1;transform:scale(1)}}
+.smorfia{font-size:clamp(21px,4.5vw,24px);font-weight:800;line-height:1.25;min-height:2.5em;display:grid;place-items:center;max-width:22ch}
+.count{color:var(--soft);font-size:16px}
+.draw .btn{width:100%}
+.big{font-size:22px!important;min-height:64px!important}
+.prizes{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.prizes button{border:2px solid rgba(247,238,220,.45);background:transparent;color:var(--ink);border-radius:999px;padding:6px 12px;font-weight:700;font-size:15px;min-height:40px}
+.prizes button.next{border-color:var(--gold);color:var(--gold)}
+.prizes button.done{opacity:.5;text-decoration:line-through}
+.last{display:flex;gap:8px;justify-content:center;min-height:44px}
+.last span{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--card);color:var(--red);font:18px 'Alfa Slab One',serif}
+.board{padding:clamp(10px,2vw,18px);display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(8px,1.6vw,14px)}
+.blk{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;border:2px solid var(--card2);border-radius:10px;padding:5px}
+.cell{aspect-ratio:1;display:grid;place-items:center;border-radius:7px;font:clamp(14px,2.6vw,21px)/1 'Alfa Slab One',serif;color:var(--csoft);background:#FFFDF6;transition:background-color .2s ease-out,color .2s ease-out}
+.cell.on{background:var(--red);color:#FFF8EC}
+.cell.last1{box-shadow:0 0 0 3px var(--gold)}
+.tools{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));margin-top:24px}
+.tools .panel{display:grid;gap:12px;align-content:start}
+.tools p{color:var(--soft);font-size:16px}
+.qr{background:#FFFDF6;border-radius:14px;padding:10px;width:180px;height:180px;justify-self:center}
+.qr svg{width:100%;height:100%;display:block}
+.link{font-size:15px;word-break:break-all;color:var(--ink)}
+.field{display:flex;gap:8px}
+.field input{flex:1;font:700 20px Figtree,sans-serif;letter-spacing:.12em;text-transform:uppercase;padding:10px 12px;border-radius:12px;border:0;background:var(--card);color:var(--cink);min-height:50px;width:100%}
+.verdict{font-weight:800;font-size:18px}
+.confirm{background:rgba(200,32,47,.18);border-radius:12px;padding:12px;display:grid;gap:10px}
+
+/* ---- cartelle ---- */
+.carts{display:grid;gap:22px;grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr))}
+.cart{padding:12px 12px 14px;border:4px solid var(--red)}
+.chead{display:flex;justify-content:space-between;align-items:center;padding:2px 4px 10px;gap:10px}
+.chead b{font-size:15px;color:var(--csoft);font-weight:600}
+.chead b span{font:18px 'Alfa Slab One',serif;color:var(--cink);letter-spacing:.06em}
+.badge{font:17px/1 'Alfa Slab One',serif;color:#FFF8EC;background:var(--red);border-radius:999px;padding:7px 12px;white-space:nowrap}
+.badge:empty{visibility:hidden}
+.badge.win{background:var(--gold);color:var(--cink)}
+.badge.bump{animation:pop .3s ease-out}
+.cgrid{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:3px}
+.c{position:relative;aspect-ratio:1/1.05;border-radius:6px;display:grid;place-items:center;font:clamp(17px,4.4vw,23px)/1 'Alfa Slab One',serif;color:var(--cink);background:#FFFDF6;border:0;padding:0}
+.c.x{background:repeating-linear-gradient(45deg,var(--card2) 0 4px,transparent 4px 8px);pointer-events:none}
+.c.hit{color:#fff;background:var(--red)}
+.c.m::after{content:"";position:absolute;width:64%;height:44%;border-radius:50%;background:radial-gradient(circle at 35% 35%,#9A5B3A,#5C2E1C);transform:rotate(-24deg);opacity:.72;box-shadow:0 2px 3px rgba(0,0,0,.35);animation:drop .2s ease-out}
+[data-seg=cece] .c.m::after{width:52%;height:52%;background:radial-gradient(circle at 35% 35%,#F3DFAE,#C9A764)}
+[data-seg=mandarino] .c.m::after{width:66%;height:56%;border-radius:48% 52% 40% 60%/55% 45% 55% 45%;background:radial-gradient(circle at 40% 35%,#FFB347,#E0700E)}
+@keyframes drop{from{opacity:0;transform:translateY(-10px) rotate(-24deg) scale(1.3)}to{opacity:.72;transform:rotate(-24deg)}}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:18px}
+.segs{display:flex;gap:6px;flex-wrap:wrap}
+.segs button{border:2px solid rgba(247,238,220,.45);background:transparent;color:var(--ink);border-radius:999px;padding:8px 14px;font-weight:700;font-size:15px;min-height:44px}
+.segs button[aria-pressed=true]{background:var(--card);color:var(--cink);border-color:var(--card)}
+.start{display:grid;gap:18px;max-width:560px}
+.step{display:flex;align-items:center;gap:8px}
+.step button{width:50px;height:50px;border-radius:12px;border:0;background:var(--card);color:var(--cink);font:800 24px Figtree,sans-serif}
+.step output{min-width:44px;text-align:center;font:30px 'Alfa Slab One',serif}
+.hint{color:var(--soft);font-size:16px;margin-bottom:14px}
+
+/* ---- montepremi ---- */
+.prem{display:grid;gap:22px;align-items:start}
+@media(min-width:860px){.prem{grid-template-columns:minmax(0,380px) minmax(0,1fr)}}
+.prem label{font-weight:700;display:block;margin-bottom:8px}
+.money{display:flex;align-items:center;gap:8px}
+.money input,.pct input{font:700 20px Figtree,sans-serif;padding:10px 12px;border-radius:12px;border:0;background:var(--card);color:var(--cink);min-height:50px;width:120px;text-align:right}
+.pot{font:clamp(44px,9vw,64px)/1 'Alfa Slab One',serif;color:var(--cink)}
+table{width:100%;border-collapse:collapse;margin-top:14px;color:var(--cink)}
+td{padding:12px 4px;border-top:1px solid var(--card2);vertical-align:middle}
+td:first-child{font-weight:800;font-size:19px}
+td:last-child{text-align:right;font:22px 'Alfa Slab One',serif;white-space:nowrap;font-variant-numeric:tabular-nums}
+.pct input{width:76px;min-height:44px;font-size:17px;padding:8px}
+.pct{display:flex;align-items:center;gap:4px;color:var(--csoft);font-weight:600}
+.warn{color:var(--red);font-weight:700;font-size:16px;min-height:1.4em;margin-top:8px}
+.small{color:var(--csoft);font-size:15px;margin-top:10px}
+footer{color:var(--soft);font-size:15px;padding:40px 0}footer a{color:inherit}
+#printbox{display:none}
+@media print{
+ body{background:#fff;color:#000}
+ body>*{display:none!important}
+ #printbox{display:grid!important;grid-template-columns:1fr 1fr;gap:10mm}
+ #printbox .cart{box-shadow:none;break-inside:avoid;border:3px solid #000}
+ #printbox .c{border:1px solid #999;background:#fff;color:#000}
+ #printbox .c.x{background:#ddd}
+ #printbox .badge{display:none}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap top"><a class="brand" href="/">Bazzecole</a></div>
+<main class="wrap">
+  <h1>Tombola</h1>
+  <p class="lede">Tabellone, cartelle sul telefono e montepremi in un solo link. Uno estrae, gli altri giocano dal proprio telefono o sulla cartella stampata.</p>
+  <div class="tabs">
+    <button data-v="tabellone" aria-pressed="true">Tabellone</button>
+    <button data-v="cartelle" aria-pressed="false">Cartelle</button>
+    <button data-v="premi" aria-pressed="false">Montepremi</button>
+  </div>
+
+  <!-- TABELLONE -->
+  <section id="v-tabellone">
+    <div class="deck">
+      <div class="panel draw">
+        <div class="ball" id="ball" aria-live="polite"><span id="num">?</span></div>
+        <p class="smorfia" id="sm">Premi Estrai per il primo numero</p>
+        <p class="count" id="cnt"></p>
+        <button class="btn big" id="draw">Estrai</button>
+        <div class="row" style="width:100%"><button class="btn line sm" id="auto" style="flex:1">Automatico</button><button class="btn line sm" id="undo" style="flex:1">Annulla l'ultimo</button></div>
+        <div class="row" style="justify-content:center">
+          <label class="sw"><input type="checkbox" id="voice">Voce</label>
+          <select id="smode" aria-label="Tipo di smorfia"><option value="nap">Smorfia napoletana</option><option value="bo">Smorfia bolognese (inventata)</option><option value="no">Senza smorfia</option></select>
+        </div>
+        <p class="count">Si gioca per</p>
+        <div class="prizes" id="prizes"></div>
+        <p class="count">Ultimi numeri</p>
+        <div class="last" id="last"></div>
+      </div>
+      <div class="paper board" id="board" aria-label="Tabellone con i 90 numeri"></div>
+    </div>
+
+    <div class="tools">
+      <div class="panel">
+        <h2>Fai giocare gli altri</h2>
+        <p>Inquadrate il codice: ognuno prende le sue cartelle sul telefono. Per chi non ha il telefono, stampatele.</p>
+        <div class="qr" id="qr" aria-label="Codice QR per aprire le cartelle"></div>
+        <p class="link" id="link"></p>
+        <div class="row"><button class="btn sm" id="copy" style="flex:1">Copia il link</button><button class="btn line sm" id="printSix" style="flex:1">Stampa 6 cartelle</button></div>
+        <p class="count" id="copied" role="status"></p>
+      </div>
+      <div class="panel">
+        <h2>Controlla una vincita</h2>
+        <p>Qualcuno grida "terno"? Scrivete il codice della sua cartella: lo trovate in alto sulla cartella, anche su quelle stampate.</p>
+        <form class="field" id="checkf"><input id="code" maxlength="5" autocomplete="off" spellcheck="false" aria-label="Codice cartella" placeholder="K7M2Q"><button class="btn sm">Controlla</button></form>
+        <p class="verdict" id="verdict" role="status"></p>
+        <div id="checkcard"></div>
+      </div>
+      <div class="panel">
+        <h2>Nuova partita</h2>
+        <p>Cancella i numeri estratti e i premi assegnati. Le cartelle dei giocatori restano uguali, ma vanno svuotate dai fagioli.</p>
+        <button class="btn line" id="reset">Ricomincia da capo</button>
+        <div class="confirm" id="confirm" hidden><b>Sicuro? I numeri estratti spariscono.</b><div class="row"><button class="btn sm" id="yes">Sì, ricomincia</button><button class="btn line sm" id="no">No</button></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CARTELLE -->
+  <section id="v-cartelle" hidden>
+    <div class="panel start" id="pick">
+      <h2>Quante cartelle vuoi?</h2>
+      <div class="step"><button id="c-" aria-label="Una cartella in meno">−</button><output id="cn">2</output><button id="c+" aria-label="Una cartella in più">+</button></div>
+      <button class="btn big" id="give">Dammi le cartelle</button>
+      <form id="restore" style="display:grid;gap:8px"><label for="codes" style="font-weight:700">Hai già i codici delle tue cartelle?</label><div class="field"><input id="codes" placeholder="K7M2Q, B3RT9" autocomplete="off" spellcheck="false" style="letter-spacing:.04em"><button class="btn sm">Recupera</button></div><p class="count" id="rerr" role="alert"></p></form>
+    </div>
+    <div id="mine" hidden>
+      <div class="bar">
+        <div class="segs" id="segs" aria-label="Segnalino"><button data-s="fagiolo">Fagioli</button><button data-s="cece">Ceci</button><button data-s="mandarino">Buccia di mandarino</button></div>
+        <div class="row"><button class="btn line sm" id="print">Stampa</button><button class="btn line sm" id="clear">Togli i segnalini</button><button class="btn line sm" id="change">Cambia cartelle</button></div>
+      </div>
+      <div class="confirm" id="cconfirm" hidden style="margin-bottom:16px"><b>Prendi cartelle nuove? Queste spariscono (segnati i codici se ti servono).</b><div class="row"><button class="btn sm" id="cyes">Sì, cambia</button><button class="btn line sm" id="cno">No</button></div></div>
+      <p class="hint">Tocca un numero quando viene chiamato, toccalo di nuovo per togliere il segnalino. Ambo, terno e gli altri premi te li segnaliamo noi.</p>
+      <div class="carts" id="carts"></div>
+    </div>
+  </section>
+
+  <!-- MONTEPREMI -->
+  <section id="v-premi" hidden>
+    <div class="prem">
+      <div class="panel" style="display:grid;gap:18px">
+        <div><label for="sold">Cartelle vendute</label><div class="step"><button data-k="sold" data-d="-1" aria-label="Meno cartelle">−</button><output id="soldo">20</output><button data-k="sold" data-d="1" aria-label="Più cartelle">+</button></div></div>
+        <div><label for="price">Prezzo di una cartella</label><div class="money"><input id="price" type="number" inputmode="decimal" min="0" step="0.5" value="1"><span>€</span></div></div>
+        <label class="sw"><input type="checkbox" id="tombolino">Tombolino (seconda tombola)</label>
+      </div>
+      <div class="paper" style="padding:clamp(18px,3vw,28px)">
+        <p style="color:var(--csoft);font-weight:700">Montepremi</p>
+        <p class="pot" id="pot">20,00 €</p>
+        <table><tbody id="ptab"></tbody></table>
+        <p class="warn" id="pwarn" role="status"></p>
+        <p class="small" id="rest"></p>
+        <p class="small">Le percentuali si possono cambiare. Gli importi sono arrotondati ai 10 centesimi. Il sito fa solo i conti: i soldi restano sul tavolo.</p>
+      </div>
+    </div>
+  </section>
+</main>
+<div class="wrap"><footer>Fatto a Bologna. Altri giochi su <a href="/">Bazzecole</a>. <a href="/privacy/">Privacy</a></footer></div>
+<div id="printbox"></div>
+
+<script src="/tombola/qrcode.js"></script>
+<script>
+{
+const $=id=>document.getElementById(id);
+const store={get(k,d){try{const v=localStorage.getItem('bz-tomb-'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem('bz-tomb-'+k,JSON.stringify(v))}catch(e){}}};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rint=n=>{try{const a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%n}catch(e){return Math.floor(Math.random()*n)}};
+const eur=new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR',minimumFractionDigits:2,useGrouping:'always'});
+
+const SMORFIA=[null,'L\'Italia','La bambina','La gatta','Il maiale','La mano','Quella che guarda a terra','Il vasetto','La Madonna','La prole','I fagioli',
+'I topi','I soldati','Sant\'Antonio','L\'ubriaco','Il ragazzo','Il sedere','La disgrazia','Il sangue','La risata','La festa',
+'La donna nuda','Il pazzo','Lo scemo','Le guardie','Natale','Nannina','Il vaso da notte','Il seno','Il padre dei bambini','Le palle del tenente',
+'Il padrone di casa','Il capitone','Gli anni di Cristo','La testa','L\'uccellino','Le nacchere','Il monaco','Le botte','La corda al collo','La noia',
+'Il coltello','Il caffè','La donna al balcone','Le carceri','Il vino buono','I soldi','Il morto','Il morto che parla','La carne','Il pane',
+'Il giardino','La mamma','Il vecchio','Il cappello','La musica','La caduta','Il gobbo','Il regalo','I peli','Il lamento',
+'Il cacciatore','Il morto ammazzato','La sposa','La giacca','Il pianto','Le due zitelle','Il polpo nella chitarra','La zuppa cotta','Sottosopra','Il palazzo',
+'L\'uomo da niente','La meraviglia','L\'ospedale','La grotta','Pulcinella','La fontana','Le gambe delle donne','La bella ragazza','Il ladro','La bocca',
+'I fiori','La tavola imbandita','Il maltempo','La chiesa','Le anime del purgatorio','La bottega','I pidocchi','I caciocavalli','La vecchia','La paura'];
+const BOLO={1:'L\'Italia, con Bologna capitale morale',2:'Le Due Torri',4:'Il maiale, futura mortadella',7:'Il vasetto di ragù della nonna',10:'I fagioli nella minestra',
+13:'Il portico più lungo del mondo',14:'L\'ubriaco del Pratello',16:'Il sedere sui gradini di San Petronio',20:'La festa in Piazza Verdi',22:'Il pazzo che cerca casa a settembre',
+24:'Le guardie in Piazza Verdi',25:'Natale, con i tortellini',31:'Il padrone di casa che alza l\'affitto',33:'Gli anni di Cristo. Gli archi di San Luca sono 666',34:'La testa del Nettuno',
+38:'Le botte per un parcheggio',40:'La noia della sessione',42:'Il caffè al bancone, 1,30 €',45:'Il Sangiovese buono',46:'I soldi della caparra',
+47:'Il morto di fame a fine mese',50:'Il pane, cioè la crescentina',53:'Il vecchio che guarda i cantieri',58:'Il regalo riciclato',63:'La sposa sotto i portici',
+68:'La zuppa cotta, cioè i tortellini in brodo',70:'Il palazzo senza ascensore',73:'L\'ospedale Sant\'Orsola',77:'Le gambe dopo la salita a San Luca',79:'Il ladro di biciclette',
+83:'Il maltempo, ma sotto i portici non piove',85:'Le anime in lista d\'attesa per una stanza',86:'La bottega in Quadrilatero',88:'I caciocavalli. Anzi no: la mortadella',90:'La paura dello sfratto'};
+const PRIZE_NAMES={ambo:'Ambo',terno:'Terno',quaterna:'Quaterna',cinquina:'Cinquina',tombola:'Tombola',tombolino:'Tombolino'};
+
+/* ---------- viste ---------- */
+const VIEWS=['tabellone','cartelle','premi'];
+function view(v){if(!VIEWS.includes(v))v='tabellone';for(const x of VIEWS)$('v-'+x).hidden=x!==v;for(const b of document.querySelectorAll('.tabs button'))b.setAttribute('aria-pressed',b.dataset.v===v)}
+document.querySelector('.tabs').addEventListener('click',e=>{const v=e.target.dataset.v;if(v){history.replaceState(null,'','#'+v);view(v)}});
+addEventListener('hashchange',()=>view(location.hash.slice(1)));
+
+/* ---------- generatore di cartelle (stesso codice, stessa cartella su ogni telefono) ---------- */
+const ALPH='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+function newCode(){let s='';for(let i=0;i<5;i++)s+=ALPH[rint(ALPH.length)];return s}
+function cleanCode(s){s=String(s).toUpperCase().replace(/[^A-Z0-9]/g,'');return s.length===5&&[...s].every(c=>ALPH.includes(c))?s:null}
+function seed(str){let h=1779033703^str.length;for(let i=0;i<str.length;i++){h=Math.imul(h^str.charCodeAt(i),3432918353);h=h<<13|h>>>19}h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);let a=(h^h>>>16)>>>0;
+  return()=>{a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const cache={};
+function cartella(code){
+  if(cache[code])return cache[code];
+  const r=seed('bazzecole-'+code);
+  for(let tries=0;tries<200;tries++){
+    const cnt=Array(9).fill(1);let extra=6;
+    while(extra){const i=Math.floor(r()*9);if(cnt[i]<3){cnt[i]++;extra--}}
+    const need=[5,5,5],pos=Array.from({length:9},()=>[]);
+    const order=[...Array(9).keys()].map(c=>[cnt[c]+r()*.5,c]).sort((a,b)=>b[0]-a[0]).map(x=>x[1]);
+    let ok=true;
+    for(const c of order){
+      const rows=[0,1,2].filter(x=>need[x]>0).map(x=>[need[x]+r()*.5,x]).sort((a,b)=>b[0]-a[0]).map(x=>x[1]).slice(0,cnt[c]);
+      if(rows.length<cnt[c]){ok=false;break}
+      for(const x of rows)need[x]--;pos[c]=rows.sort();
+    }
+    if(!ok||need.some(n=>n))continue;
+    const grid=[Array(9).fill(0),Array(9).fill(0),Array(9).fill(0)];
+    for(let c=0;c<9;c++){
+      const lo=c===0?1:c*10,hi=c===8?90:c*10+9,pool=[];for(let n=lo;n<=hi;n++)pool.push(n);
+      const nums=[];for(let k=0;k<cnt[c];k++)nums.push(pool.splice(Math.floor(r()*pool.length),1)[0]);
+      nums.sort((a,b)=>a-b);pos[c].forEach((row,k)=>grid[row][c]=nums[k]);
+    }
+    return cache[code]=grid;
+  }
+  throw new Error('cartella');
+}
+function best(grid,set){
+  let top=0,all=0;
+  for(const row of grid){let k=0;for(const n of row)if(n&&set.has(n))k++;top=Math.max(top,k);all+=k}
+  if(all===15)return'tombola';return[null,null,'ambo','terno','quaterna','cinquina'][top]||null;
+}
+function cartHTML(code,marks,opt={}){
+  const grid=cartella(code),set=new Set(marks),b=best(grid,set);
+  const cells=grid.map((row,ri)=>row.map(n=>n?`<button class="c${set.has(n)?(opt.hit?' hit':' m'):''}" data-n="${n}" ${opt.ro?'tabindex="-1" disabled':''} aria-pressed="${set.has(n)}">${n}</button>`:'<span class="c x"></span>').join('')).join('');
+  return`<div class="paper cart" data-code="${code}"><div class="chead"><b>Cartella <span>${code}</span></b><span class="badge${b==='tombola'?' win':''}">${b?PRIZE_NAMES[b]+(b==='tombola'?'!':''):''}</span></div><div class="cgrid">${cells}</div></div>`;
+}
+
+/* ---------- tabellone ---------- */
+let drawn=store.get('drawn',[]),done=store.get('done',[]),auto=null;
+$('voice').checked=store.get('voice',false);$('smode').value=store.get('smode','nap');
+const board=$('board');
+board.innerHTML=Array.from({length:6},(_,k)=>{const rb=Math.floor(k/2),cb=k%2;let h='';for(let l=0;l<3;l++)for(let j=1;j<=5;j++){const n=(rb*3+l)*10+cb*5+j;h+=`<span class="cell" id="n${n}">${n}</span>`}return`<div class="blk">${h}</div>`}).join('');
+function smText(n){const m=$('smode').value;if(m==='no')return'';return m==='bo'?(BOLO[n]||SMORFIA[n]):SMORFIA[n]}
+function prizeList(){return store.get('prem',{}).tombolino?['ambo','terno','quaterna','cinquina','tombola','tombolino']:['ambo','terno','quaterna','cinquina','tombola']}
+function renderTab(anim){
+  const last=drawn[drawn.length-1];
+  $('num').textContent=last||'?';
+  $('sm').textContent=last?smText(last):'Premi Estrai per il primo numero';
+  $('cnt').textContent=`${drawn.length} ${drawn.length===1?'numero estratto':'numeri estratti'} su 90`;
+  for(let n=1;n<=90;n++){const c=$('n'+n);c.classList.toggle('on',drawn.includes(n));c.classList.toggle('last1',n===last)}
+  $('last').innerHTML=drawn.slice(-6,-1).reverse().map(n=>`<span>${n}</span>`).join('');
+  $('draw').disabled=drawn.length>=90;$('undo').disabled=!drawn.length;
+  if(drawn.length>=90)$('sm').textContent='Tutti i numeri sono usciti. Qualcuno avrà pur fatto tombola.';
+  const list=prizeList(),next=list.find(p=>!done.includes(p));
+  $('prizes').innerHTML=list.map(p=>`<button data-p="${p}" class="${done.includes(p)?'done':p===next?'next':''}" aria-pressed="${done.includes(p)}">${PRIZE_NAMES[p]}</button>`).join('');
+  if(anim){const b=$('ball');b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop')}
+}
+function speak(n){
+  if(!$('voice').checked||!('speechSynthesis' in window))return;
+  try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(`${n}. ${smText(n)}`);u.lang='it-IT';u.rate=.95;const v=speechSynthesis.getVoices().find(x=>/^it/i.test(x.lang));if(v)u.voice=v;speechSynthesis.speak(u)}catch(e){}
+}
+function draw(){
+  if(drawn.length>=90){stopAuto();return}
+  const left=[];for(let n=1;n<=90;n++)if(!drawn.includes(n))left.push(n);
+  const n=left[rint(left.length)];drawn.push(n);store.set('drawn',drawn);renderTab(true);speak(n);
+  if(drawn.length>=90)stopAuto();
+}
+function stopAuto(){clearInterval(auto);auto=null;$('auto').textContent='Automatico'}
+$('draw').onclick=draw;
+$('auto').onclick=()=>{if(auto){stopAuto();return}draw();auto=setInterval(draw,7000);$('auto').textContent='Ferma'};
+$('undo').onclick=()=>{drawn.pop();store.set('drawn',drawn);renderTab(false)};
+$('voice').onchange=e=>{store.set('voice',e.target.checked);if(e.target.checked&&drawn.length)speak(drawn[drawn.length-1])};
+$('smode').onchange=e=>{store.set('smode',e.target.value);renderTab(false)};
+$('prizes').addEventListener('click',e=>{const p=e.target.dataset.p;if(!p)return;done=done.includes(p)?done.filter(x=>x!==p):[...done,p];store.set('done',done);renderTab(false)});
+$('reset').onclick=()=>{$('confirm').hidden=false;$('yes').focus()};
+$('no').onclick=()=>{$('confirm').hidden=true};
+$('yes').onclick=()=>{stopAuto();drawn=[];done=[];store.set('drawn',drawn);store.set('done',done);$('confirm').hidden=true;$('verdict').textContent='';$('checkcard').innerHTML='';renderTab(false)};
+$('checkf').addEventListener('submit',e=>{
+  e.preventDefault();const code=cleanCode($('code').value);
+  if(!code){$('verdict').textContent='Il codice ha 5 caratteri, lettere e numeri. Lo trovi in alto sulla cartella.';$('checkcard').innerHTML='';return}
+  const set=new Set(drawn),grid=cartella(code),b=best(grid,set);
+  const rows=grid.map(r=>r.filter(n=>n&&set.has(n)).length);
+  const mx=Math.max(...rows),fem=['quaterna','cinquina','tombola'].includes(b);
+  $('verdict').textContent=b?`${PRIZE_NAMES[b]} ${fem?'valida':'valido'}: ${b==='tombola'?'tutti i 15 numeri sono usciti.':'la riga migliore ha '+mx+' numeri usciti.'}`:`Niente da fare: al massimo ${mx} ${mx===1?'numero uscito':'numeri usciti'} per riga.`;
+  $('checkcard').innerHTML=cartHTML(code,[...set].filter(n=>grid.flat().includes(n)),{hit:true,ro:true});
+});
+function cartelleURL(){return location.origin+'/tombola/#cartelle'}
+function qr(){
+  const url=cartelleURL();$('link').textContent=url;
+  try{const q=qrcode(0,'M');q.addData(url);q.make();$('qr').innerHTML=q.createSvgTag({cellSize:4,margin:2,scalable:true})}catch(e){$('qr').hidden=true}
+}
+$('copy').onclick=async()=>{try{await navigator.clipboard.writeText(cartelleURL());$('copied').textContent='Link copiato. Mandalo nel gruppo di famiglia.'}catch(e){$('copied').textContent=cartelleURL()}};
+function printCodes(codes){$('printbox').innerHTML=codes.map(c=>cartHTML(c,[],{ro:true})).join('');window.print()}
+$('printSix').onclick=()=>printCodes(Array.from({length:6},newCode));
+
+/* ---------- le mie cartelle ---------- */
+let mine=store.get('cards',{codes:[],marks:{}}),want=2;
+document.body.dataset.seg=store.get('seg','fagiolo');
+function renderMine(){
+  const has=mine.codes.length>0;$('pick').hidden=has;$('mine').hidden=!has;
+  for(const b of document.querySelectorAll('#segs button'))b.setAttribute('aria-pressed',b.dataset.s===document.body.dataset.seg);
+  if(has)$('carts').innerHTML=mine.codes.map(c=>cartHTML(c,mine.marks[c]||[])).join('');
+}
+function saveMine(){store.set('cards',mine)}
+$('c-').onclick=()=>{want=Math.max(1,want-1);$('cn').textContent=want};
+$('c+').onclick=()=>{want=Math.min(6,want+1);$('cn').textContent=want};
+$('give').onclick=()=>{mine={codes:Array.from({length:want},newCode),marks:{}};saveMine();renderMine()};
+$('restore').addEventListener('submit',e=>{
+  e.preventDefault();const raw=$('codes').value.split(/[\s,;]+/).filter(Boolean);
+  const codes=[...new Set(raw.map(cleanCode).filter(Boolean))].slice(0,6);
+  if(!codes.length){$('rerr').textContent='Non trovo codici validi: sono 5 caratteri, separati da una virgola.';return}
+  $('rerr').textContent='';mine={codes,marks:{}};saveMine();renderMine();
+});
+$('carts').addEventListener('click',e=>{
+  const b=e.target.closest('.c[data-n]');if(!b)return;
+  const card=b.closest('.cart'),code=card.dataset.code,n=+b.dataset.n;
+  const before=best(cartella(code),new Set(mine.marks[code]||[]));
+  const m=new Set(mine.marks[code]||[]);m.has(n)?m.delete(n):m.add(n);mine.marks[code]=[...m];saveMine();
+  b.classList.toggle('m',m.has(n));b.setAttribute('aria-pressed',m.has(n));
+  const now=best(cartella(code),m),badge=card.querySelector('.badge');
+  badge.textContent=now?PRIZE_NAMES[now]+(now==='tombola'?'!':''):'';badge.classList.toggle('win',now==='tombola');
+  const rank=x=>['ambo','terno','quaterna','cinquina','tombola'].indexOf(x);
+  if(now&&rank(now)>rank(before)){badge.classList.remove('bump');void badge.offsetWidth;badge.classList.add('bump');try{navigator.vibrate&&navigator.vibrate(now==='tombola'?[90,60,90]:60)}catch(e){}}
+});
+$('segs').addEventListener('click',e=>{const s=e.target.dataset.s;if(!s)return;document.body.dataset.seg=s;store.set('seg',s);renderMine()});
+$('print').onclick=()=>printCodes(mine.codes);
+$('clear').onclick=()=>{mine.marks={};saveMine();renderMine()};
+$('change').onclick=()=>{$('cconfirm').hidden=false;$('cyes').focus()};
+$('cno').onclick=()=>{$('cconfirm').hidden=true};
+$('cyes').onclick=()=>{mine={codes:[],marks:{}};saveMine();$('cconfirm').hidden=true;renderMine()};
+
+/* ---------- montepremi ---------- */
+const DEF5={ambo:10,terno:15,quaterna:20,cinquina:25,tombola:30},DEF6={ambo:10,terno:12,quaterna:18,cinquina:20,tombola:25,tombolino:15};
+let P=Object.assign({sold:20,price:1,tombolino:false,pct:{...DEF5}},store.get('prem',{}));
+$('price').value=P.price;$('tombolino').checked=P.tombolino;
+function renderPrem(){
+  const list=P.tombolino?Object.keys(DEF6):Object.keys(DEF5);
+  for(const k of list)if(P.pct[k]==null)P.pct[k]=(P.tombolino?DEF6:DEF5)[k];
+  const pot=Math.round(P.sold*P.price*100)/100;
+  $('soldo').textContent=P.sold;$('pot').textContent=eur.format(pot);
+  const tot=list.reduce((s,k)=>s+(+P.pct[k]||0),0);
+  let paid=0;
+  const rows=list.map(k=>{const v=Math.floor(pot*(+P.pct[k]||0)/10)/10;paid+=v;return[k,v]});
+  if(!$('ptab').querySelector('input')||$('ptab').dataset.n!==String(list.length)){
+    $('ptab').innerHTML=rows.map(([k])=>`<tr><td>${PRIZE_NAMES[k]}</td><td><span class="pct"><input data-p="${k}" type="number" inputmode="numeric" min="0" max="100" value="${P.pct[k]}" aria-label="Percentuale ${PRIZE_NAMES[k]}">%</span></td><td id="pv-${k}"></td></tr>`).join('');
+    $('ptab').dataset.n=list.length;
+  }
+  for(const [k,v] of rows)$('pv-'+k).textContent=eur.format(v);
+  $('pwarn').textContent=tot===100?'':`Le percentuali fanno ${tot}%: devono fare 100%.`;
+  const rest=Math.round((pot-paid)*100)/100;
+  $('rest').textContent=tot===100&&rest>0?`Avanzano ${eur.format(rest)} per gli arrotondamenti: tradizione vuole che vadano a chi tiene il tabellone.`:'';
+  store.set('prem',P);renderTab(false);
+}
+document.addEventListener('click',e=>{const k=e.target.dataset.k;if(k!=='sold')return;P.sold=Math.max(1,Math.min(500,P.sold+(+e.target.dataset.d)));renderPrem()});
+$('price').addEventListener('input',e=>{const v=parseFloat(String(e.target.value).replace(',','.'));P.price=isFinite(v)&&v>=0?v:0;renderPrem()});
+$('tombolino').onchange=e=>{P.tombolino=e.target.checked;P.pct={...(P.tombolino?DEF6:DEF5)};$('ptab').innerHTML='';renderPrem()};
+$('ptab').addEventListener('input',e=>{const k=e.target.dataset.p;if(!k)return;P.pct[k]=Math.max(0,Math.min(100,Math.round(+e.target.value)||0));renderPrem()});
+
+/* ---------- avvio ---------- */
+qr();renderTab(false);renderMine();renderPrem();view(location.hash.slice(1));
+}
+</script>
+</body>
+</html>
