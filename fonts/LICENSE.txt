@@ -1,0 +1,3 @@
+I font in questa cartella (Alfa Slab One, Figtree, Caveat, Barlow, Barlow Condensed, Shrikhand) sono distribuiti con licenza SIL Open Font License 1.1.
+Testo completo: https://openfontlicense.org
+File ottenuti dai pacchetti Fontsource (https://fontsource.org).
