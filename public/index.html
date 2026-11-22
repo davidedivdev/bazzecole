@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Bazzecole · giochini e sciocchezze</title>
-<meta name="description" content="Bazzecole: piccoli giochi e sciocchezze da fare in compagnia o da condividere. Gratis, nel browser, senza app. Fatto a Bologna.">
+<meta name="description" content="Bazzecole: giochi da fare in compagnia o da condividere. Non ho mai, obbligo o verità, l'Impostore, tombola, dadi, quiz e la parola del giorno. Gratis, nel browser, senza app. Fatto a Bologna.">
 <meta property="og:title" content="Bazzecole">
 <meta property="og:description" content="Piccoli giochi e sciocchezze da condividere. Fatto a Bologna.">
 <meta property="og:type" content="website">
@@ -42,7 +42,7 @@ a.item:focus-visible{outline:4px solid var(--ink);outline-offset:4px}
 .item h2{font:30px/1.05 'Alfa Slab One',serif;margin:18px 0 6px;font-weight:400;text-wrap:balance}
 .item p{margin:0;font-size:16px;opacity:.9}
 .tag{position:absolute;top:18px;right:-6px;background:var(--paper);color:#2B140E;font:800 14px Figtree,sans-serif;padding:6px 12px 6px 14px;border-radius:6px 0 0 6px;transform:rotate(4deg);box-shadow:0 2px 0 rgba(0,0,0,.2)}
-.imp{background:#A3191F}.tomb{background:#1F4D3A}.pif{background:#2340A0}.scuse{background:#54627A}.cinq{background:#1B2547}.piatti{background:#3F6B5A}.casa{background:#B8462F}.treni{background:#2C3440}.caffe{background:#5B3420}
+.imp{background:#A3191F}.tomb{background:#1F4D3A}.pif{background:#2340A0}.scuse{background:#54627A}.cinq{background:#1B2547}.piatti{background:#3F6B5A}.casa{background:#B8462F}.treni{background:#2C3440}.caffe{background:#5B3420}.grp{background:#3A2E7A}.quiz{background:#9E2A5E}.tav{background:#12454A}.pol{background:#2E5E8C}
 .tip{margin-top:clamp(28px,4vw,44px);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;background:var(--ink);color:var(--bg);border-radius:20px;padding:20px 24px}
 .tip p{margin:0;font-size:18px;max-width:46ch}
 .tip a{background:var(--bg);color:var(--ink);text-decoration:none;font-weight:800;border-radius:14px;padding:14px 20px;min-height:50px;display:inline-flex;align-items:center;transition:transform .15s ease-out}
@@ -65,6 +65,12 @@ footer a{color:inherit}
       <h2>Cinquina</h2>
       <p>La parola del giorno: cinque lettere, sei tentativi. Tu in quanti la trovi?</p>
     </a>
+    <a class="item grp" href="/gruppo/">
+      <span class="tag">Nuovo</span>
+      <svg viewBox="0 0 96 96" aria-hidden="true"><rect x="8" y="22" width="40" height="58" rx="7" fill="#C7E86A" transform="rotate(-16 28 51)"/><rect x="28" y="14" width="40" height="58" rx="7" fill="#FF9B76"/><rect x="48" y="22" width="40" height="58" rx="7" fill="#FFD15C" transform="rotate(16 68 51)"/><text x="68" y="62" text-anchor="middle" font-family="Barlow Condensed, sans-serif" font-weight="700" font-size="34" fill="#1E1B3A" transform="rotate(16 68 51)">?</text></svg>
+      <h2>Non ho mai, obbligo o verità</h2>
+      <p>Tre giochi di gruppo, centinaia di carte, le vostre domande e una modalità piccante per maggiorenni.</p>
+    </a>
     <a class="item tomb" href="/tombola/">
       <span class="tag">Per Natale</span>
       <svg viewBox="0 0 96 96" aria-hidden="true"><circle cx="40" cy="44" r="30" fill="#FBF4E4"/><text x="40" y="56" text-anchor="middle" font-family="Alfa Slab One, Georgia, serif" font-size="30" fill="#C8202F">90</text><ellipse cx="74" cy="72" rx="12" ry="8" fill="#7A3E26" transform="rotate(-24 74 72)"/><ellipse cx="60" cy="84" rx="10" ry="7" fill="#7A3E26" transform="rotate(18 60 84)"/></svg>
@@ -83,8 +89,20 @@ footer a{color:inherit}
       <h2>Parola in fronte</h2>
       <p>Telefono sulla fronte, gli altri ti fanno indovinare. Anche con le vostre parole.</p>
     </a>
-    <a class="item scuse" href="/scuse/">
+    <a class="item quiz" href="/quiz/">
       <span class="tag">Nuovo</span>
+      <svg viewBox="0 0 96 96" aria-hidden="true"><path d="M6 86V30h84v56h-8V58a12 12 0 0 0-24 0v28h-8V58a12 12 0 0 0-24 0v28h-8V58a12 12 0 0 0-12-12V86Z" fill="#FBE7EE"/><rect x="6" y="22" width="84" height="10" rx="3" fill="#F07A4A"/><circle cx="74" cy="16" r="14" fill="#F2C230"/><text x="74" y="23" text-anchor="middle" font-family="Figtree, sans-serif" font-weight="800" font-size="20" fill="#2A1530">?</text></svg>
+      <h2>Che … sei?</h2>
+      <p>Che portico di Bologna sei? Che pasta? Che coinquilino? Il risultato va mandato nel gruppo.</p>
+    </a>
+    <a class="item tav" href="/tavolo/">
+      <span class="tag">Nuovo</span>
+      <svg viewBox="0 0 96 96" aria-hidden="true"><g transform="rotate(-12 30 52)"><rect x="8" y="30" width="44" height="44" rx="9" fill="#F6EFE2"/><circle cx="20" cy="42" r="4.5" fill="#12454A"/><circle cx="30" cy="52" r="4.5" fill="#12454A"/><circle cx="40" cy="62" r="4.5" fill="#12454A"/></g><g transform="rotate(14 68 44)"><rect x="46" y="22" width="44" height="44" rx="9" fill="#E0B252"/><circle cx="58" cy="34" r="4.5" fill="#12454A"/><circle cx="78" cy="34" r="4.5" fill="#12454A"/><circle cx="58" cy="54" r="4.5" fill="#12454A"/><circle cx="78" cy="54" r="4.5" fill="#12454A"/></g></svg>
+      <h2>Kit da tavolo</h2>
+      <p>Dadi da 4 a 100 facce, la bottiglia che gira, testa o croce e chi inizia.</p>
+    </a>
+    <a class="item scuse" href="/scuse/">
+      <span class="tag">Da mandare</span>
       <svg viewBox="0 0 96 96" aria-hidden="true"><rect x="14" y="10" width="62" height="78" rx="4" fill="#FFFDF6"/><path d="M24 28h42M24 40h42M24 52h30" stroke="#1F2A44" stroke-width="4" stroke-linecap="round"/><rect x="44" y="58" width="42" height="22" rx="5" fill="none" stroke="#C0392B" stroke-width="4" transform="rotate(-10 65 69)"/></svg>
       <h2>Generatore di scuse</h2>
       <p>Per saltare lezione, parenti e riunioni di condominio. Credibili o assurde.</p>
@@ -94,6 +112,12 @@ footer a{color:inherit}
       <svg viewBox="0 0 96 96" aria-hidden="true"><path d="M8 88V44h80v44" fill="#F2B632"/><path d="M14 88V56a10 10 0 0 1 20 0v32M38 88V56a10 10 0 0 1 20 0v32M62 88V56a10 10 0 0 1 20 0v32" fill="#8E3523"/><path d="M4 44 48 16l44 28Z" fill="#FBE6C4"/></svg>
       <h2>Trova una stanza a Bologna</h2>
       <p>Due settimane, annunci sotto i portici, colloqui di gruppo e un boss finale.</p>
+    </a>
+    <a class="item pol" href="/politica/">
+      <span class="tag">Nuovo</span>
+      <svg viewBox="0 0 96 96" aria-hidden="true"><rect x="10" y="10" width="76" height="76" rx="10" fill="#FFFFFF"/><path d="M48 16v64M16 48h64" stroke="#5C636B" stroke-width="3"/><circle cx="62" cy="34" r="12" fill="#F2C230" opacity=".35"/><circle cx="62" cy="34" r="7" fill="#F2C230" stroke="#2E5E8C" stroke-width="3"/></svg>
+      <h2>Test politico</h2>
+      <p>Trenta affermazioni su economia e società, nessun partito. Dove ti collochi?</p>
     </a>
     <a class="item piatti" href="/piatti/">
       <span class="tag">Per coinquilini</span>

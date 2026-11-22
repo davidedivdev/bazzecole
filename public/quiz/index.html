@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Che portico di Bologna sei? Che pasta sei? Che coinquilino sei? Quiz · Bazzecole</title>
+<meta name="description" content="Tre quiz da mandare nel gruppo: che portico di Bologna sei, che formato di pasta sei e che coinquilino sei. Sette domande, risultato da condividere, nessuna registrazione.">
+<meta property="og:title" content="Che … sei?">
+<meta property="og:description" content="Che portico di Bologna sei? Che formato di pasta? Che coinquilino? Sette domande e un risultato da mandare nel gruppo.">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://bazzecole.davide200410.workers.dev/quiz/">
+<meta property="og:url" content="https://bazzecole.davide200410.workers.dev/quiz/">
+<meta property="og:site_name" content="Bazzecole">
+<meta property="og:locale" content="it_IT">
+<meta property="og:image" content="https://bazzecole.davide200410.workers.dev/og/quiz.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://bazzecole.davide200410.workers.dev/og/quiz.png">
+<meta name="theme-color" content="#FBE7EE">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+/* VOICE: il test del giornalino letto sotto l'ombrellone, ma con le battute di un fuorisede bolognese
+   IDEA: adesivi colorati con il bordo spesso, e una fila di arcate sopra ogni risultato
+   PICTURE: il risultato come un adesivo da attaccare alla chat di gruppo
+   COLOUR and TYPE: 60 carta rosa, 30 inchiostro prugna, 10 accento per quiz (arancio portici, giallo pasta, azzurro coinquilini); Shrikhand per titoli e risultati, Figtree per domande e testo, Alfa Slab One solo per il logo
+   LAYOUT: colonna stretta, una domanda per schermata, risposte grandi da pollice */
+:root{color-scheme:light dark;--bg:light-dark(#FBE7EE,#22141F);--ink:light-dark(#2A1530,#F6E9EF);--card:light-dark(#FFFFFF,#331D30);--soft:light-dark(#6B4E66,#C9AFC2);--dark:#2A1530;--acc:#F07A4A}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+body[data-q=portico]{--acc:#F07A4A}body[data-q=pasta]{--acc:#F2C230}body[data-q=coinquilino]{--acc:#59B3E6}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.55 Figtree,system-ui,sans-serif;overflow-x:clip}
+[hidden]{display:none!important}
+.wrap{max-width:620px;margin:0 auto;padding-left:max(4vw,16px);padding-right:max(4vw,16px)}
+.top{padding-top:14px;padding-bottom:4px;display:flex;justify-content:space-between;align-items:center}
+.brand{font:20px/1 'Alfa Slab One',serif;color:var(--ink);text-decoration:none}
+.top button{border:0;background:none;color:var(--soft);font-weight:700;text-decoration:underline;min-height:44px}
+h1{font:400 clamp(44px,11vw,72px)/1 Shrikhand,serif;margin:18px 0 0;letter-spacing:.01em}
+p{margin:0}
+.lede{color:var(--soft);font-size:clamp(18px,2.4vw,20px);margin:12px 0 22px;max-width:48ch}
+button{font:inherit;cursor:pointer;color:inherit}
+button:focus-visible,a:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.stick{background:var(--card);border:3px solid var(--ink);border-radius:20px;box-shadow:6px 6px 0 var(--ink)}
+.pick{display:grid;gap:18px;margin-bottom:10px}
+.pick button{display:block;width:100%;text-align:left;padding:0;overflow:hidden;transition:transform .15s ease-out,box-shadow .15s ease-out}
+.pick button:active{transform:translate(4px,4px);box-shadow:2px 2px 0 var(--ink)}
+.pick .band{background:var(--c);color:var(--dark);padding:14px 18px 10px;font:400 clamp(26px,6vw,32px)/1.1 Shrikhand,serif;border-bottom:3px solid var(--ink)}
+.pick .txt{padding:12px 18px 14px}
+.pick .txt small{display:block;color:var(--soft);font-weight:700;font-size:15px;margin-top:4px}
+.card{padding:clamp(18px,4vw,26px)}
+.prog{display:flex;gap:6px;margin-bottom:16px}
+.prog i{flex:1;height:8px;border-radius:9px;background:color-mix(in srgb,var(--ink) 15%,transparent)}
+.prog i.on{background:var(--ink)}
+.qt{font:400 22px/1.1 Shrikhand,serif;color:var(--soft);margin-bottom:6px}
+.q{font:800 clamp(23px,5.4vw,29px)/1.25 Figtree,sans-serif;min-height:2.6em}
+.q.in{animation:in .2s ease-out}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.ans{display:grid;gap:10px;margin-top:16px}
+.ans button{border:3px solid var(--ink);background:var(--card);border-radius:16px;padding:12px 16px;min-height:58px;font-weight:700;font-size:18px;text-align:left;box-shadow:3px 3px 0 var(--ink);transition:transform .12s ease-out,box-shadow .12s ease-out,background-color .12s ease-out}
+.ans button:active,.ans button.sel{transform:translate(3px,3px);box-shadow:0 0 0 var(--ink);background:var(--acc);color:var(--dark)}
+.friend{background:var(--acc);color:var(--dark);border:3px solid var(--ink);border-radius:14px;padding:10px 14px;font-weight:700;margin-bottom:14px}
+.res{overflow:hidden}
+.arc{display:block;width:100%;height:64px;background:var(--acc);border-bottom:3px solid var(--ink)}
+.arc path{fill:var(--dark);fill-opacity:.85}
+.res .in{padding:clamp(18px,4vw,26px)}
+.res .sei{font-weight:800;color:var(--soft)}
+.res h2{font:400 clamp(38px,9.5vw,56px)/1.02 Shrikhand,serif;margin:4px 0 12px}
+.res p.d{font-size:19px}
+.btns{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:12px;margin-top:20px}
+.btn{border:3px solid var(--ink);border-radius:16px;min-height:56px;padding:12px 18px;font-weight:800;font-size:18px;background:var(--card);box-shadow:4px 4px 0 var(--ink);transition:transform .12s ease-out,box-shadow .12s ease-out}
+.btn.main{background:var(--acc);color:var(--dark)}
+.btn:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--ink)}
+.toast{min-height:1.4em;font-weight:700;margin-top:12px}
+details{margin-top:22px;border-top:2px dashed color-mix(in srgb,var(--ink) 30%,transparent);padding-top:14px}
+summary{font-weight:800;cursor:pointer;padding:10px 0}
+.all{display:grid;gap:12px;margin-top:8px}
+.all div b{display:block;font:400 22px/1.15 Shrikhand,serif}
+.all div{font-size:16px;color:var(--soft)}
+.all div.me b{color:var(--ink);text-decoration:underline;text-decoration-color:var(--acc);text-decoration-thickness:5px;text-underline-offset:3px}
+.extra{margin-top:12px;font-weight:700}.extra a{color:inherit}
+footer{color:var(--soft);font-size:15px;padding:34px 0 40px}footer a{color:inherit}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap top"><a class="brand" href="/">Bazzecole</a><button id="home" hidden>Tutti i quiz</button></div>
+<main class="wrap">
+  <section id="v-pick">
+    <h1>Che … sei?</h1>
+    <p class="lede">Tre quiz scemi da sette domande. Rispondi d'istinto, poi manda il risultato nel gruppo e aspetta le proteste.</p>
+    <div class="pick" id="pick"></div>
+  </section>
+  <section id="v-quiz" hidden>
+    <div class="stick card">
+      <div class="friend" id="friend" hidden></div>
+      <div class="prog" id="prog"></div>
+      <p class="qt" id="qt"></p>
+      <p class="q" id="q" aria-live="polite"></p>
+      <div class="ans" id="ans"></div>
+    </div>
+  </section>
+  <section id="v-res" hidden>
+    <div class="stick res">
+      <svg class="arc" id="arc" viewBox="0 0 600 64" preserveAspectRatio="xMidYMax slice" aria-hidden="true"></svg>
+      <div class="in">
+        <p class="sei" id="sei"></p>
+        <h2 id="rn"></h2>
+        <p class="d" id="rd"></p>
+        <p class="extra" id="extra" hidden></p>
+        <div class="btns"><button class="btn main" id="share">Manda nel gruppo</button><button class="btn" id="again">Rifai il quiz</button><button class="btn" id="other">Altri quiz</button></div>
+        <p class="toast" id="toast" role="status"></p>
+        <details><summary>Vedi tutti i risultati</summary><div class="all" id="all"></div></details>
+      </div>
+    </div>
+  </section>
+</main>
+<div class="wrap"><footer>Tutto per ridere: nessun portico, formato di pasta o coinquilino è stato offeso. Le risposte restano sul tuo telefono. Fatto a Bologna. <a href="/privacy/">Privacy</a>. <a href="https://www.paypal.me/DavideMazza626" target="_blank" rel="noopener">Offrici un caffè</a></footer></div>
+
+<script>
+{
+const $=id=>document.getElementById(id);
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+/* ogni risposta: [testo, 'chiavi']: la prima chiave vale 2 punti, le altre 1 */
+const QUIZ={
+portico:{title:'Che portico di Bologna sei?',sub:'Sotto quale delle arcate più famose della città ti ritrovi.',acc:'#F07A4A',
+ R:{
+  sanluca:['il portico di San Luca','Lungo, costante, in salita. A una festa resti fino alla fine e la mattina dopo vai pure a correre. 666 arcate di pazienza: chi ti segue arriva in cima col fiatone, ma ci arriva.'],
+  pavaglione:['il portico del Pavaglione','Elegante, colto, con le vetrine giuste. Passi davanti all\'Archiginnasio come fosse casa tua e correggi i congiuntivi degli altri a bassa voce. Ti si perdona tutto, perché sai sempre cosa consigliare da leggere.'],
+  zamboni:['il portico di via Zamboni','Vissuto, rumoroso, pieno di scritte e di vita. Le tue giornate iniziano a mezzogiorno e finiscono quando chiude l\'ultimo bar. Hai cento amici e ti ricordi il nome di dodici. Va benissimo così.'],
+  morte:['il portico della Morte','Nome inquietante, cuore tenerissimo. Sembri cupo, poi uno si avvicina e scopre che sotto hai solo libri e bancarelle. Chi ti conosce davvero ti adora; gli altri hanno solo paura del nome.'],
+  servi:['il portico dei Servi','Romantico, ordinato, con le colonne giuste al posto giusto. A dicembre hai mercatini e lucine nell\'anima. Ti piacciono le cose fatte bene e le tradizioni che si ripetono ogni anno.'],
+  indipendenza:['il portico di via Indipendenza','Largo, trafficato, sempre di passaggio. Sei sempre di corsa tra un negozio e un appuntamento, e mezza città ti conosce di vista. Il giorno che ti fermi, Bologna se ne accorge.']
+ },
+ Q:[
+  ['Sabato pomeriggio libero. Cosa fai?',[['Una camminata lunga, anche in salita','sanluca'],['Mostra o libreria, poi un caffè seduto','pavaglione morte'],['Giro per negozi in centro','servi indipendenza'],['Che pomeriggio? Mi sono appena svegliato','zamboni']]],
+  ['Nella tua borsa c\'è sicuramente…',[['Un libro con le pagine piegate','morte pavaglione'],['Borraccia, cerotti e un k-way','sanluca'],['Scontrini di cose comprate oggi','indipendenza'],['Il volantino di una festa e mezza piadina','zamboni']]],
+  ['Come ti descrivono gli amici?',[['Affidabile: ci sei sempre','sanluca servi'],['Intelligente, ma un filo snob','pavaglione'],['L\'anima di ogni festa','indipendenza zamboni'],['Misterioso, poi però sei un tenero','morte']]],
+  ['La tua serata ideale:',[['Cena a lume di candela','servi'],['Festa in casa che finisce all\'alba','zamboni'],['Divano, tisana e un giallo','morte'],['Aperitivo dove passa tutta Bologna','indipendenza pavaglione']]],
+  ['Piove a dirotto e non hai l\'ombrello.',[['Nessun problema: conosco il percorso tutto sotto i portici','sanluca'],['Mi riparo in una libreria e perdo la cognizione del tempo','morte'],['Entro in un negozio ed esco con un ombrello e altre quattro cose','indipendenza'],['Resto sotto il portico a chiacchierare con chiunque','zamboni servi']]],
+  ['Il Natale per te è…',[['Mercatini, lucine e vin brulé','servi'],['Regali comprati il 24 alle sette di sera','indipendenza zamboni'],['Una passeggiata lunga per smaltire i tortellini','sanluca'],['Un libro nuovo sotto l\'albero','pavaglione morte']]],
+  ['Un difetto che ammetti:',[['Testardo: quando parto, arrivo in fondo','sanluca'],['Giudico chi non ha letto i classici','pavaglione'],['Non so dire di no a un\'altra birra','zamboni'],['Sono un po\' nostalgico','servi morte']]]
+ ]},
+pasta:{title:'Che formato di pasta sei?',sub:'Tortellino, tagliatella o qualcosa di più ribelle.',acc:'#F2C230',
+ R:{
+  tortellino:['il tortellino','Piccolo, pieno di cose, fatto a mano con pazienza. Sei tradizione pura: hai le tue regole e guai a chi le cambia. Dentro hai un mondo, ma lo fai vedere solo a chi si siede a tavola con te.'],
+  tagliatella:['la tagliatella','Generosa, larga, avvolgente. Accogli tutti e tieni il sugo come nessuno. Sei quella che dice «mangia, che sei sciupato». E se qualcuno nomina gli spaghetti alla bolognese, ti si chiude la vena.'],
+  gramigna:['la gramigna','Piccola, ricciolina, un po\' ribelle. Fuori Bologna in pochi ti conoscono, ma chi ti assaggia non ti lascia più. Ti piace la salsiccia e non devi spiegazioni a nessuno.'],
+  rigatone:['il rigatone','Solido, robusto, affidabile. Reggi qualsiasi sugo e qualsiasi giornata. Non sei il più raffinato della tavola, ma sei quello che chiamano quando c\'è da fare un trasloco.'],
+  farfalla:['la farfalla','Elegante e fotogenica. Sei sempre in posa e stai bene in ogni insalata. Al centro sei un po\' durina, ma i bordi sono morbidissimi: chi ti conosce lo sa.'],
+  spaghetto:['lo spaghetto','Il classico che piace a tutti, in tutto il mondo. Sei famoso, socievole, ti trovi bene ovunque. Unico punto debole: se qualcuno ti spezza prima di cuocerti, la prendi molto sul personale.']
+ },
+ Q:[
+  ['Al ristorante ordini…',[['Il piatto della nonna, senza guardare il menù','tortellino tagliatella'],['Quello che non ho mai provato','gramigna farfalla'],['Una porzione abbondante, con bis','rigatone'],['Il classico fatto bene','spaghetto']]],
+  ['Il tuo rapporto con il sugo:',[['Ragù che cuoce da sei ore, ovviamente','tagliatella'],['Brodo. Solo brodo. Sempre brodo.','tortellino'],['Salsiccia e un filo di panna, ma non dirlo in giro','gramigna'],['Tanto, mai abbastanza','rigatone']]],
+  ['Come ti vesti per uscire?',[['Curato nei dettagli','farfalla'],['Felpa comoda: l\'importante è stare bene','rigatone gramigna'],['Il solito, che non passa mai di moda','tortellino spaghetto'],['Qualcosa di vintage che era di mia madre','tagliatella tortellino']]],
+  ['Il tuo superpotere?',[['Rendo felice chiunque in dieci minuti','spaghetto'],['Tengo tutto dentro, soprattutto il ripieno','tortellino'],['Abbraccio tutto quello che incontro','tagliatella rigatone'],['Vengo bene in ogni foto','farfalla']]],
+  ['Qualcuno dice «spaghetti alla bolognese».',[['Mi sento offeso a livello personale','tagliatella tortellino'],['Faccio finta di niente, basta mangiare','rigatone gramigna'],['Sorrido: è il mio momento di gloria','spaghetto'],['Propongo una via di mezzo creativa','farfalla gramigna']]],
+  ['Il tuo posto preferito in casa:',[['La cucina, con le mani in pasta','tortellino'],['Il divano, sprofondato','rigatone'],['Il balcone con le piante','farfalla'],['Ovunque ci sia gente','gramigna spaghetto']]],
+  ['Un difetto?',[['Mi arriccio su me stesso quando sono nervoso','gramigna'],['Sono un po\' pesante, ma con affetto','tagliatella rigatone'],['Mi offendo se mi spezzano','spaghetto'],['Sono più bello che sostanzioso','farfalla']]]
+ ]},
+coinquilino:{title:'Che coinquilino sei?',sub:'Per scoprire chi, in casa, è il problema. Spoiler: forse tu.',acc:'#59B3E6',
+ R:{
+  fantasma:['il fantasma','Paghi l\'affitto puntuale, non sporchi, non fai rumore. Nessuno ti ha mai visto in cucina e qualcuno dubita che tu esista davvero. Coinquilino perfetto, ma ogni tanto esci a salutare.'],
+  chef:['lo chef','Cucini per dodici anche quando siete in due. La casa profuma sempre e tutti ti vogliono bene. Poi però la cucina sembra un campo di battaglia e la pentola resta «a bagno» per tre giorni.'],
+  contabile:['il contabile','Hai un foglio di calcolo per ogni cosa, dal gas al sale. Grazie a te nessuno litiga sui soldi, ma ti sei fatto odiare per quei 37 centesimi di detersivo. Dentro sei buono, giuriamo.'],
+  festaiolo:['il festaiolo','Casa vostra è un after ufficioso. Conosci mezzo quartiere e porti sempre gente nuova. Con te non ci si annoia mai, ma la mattina dopo il salotto ha bisogno di una squadra di soccorso.'],
+  divano:['il filosofo del divano','Vivi sul divano e da lì commenti il mondo. Alle tre di notte fai le domande più profonde della casa. Non pulisci mai, ma quando qualcuno è giù sei il primo ad ascoltarlo.'],
+  mamma:['la mamma della casa','Compri la carta igienica per tutti, ricordi le scadenze delle bollette e hai inventato i turni delle pulizie. Senza di te la casa crollerebbe in una settimana. Lo sanno tutti, nessuno lo dice. Ecco: grazie.']
+ },
+ Q:[
+  ['Martedì, ore 23. Dove sei?',[['In camera, porta chiusa: nessuno sa se ci sono','fantasma'],['In cucina a preparare il sugo per domani','chef'],['Fuori, ovviamente','festaiolo'],['Sul divano, da sette ore','divano']]],
+  ['Finisce la carta igienica. Cosa fai?',[['La compro io, come sempre','mamma'],['Segno 0,89 € nel foglio delle spese','contabile'],['Uso i fazzoletti e spero che qualcuno se ne accorga','divano'],['Non lo so, non sono mai a casa','fantasma']]],
+  ['Il tuo contributo alla chat della casa:',[['Foto del lavandino pieno, con tre punti esclamativi','contabile mamma'],['«Stasera porto un po\' di gente»','festaiolo'],['Niente: l\'ho silenziata due anni fa','fantasma'],['«Chi vuole la pasta? Ne ho fatta per dodici»','chef']]],
+  ['Cosa c\'è nel tuo ripiano del frigo?',[['Contenitori con nome e data','mamma contabile'],['Spezie rare e un lievito madre di nome Gino','chef'],['Una birra e mezzo limone','festaiolo divano'],['Ho un ripiano? Forse.','fantasma']]],
+  ['I turni delle pulizie:',[['Li ho inventati io','mamma'],['Li ho messi in un foglio con le formule','contabile'],['Ah, ci sono dei turni?','divano fantasma'],['Pulisco dopo aver cucinato. A volte.','chef']]],
+  ['Arrivano ospiti a sorpresa.',[['Più siamo, meglio è','festaiolo chef'],['Mi chiudo in camera','fantasma'],['Faccio spazio sul divano, ma non mi alzo','divano'],['Chiedo chi paga la quota extra delle bollette','contabile']]],
+  ['La frase che dici più spesso:',[['Chi ha lasciato le luci accese?','mamma contabile'],['Assaggia questo','chef'],['Ancora un episodio e poi vado','divano'],['Ci sei stasera?','festaiolo']]]
+ ],
+ extra:'Per decidere chi lava i piatti stasera c\'è <a href="/piatti/">la ruota dei piatti</a>.'}
+};
+const KEY='bz-quiz';
+const load=()=>{try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return{}}};
+const save=o=>{try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}};
+let cur=null,qi=0,score={},picked=[];
+
+function arcs(){let d='M0 0H600V64H0Z';for(let x=0;x<600;x+=50)d+=`M${x+9} 64V34A16 16 0 0 1 ${x+41} 34V64Z`;return `<path fill-rule="evenodd" d="${d}"/>`}
+$('arc').innerHTML=arcs();
+
+function view(v){for(const id of['v-pick','v-quiz','v-res'])$(id).hidden=id!=='v-'+v;$('home').hidden=v==='pick';scrollTo(0,0)}
+function renderPick(){
+  const done=load();document.body.dataset.q='';
+  $('pick').innerHTML=Object.entries(QUIZ).map(([k,z])=>`<button class="stick" data-k="${k}" style="--c:${z.acc}"><div class="band">${z.title}</div><div class="txt">${z.sub}<small>${done[k]&&z.R[done[k]]?'La volta scorsa: '+z.R[done[k]][0]:'7 domande'}</small></div></button>`).join('');
+  view('pick');
+}
+$('pick').addEventListener('click',e=>{const b=e.target.closest('button');if(b)location.hash=b.dataset.k});
+function start(k,friend){
+  cur=k;qi=0;score={};picked=[];const z=QUIZ[k];document.body.dataset.q=k;
+  for(const r in z.R)score[r]=0;
+  const f=$('friend');
+  if(friend&&z.R[friend]){f.hidden=false;f.textContent=`Chi ti ha mandato il link è ${z.R[friend][0]}. E tu?`}else f.hidden=true;
+  $('qt').textContent=z.title;view('quiz');renderQ();
+}
+function renderQ(){
+  const z=QUIZ[cur],[text,opts]=z.Q[qi];
+  $('prog').innerHTML=z.Q.map((_,k)=>`<i class="${k<=qi?'on':''}"></i>`).join('');
+  const q=$('q');q.textContent=text;q.classList.remove('in');void q.offsetWidth;q.classList.add('in');
+  $('ans').innerHTML=opts.map(([t],k)=>`<button data-k="${k}">${esc(t)}</button>`).join('');
+}
+let busy=false;
+$('ans').addEventListener('click',e=>{
+  const b=e.target.closest('button');if(!b||busy)return;busy=true;b.classList.add('sel');
+  const keys=QUIZ[cur].Q[qi][1][+b.dataset.k][1].split(' ');
+  keys.forEach((r,n)=>score[r]+=n?1:2);picked.push(keys[0]);
+  setTimeout(()=>{busy=false;if(qi<QUIZ[cur].Q.length-1){qi++;renderQ()}else result()},RM?0:180);
+});
+function winner(){
+  /* a parità vince il risultato scelto per primo come risposta principale più di recente */
+  const max=Math.max(...Object.values(score));
+  const tied=Object.keys(score).filter(r=>score[r]===max);
+  if(tied.length===1)return tied[0];
+  for(let k=picked.length-1;k>=0;k--)if(tied.includes(picked[k]))return picked[k];
+  return tied[0];
+}
+let last=null;
+function result(){
+  const z=QUIZ[cur],r=winner(),[name,desc]=z.R[r];last={k:cur,r};
+  const d=load();d[cur]=r;save(d);
+  $('sei').textContent=z.title;
+  $('rn').textContent=name.replace(/^./,c=>c.toUpperCase());$('rd').textContent=desc;
+  const ex=$('extra');if(z.extra){ex.hidden=false;ex.innerHTML=z.extra}else ex.hidden=true;
+  $('all').innerHTML=Object.entries(z.R).map(([k,[n,t]])=>`<div class="${k===r?'me':''}"><b>${esc(n.replace(/^./,c=>c.toUpperCase()))}</b>${esc(t)}</div>`).join('');
+  $('toast').textContent='';view('res');
+  if(location.hash.slice(1)!==cur)history.replaceState(null,'','#'+cur);
+}
+$('again').onclick=()=>start(cur);
+$('other').onclick=$('home').onclick=()=>{location.hash=''};
+
+function route(){
+  const [k,f]=decodeURIComponent(location.hash.slice(1)).split('/');
+  if(QUIZ[k])start(k,f);else{cur=null;renderPick()}
+}
+addEventListener('hashchange',route);route();
+
+function wrap(g,text,maxW){const words=text.split(' '),lines=[];let l='';for(const w of words){const t=l?l+' '+w:w;if(g.measureText(t).width>maxW&&l){lines.push(l);l=w}else l=t}if(l)lines.push(l);return lines}
+async function cardBlob(){
+  try{await Promise.all(['80px Shrikhand','800 40px Figtree','400 38px Figtree'].map(f=>document.fonts.load(f)))}catch(e){}
+  const z=QUIZ[last.k],[name,desc]=z.R[last.r];
+  const c=document.createElement('canvas');c.width=1080;c.height=1350;let g=c.getContext('2d');
+  g.font='92px Shrikhand, serif';const tl=wrap(g,'Sono '+name,850);
+  g.font='400 38px Figtree, sans-serif';const dl=wrap(g,desc,850);
+  const end=420+tl.length*100+20+dl.length*54+40;const H=Math.max(1080,end+150);
+  c.height=H;g=c.getContext('2d');
+  g.fillStyle=z.acc;g.fillRect(0,0,1080,H);
+  g.fillStyle='rgba(42,21,48,.85)';g.beginPath();g.rect(0,0,1080,150);
+  for(let x=0;x<1080;x+=90){g.moveTo(x+16,150);g.lineTo(x+16,80);g.arc(x+45,80,29,Math.PI,0);g.lineTo(x+74,150);g.closePath()}
+  g.fill('evenodd');
+  const bh=H-210-70;
+  g.fillStyle='#2A1530';g.fillRect(70,220,950,bh);g.fillStyle='#FFFFFF';g.fillRect(60,210,950,bh);
+  g.strokeStyle='#2A1530';g.lineWidth=8;g.strokeRect(60,210,950,bh);
+  g.fillStyle='#6B4E66';g.font='800 40px Figtree, sans-serif';g.fillText(z.title,110,300);
+  g.fillStyle='#2A1530';g.font='92px Shrikhand, serif';
+  let y=420;for(const l of tl){g.fillText(l,110,y);y+=100}
+  g.font='400 38px Figtree, sans-serif';y+=20;
+  for(const l of dl){g.fillText(l,110,y);y+=54}
+  g.fillStyle='#6B4E66';g.font='800 34px Figtree, sans-serif';g.fillText('E tu? '+location.host+'/quiz',110,210+bh-60);
+  return new Promise(res=>c.toBlob(res,'image/png'));
+}
+$('share').onclick=async()=>{
+  const z=QUIZ[last.k],name=z.R[last.r][0];
+  const text=`${z.title} Io sono ${name}. E tu?`;
+  const url=`${location.origin}/quiz/#${last.k}/${last.r}`;
+  try{
+    const blob=await cardBlob();const file=new File([blob],`${last.k}-${last.r}.png`,{type:'image/png'});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],text:text+' '+url});return}
+    if(navigator.share){await navigator.share({text,url});return}
+  }catch(err){if(err&&err.name==='AbortError')return}
+  try{await navigator.clipboard.writeText(text+' '+url);$('toast').textContent='Copiato: incollalo nel gruppo.'}catch(err){$('toast').textContent=text+' '+url}
+};
+}
+</script>
+<script src="/shared/altri.js"></script>
+</body>
+</html>

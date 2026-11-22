@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Non ho mai, Chi è più probabile che, Obbligo o verità online · Bazzecole</title>
+<meta name="description" content="Tre giochi di gruppo gratis sul telefono: Non ho mai, Chi è più probabile che e Obbligo o verità. Centinaia di carte, le vostre domande personalizzate e una modalità piccante per maggiorenni. Niente app, niente pubblicità invadente.">
+<meta property="og:title" content="Non ho mai, Chi è più probabile, Obbligo o verità">
+<meta property="og:description" content="Centinaia di carte per le serate in compagnia, le vostre domande e una modalità piccante solo per maggiorenni.">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://bazzecole.davide200410.workers.dev/gruppo/">
+<meta property="og:url" content="https://bazzecole.davide200410.workers.dev/gruppo/">
+<meta property="og:site_name" content="Bazzecole">
+<meta property="og:locale" content="it_IT">
+<meta property="og:image" content="https://bazzecole.davide200410.workers.dev/og/gruppo.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://bazzecole.davide200410.workers.dev/og/gruppo.png">
+<meta name="theme-color" content="#17152B">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+/* VOICE: l'amico che tiene in mano il telefono alla festa e legge le carte ad alta voce
+   IDEA: un mazzo di carte colorate che si sfoglia con un tocco, una dopo l'altra
+   PICTURE: la carta in primo piano con altre due storte dietro, come un mazzo appoggiato sul tavolo
+   COLOUR and TYPE: 60 notte viola, 30 lavanda chiaro, 10 colori delle carte (lime, corallo, giallo, acqua; rosso per le piccanti); Barlow Condensed per le carte, Barlow per il resto, Alfa Slab One solo per il logo
+   LAYOUT: tre linguette in alto, la carta grande al centro, il pulsante per la prossima sotto il pollice */
+:root{color-scheme:light dark;--bg:light-dark(#EEEAF6,#17152B);--ink:light-dark(#1E1B3A,#EEEAF6);--soft:light-dark(#57537A,#B5B0D6);--panel:light-dark(#FFFFFF,#242145);--line:light-dark(#D6D1E8,#38345F);--dark:#1E1B3A;--c:#C7E86A}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+body[data-m=nonhomai]{--c:#C7E86A}body[data-m=probabile]{--c:#FF9B76}body[data-m=obbligo]{--c:#FFD15C}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.5 Barlow,system-ui,sans-serif;overflow-x:clip}
+[hidden]{display:none!important}
+.wrap{max-width:640px;margin:0 auto;padding-left:max(4vw,16px);padding-right:max(4vw,16px)}
+.top{padding-top:14px;padding-bottom:4px}
+.brand{font:20px/1 'Alfa Slab One',serif;color:var(--ink);text-decoration:none}
+h1{font:700 clamp(34px,8vw,50px)/1.02 'Barlow Condensed',sans-serif;margin:12px 0 4px;letter-spacing:.005em;text-wrap:balance}
+p{margin:0}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:var(--panel);border-radius:16px;padding:5px;margin:14px 0 12px;border:1px solid var(--line)}
+.tabs button{border:0;background:none;border-radius:12px;padding:8px 6px;min-height:52px;font:600 16px/1.15 Barlow,sans-serif;color:var(--soft);transition:background-color .15s ease-out,color .15s ease-out}
+.tabs button[aria-selected=true]{background:var(--c);color:var(--dark)}
+.how{color:var(--soft);font-size:17px;min-height:3em}
+.turn{font:700 22px/1.2 'Barlow Condensed',sans-serif;margin:12px 0 0;min-height:1.2em}
+.deck{position:relative;margin:16px 6px 0;min-height:clamp(300px,52vh,420px)}
+.deck::before,.deck::after{content:"";position:absolute;inset:0;border-radius:24px;background:color-mix(in srgb,var(--c) 45%,var(--bg));transform:rotate(-3.5deg) translateY(6px)}
+.deck::after{background:color-mix(in srgb,var(--c) 70%,var(--bg));transform:rotate(2.5deg) translateY(3px)}
+.card{position:absolute;inset:0;z-index:1;border:0;border-radius:24px;background:var(--c);color:var(--dark);padding:clamp(22px,5vw,34px);text-align:left;display:flex;flex-direction:column;box-shadow:0 18px 40px rgba(10,8,30,.25)}
+.card.spicy{background:#C92F4B;color:#FFF5F6}
+.card .lead{font:600 19px/1.2 Barlow,sans-serif;opacity:.8}
+.card .txt{font:700 clamp(32px,7.6vw,46px)/1.08 'Barlow Condensed',sans-serif;margin-top:10px;flex:1;display:flex;align-items:center}
+.card .foot{display:flex;justify-content:space-between;align-items:center;font-weight:600;font-size:15px;opacity:.8;gap:10px}
+.chip{border:2px solid currentColor;border-radius:99px;padding:1px 10px;font-weight:700}
+.card.flip{animation:flip .26s ease-out}
+@keyframes flip{from{transform:translateY(14px) rotate(-2deg);opacity:0}to{transform:none;opacity:1}}
+.ctrl{display:grid;gap:10px;margin-top:20px}
+.ctrl.two{grid-template-columns:1fr 1fr}
+.btn{border:0;border-radius:16px;min-height:60px;padding:12px 18px;font:700 20px/1.1 Barlow,sans-serif;background:var(--ink);color:var(--bg);transition:transform .15s ease-out}
+.btn:active{transform:scale(.97)}
+.btn.o{background:#FFD15C;color:var(--dark)}.btn.v{background:#8FDCCB;color:var(--dark)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px var(--line);min-height:48px;font-size:17px}
+.toast{min-height:1.4em;font-weight:600;margin-top:8px;color:var(--soft)}
+details{background:var(--panel);border:1px solid var(--line);border-radius:16px;margin-top:16px}
+summary{padding:14px 16px;font-weight:700;cursor:pointer}
+.set{padding:0 16px 16px;display:grid;gap:16px}
+.set label{display:block;font-weight:600}
+.set small{display:block;color:var(--soft);font-size:15px;font-weight:400}
+textarea{width:100%;min-height:110px;margin-top:6px;border:2px solid var(--line);border-radius:12px;background:var(--bg);padding:10px 12px;font-size:17px;resize:vertical}
+.sw{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.sw input{appearance:none;width:58px;height:34px;border-radius:99px;background:var(--line);position:relative;flex:none;cursor:pointer;transition:background-color .15s ease-out}
+.sw input::after{content:"";position:absolute;top:4px;left:4px;width:26px;height:26px;border-radius:50%;background:#fff;transition:transform .15s ease-out}
+.sw input:checked{background:#C92F4B}.sw input:checked::after{transform:translateX(24px)}
+dialog{border:0;border-radius:20px;padding:24px;max-width:min(440px,92vw);background:var(--panel);color:var(--ink);box-shadow:0 30px 80px rgba(0,0,0,.4)}
+dialog::backdrop{background:rgba(15,12,35,.6)}
+dialog h2{font:700 30px/1.1 'Barlow Condensed',sans-serif;margin:0 0 10px}
+dialog p{margin-bottom:10px}
+dialog .ctrl{margin-top:16px}
+.note{color:var(--soft);font-size:15px;margin-top:18px}
+footer{color:var(--soft);font-size:15px;padding:30px 0 40px}footer a{color:inherit}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body data-m="nonhomai">
+<div class="wrap top"><a class="brand" href="/">Bazzecole</a></div>
+<main class="wrap">
+  <h1>Giochi di gruppo</h1>
+  <div class="tabs" role="tablist" id="tabs">
+    <button role="tab" data-m="nonhomai">Non ho mai</button>
+    <button role="tab" data-m="probabile">Chi è più probabile</button>
+    <button role="tab" data-m="obbligo">Obbligo o verità</button>
+  </div>
+  <p class="how" id="how"></p>
+  <p class="turn" id="turn" aria-live="polite"></p>
+  <div class="deck"><button class="card" id="card" aria-live="polite"><span class="lead" id="lead"></span><span class="txt" id="txt"></span><span class="foot"><span id="count"></span><span class="chip" id="chip" hidden>Piccante</span></span></button></div>
+  <div class="ctrl" id="c-next"><button class="btn" id="next">Prossima carta</button></div>
+  <div class="ctrl two" id="c-ov" hidden><button class="btn o" id="bo">Obbligo</button><button class="btn v" id="bv">Verità</button></div>
+  <p class="toast" id="toast" role="status"></p>
+
+  <details id="opts">
+    <summary>Giocatori, carte vostre e modalità piccante</summary>
+    <div class="set">
+      <div><label for="names">Giocatori<small>Un nome per riga. Se li scrivi, ti diciamo a chi tocca.</small></label><textarea id="names" placeholder="Giulia&#10;Marco&#10;Sara"></textarea></div>
+      <div class="sw"><label for="spicy">Modalità piccante 18+<small>Aggiunge carte su baci, cotte e appuntamenti. Niente di esplicito, ma solo tra maggiorenni.</small></label><input type="checkbox" id="spicy"></div>
+      <div id="mine"></div>
+    </div>
+  </details>
+  <p class="note">Si gioca solo se ci si diverte tutti: chiunque può dire «passo» a una carta, senza spiegazioni. Niente alcol obbligatorio: in Non ho mai si gioca con le dita.</p>
+</main>
+<dialog id="age">
+  <h2>Siete tutti maggiorenni?</h2>
+  <p>Le carte piccanti parlano di baci, cotte ed ex. Nulla di esplicito, ma sono pensate solo per gruppi di maggiorenni.</p>
+  <p>Attivale solo se tu e chi gioca con te avete almeno 18 anni.</p>
+  <div class="ctrl two"><button class="btn ghost" id="age-no">No, lascia stare</button><button class="btn" id="age-yes">Sì, abbiamo tutti 18 anni o più</button></div>
+</dialog>
+<div class="wrap"><footer>Fatto a Bologna. Per i dadi e la bottiglia c'è il <a href="/tavolo/">kit da tavolo</a>. <a href="/privacy/">Privacy</a>. <a href="https://www.paypal.me/DavideMazza626" target="_blank" rel="noopener">Offrici un caffè</a></footer></div>
+
+<script>
+{
+const $=id=>document.getElementById(id);
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const C={
+nonhomai:['fatto finta di essere al telefono per evitare qualcuno','mangiato la cena di un coinquilino dal frigo','dormito in biblioteca','perso l\'ultimo autobus della notte','mandato un messaggio alla persona sbagliata','riso a un funerale','mentito sulla mia età','dato un esame senza aver aperto il libro','cantato a squarciagola in macchina da solo','rubato le patatine dal piatto di qualcun altro','rimandato la sveglia più di cinque volte','scritto «sto arrivando» mentre ero ancora sotto la doccia','spiato il profilo dell\'ex di qualcun altro','pianto guardando un cartone animato','dimenticato il compleanno di un amico stretto','riciclato un regalo','finto di conoscere una canzone a un concerto','preso una multa sul treno','sbagliato il nome di qualcuno e continuato a sbagliarlo per mesi','dormito più di quattordici ore di fila','lasciato i piatti nel lavandino per più di tre giorni','fatto il bagno al mare di notte','copiato a un compito in classe','detto di aver letto un libro dopo aver visto solo il film','salito a piedi tutto il portico di San Luca','ordinato gli spaghetti alla bolognese','bevuto il caffè freddo del giorno prima','rotto qualcosa e dato la colpa a qualcun altro','tagliato i capelli da solo','preso un treno nella direzione sbagliata','mangiato una pizza intera da solo','ascoltato un vocale a velocità doppia','mandato un vocale di più di cinque minuti','finto di stare male per saltare un impegno','urlato contro un elettrodomestico','perso le chiavi di casa','fatto il turista nella mia città','ballato su un tavolo','scritto una recensione cattiva su internet','avuto paura di un piccione','prestato qualcosa senza riaverlo indietro','dormito al cinema','chiesto il bis a una cena dove non conoscevo nessuno','cercato il mio nome su internet','rifiutato un voto all\'università','pagato l\'affitto in ritardo','finto di lavorare in videochiamata','risposto a una mail dopo un mese','mangiato qualcosa caduto per terra','fatto le scale di corsa per non incontrare un vicino'],
+probabile:['diventi famoso su internet per sbaglio','dimentichi il proprio compleanno','si perda con il navigatore acceso','sopravviva a un\'apocalisse zombie','arrivi in ritardo al proprio matrimonio','adotti cinque gatti','mangi l\'ultima fetta senza chiedere','si addormenti a una festa','apra un ristorante','diventi sindaco di Bologna','vinca un reality','pianga guardando una pubblicità','risponda a un messaggio dopo tre settimane','vada a vivere all\'estero','compri una cosa inutile alle tre di notte','si faccia un tatuaggio di cui si pentirà','parli con le piante','conosca tutti i baristi della zona','organizzi una festa e poi non si presenti','perda il telefono stasera','faccia un discorso commosso a un matrimonio','si metta a ballare senza musica','scriva un libro','diventi famoso cucinando','si iscriva in palestra e non ci vada mai','vada a una festa in pigiama','trovi una stanza a Bologna sotto i 400 euro','dica «da lunedì inizio» per un anno intero','resti chiuso fuori casa','faccia amicizia con uno sconosciuto in treno','si commuova a un concerto','litighi con l\'assistente vocale','tenga un foglio di calcolo per le spese di casa','venga scambiato per un turista nella propria città','resti sveglio fino all\'alba a guardare documentari','faccia un regalo fatto a mano','dimentichi dove ha parcheggiato','vinca una gara di karaoke','mandi un vocale di dieci minuti','diventi milionario','se ne vada da una festa senza salutare','prenda il treno sbagliato','si tagli i capelli in modo drastico','vinca a un quiz televisivo','si perda in un centro commerciale','faccia una maratona di una serie in un giorno','racconti la stessa storia per la terza volta','arrivi in anticipo a tutto','entri nel posto sbagliato con sicurezza','si faccia offrire da bere da uno sconosciuto'],
+obbligo:['Imita qualcuno del gruppo finché gli altri non indovinano chi è.','Parla con un accento diverso fino al tuo prossimo turno.','Fai una dichiarazione d\'amore appassionata alla pianta più vicina.','Racconta la tua giornata come un telecronista sportivo.','Canta il ritornello di una canzone scelta dal gruppo.','Fai dieci piegamenti sulle gambe recitando l\'alfabeto.','Lascia che il gruppo ti faccia un\'acconciatura, senza forbici.','Balla senza musica per venti secondi.','Parla solo in rima fino al tuo prossimo turno.','Racconta una barzelletta. Se nessuno ride, ne racconti un\'altra.','Descrivi l\'ultima foto della tua galleria senza mostrarla: gli altri indovinano cos\'è.','Fai un complimento sincero a ognuno dei presenti.','Fai la pubblicità di un oggetto a caso nella stanza per trenta secondi.','Rispondi solo con domande fino al tuo prossimo turno.','Tieni un libro in equilibrio sulla testa fino al tuo prossimo turno.','Mima un film: gli altri devono indovinare il titolo.','Parla come un navigatore satellitare per un minuto.','Fai il cameriere di un\'osteria bolognese e prendi l\'ordine di tutti.','Racconta la trama del tuo film preferito in quindici secondi.','Scambia un capo che indossi con la persona alla tua sinistra fino al prossimo turno.','Intervista la persona alla tua destra come se fosse una star.','Recita una poesia inventata sul tema «le bollette».','Fai il verso di cinque animali di fila.','Fai una sfilata dalla porta al divano.','Spiega le regole del calcio come se il gruppo fosse di alieni.','Inventa un coro da stadio per il gruppo.','Fai una previsione sul futuro di ciascuno dei presenti.','Parla di te in terza persona fino al prossimo turno.','Organizza una foto di gruppo con le facce più brutte possibili.','Trova nella stanza tre oggetti che iniziano con la P in venti secondi.','Descrivi un coinquilino immaginario come in un annuncio di affitto.','Fai la statua per trenta secondi mentre gli altri provano a farti ridere.','Leggi l\'ultima ricerca che hai fatto su internet ad alta voce.','Disegna il ritratto della persona alla tua destra in trenta secondi.','Spiega come si fanno i tortellini come se fosse una ricetta segreta di Stato.'],
+verita:['Qual è la cosa più imbarazzante che hai fatto in pubblico?','Qual è la bugia più grande che hai detto ai tuoi genitori?','Che superpotere vorresti e perché?','Qual è il regalo peggiore che hai ricevuto?','Quale app apri più spesso?','Chi del gruppo porteresti su un\'isola deserta?','Qual è stata la tua figuraccia peggiore a scuola o all\'università?','Hai mai fatto finta che ti piacesse un regalo? Quale?','Qual è la tua paura più stupida?','Cosa faresti con un milione di euro domani?','Qual è la serie che guardi di nascosto?','Cosa cambieresti della casa in cui vivi?','Racconta il coinquilino peggiore che hai avuto, senza fare nomi.','Qual è la cosa più strana che hai cercato su internet?','Quale abitudine non riesci a toglierti?','Qual è la canzone che ascolti di più ultimamente?','Hai mai mentito in questo gioco?','Chi del gruppo conosci da più tempo, e com\'è iniziata?','Qual è il messaggio più strano che hai ricevuto?','Qual è il tuo sogno nel cassetto?','Cosa hai pensato la prima volta che hai visto la persona alla tua destra?','Qual è il lavoro che non faresti mai?','Qual è la cosa più costosa che hai rotto?','Di cosa sei segretamente orgoglioso?','Se potessi rivivere un giorno, quale sceglieresti?','Qual è il complimento più bello che hai ricevuto?','Qual è il tuo piacere proibito, quello che non confessi?','Chi chiameresti alle tre di notte in caso di emergenza?','Qual è l\'ultimo acquisto di cui ti sei pentito?','Quale cibo odi ma fai finta che ti piaccia?','Qual è la scusa più assurda che hai usato?','Chi del gruppo sopravviverebbe più a lungo nella giungla?','In quale epoca storica vorresti vivere?','Qual è la cosa più coraggiosa che hai fatto?','Se domani cambiassi vita, che lavoro faresti?']
+};
+const S={
+nonhomai:['baciato qualcuno conosciuto la sera stessa','scritto a un ex dopo mezzanotte','avuto una cotta per un coinquilino','mandato un messaggio ammiccante alla persona sbagliata','finto di non vedere un ex per strada','usato un\'app di incontri per più di un mese','avuto due appuntamenti con persone diverse nella stessa settimana','dato un numero di telefono falso','fatto una dichiarazione e ricevuto un due di picche','avuto una cotta per un professore','dormito fuori senza avvisare i coinquilini','fatto il primo passo','dato buca a un appuntamento con una scusa inventata','baciato qualcuno sotto un portico','riletto una vecchia chat con un ex'],
+probabile:['baci qualcuno stasera','scriva a un ex entro fine mese','abbia una cotta segreta per qualcuno qui','faccia il primo passo al primo appuntamento','si innamori in vacanza','usi una frase da rimorchio pessima e funzioni','abbia il profilo di incontri più divertente','si sposi per primo','vada a un appuntamento al buio','torni con un ex','abbia più chat aperte con persone diverse','dorma fuori stanotte'],
+obbligo:['Fai il tuo sguardo più seducente alla persona alla tua destra per cinque secondi.','Fai la tua migliore frase da rimorchio alla persona alla tua sinistra.','Lascia che il gruppo scriva la tua descrizione per un\'app di incontri e leggila ad alta voce.','Mima il tuo appuntamento peggiore.','Fai un complimento audace, ma gentile, a qualcuno del gruppo.','Balla un lento con la persona che sceglie il gruppo, se è d\'accordo.','Racconta il tuo primo bacio con la voce di un documentario sulla natura.','Descrivi il tuo tipo ideale usando solo oggetti nella stanza.','Fai una serenata di quindici secondi a chi vuoi.','Fai una dichiarazione drammatica da telenovela alla persona alla tua destra.','Racconta come conquisteresti la persona di fronte a te, in trenta secondi.','Fai l\'occhiolino a ognuno dei presenti, il più seriamente possibile.'],
+verita:['Chi in questa stanza baceresti, se dovessi scegliere?','Qual è stato il tuo appuntamento peggiore?','Hai mai avuto una cotta per qualcuno del gruppo?','Qual è la cosa più romantica che hai fatto per qualcuno?','Qual è la peggiore frase da rimorchio che hai sentito o detto?','Hai mai scritto a qualcuno solo perché ti annoiavi?','Cosa ti fa perdere la testa in una persona?','Qual è il segnale d\'allarme che ignori sempre?','Hai mai baciato qualcuno per scommessa?','Ti sei mai innamorato a prima vista?','Qual è il posto più strano in cui hai dato un bacio?','Chi del gruppo avrebbe più successo su un\'app di incontri?']
+};
+const MODES={
+ nonhomai:{lead:'Non ho mai…',how:'Tutti alzano cinque dita. Leggi la carta: chi l\'ha fatto ne abbassa una. Chi resta senza dita ha perso.',fmt:t=>t},
+ probabile:{lead:'Chi è più probabile che…',how:'Leggi la carta e conta fino a tre: tutti indicano la persona più probabile. Chi prende più voti si difende.',fmt:t=>t},
+ obbligo:{lead:'',how:'Chi è di turno sceglie: obbligo o verità. Si può sempre passare.',fmt:t=>t}
+};
+const KEY='bz-gruppo';
+let st={names:[],spicy:false,adult:false,mie:{nonhomai:[],probabile:[],obbligo:[],verita:[]}};
+try{const o=JSON.parse(localStorage.getItem(KEY));if(o)st={...st,...o,mie:{...st.mie,...(o.mie||{})}}}catch(e){}
+const persist=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+let mode='nonhomai',turnIx=-1;const Qs={};
+
+function pool(k){return[...C[k].map(t=>[t,0]),...(st.spicy&&st.adult?S[k].map(t=>[t,1]):[]),...st.mie[k].map(t=>[t,0])]}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function draw(k){
+  if(!Qs[k])Qs[k]=shuffle(pool(k));
+  else if(!Qs[k].length){Qs[k]=shuffle(pool(k));toast('Carte finite: le rimescoliamo.')}
+  return Qs[k].pop();
+}
+function resetDecks(){for(const k in Qs)delete Qs[k]}
+function toast(t){$('toast').textContent=t;clearTimeout(toast.t);toast.t=setTimeout(()=>$('toast').textContent='',2600)}
+function nextTurn(){
+  if(!st.names.length){$('turn').textContent='';return}
+  turnIx=(turnIx+1)%st.names.length;
+  $('turn').textContent=(mode==='obbligo'?'Tocca a ':'Legge ')+st.names[turnIx];
+}
+function show(lead,text,spicy,cnt){
+  const c=$('card');c.classList.toggle('spicy',!!spicy);$('chip').hidden=!spicy;
+  $('lead').textContent=lead;$('txt').textContent=text;$('count').textContent=cnt||'';
+  if(!RM){c.classList.remove('flip');void c.offsetWidth;c.classList.add('flip')}
+}
+function deal(kind){
+  if(mode==='obbligo'){
+    const k=kind||'verita',[t,sp]=draw(k);
+    show(k==='obbligo'?'Obbligo':'Verità',t,sp,'Poi passa il telefono');
+    $('card').style.background=sp?'':(k==='obbligo'?'#FFD15C':'#8FDCCB');
+    $('next').textContent='Prossimo turno';$('c-ov').hidden=true;$('c-next').hidden=false;
+  }else{
+    const [t,sp]=draw(mode);
+    show(MODES[mode].lead,MODES[mode].fmt(t),sp,`${pool(mode).length-Qs[mode].length} di ${pool(mode).length}`);
+    $('card').style.background='';
+  }
+}
+function waitChoice(){
+  nextTurn();$('card').style.background='';
+  show('Obbligo o verità?',st.names.length?`${st.names[turnIx]}, cosa scegli?`:'Chi è di turno sceglie.',0,'');
+  $('c-ov').hidden=false;$('c-next').hidden=true;
+}
+function setMode(m){
+  mode=MODES[m]?m:'nonhomai';document.body.dataset.m=mode;
+  for(const b of $('tabs').children)b.setAttribute('aria-selected',b.dataset.m===mode);
+  $('how').textContent=MODES[mode].how;$('next').textContent='Prossima carta';$('toast').textContent='';
+  if(mode==='obbligo'){waitChoice()}else{$('c-ov').hidden=true;$('c-next').hidden=false;nextTurn();deal()}
+}
+$('tabs').addEventListener('click',e=>{const b=e.target.closest('button');if(b)location.hash=b.dataset.m});
+addEventListener('hashchange',()=>setMode(location.hash.slice(1)));
+function advance(){if(mode==='obbligo'){if($('c-ov').hidden)waitChoice()}else{nextTurn();deal()}}
+$('next').onclick=advance;$('card').onclick=advance;
+$('bo').onclick=()=>deal('obbligo');$('bv').onclick=()=>deal('verita');
+
+/* impostazioni */
+$('names').value=st.names.join('\n');
+$('names').addEventListener('input',()=>{st.names=$('names').value.split('\n').map(s=>s.trim()).filter(Boolean).slice(0,30);turnIx=-1;persist()});
+const MINE=[['nonhomai','Le vostre «Non ho mai»','Scrivi solo la fine: «mangiato la pizza con l\'ananas».'],['probabile','Le vostre «Chi è più probabile che»','Scrivi solo la fine: «finisca la pizza per primo».'],['obbligo','I vostri obblighi',''],['verita','Le vostre verità','']];
+$('mine').innerHTML=MINE.map(([k,l,h])=>`<div style="margin-top:14px"><label for="m-${k}">${l}<small>Una per riga. Restano solo su questo telefono.${h?' '+h:''}</small></label><textarea id="m-${k}" data-k="${k}"></textarea></div>`).join('');
+for(const [k] of MINE){const t=$('m-'+k);t.value=st.mie[k].join('\n');t.addEventListener('change',()=>{st.mie[k]=t.value.split('\n').map(s=>s.trim()).filter(s=>s.length>1).slice(0,200);persist();delete Qs[k];toast('Carte aggiunte al mazzo.')})}
+const sp=$('spicy');sp.checked=st.spicy&&st.adult;
+sp.addEventListener('change',()=>{
+  if(sp.checked&&!st.adult){sp.checked=false;const d=$('age');if(d.showModal)d.showModal();else if(confirm('Le carte piccanti sono solo per maggiorenni. Avete tutti almeno 18 anni?'))yes();return}
+  st.spicy=sp.checked;persist();resetDecks();toast(sp.checked?'Carte piccanti aggiunte.':'Carte piccanti tolte.');
+});
+function yes(){st.adult=true;st.spicy=true;sp.checked=true;persist();resetDecks();toast('Carte piccanti aggiunte.')}
+$('age-yes').onclick=()=>{$('age').close();yes()};
+$('age-no').onclick=()=>$('age').close();
+
+setMode(location.hash.slice(1));
+}
+</script>
+<script src="/shared/altri.js"></script>
+</body>
+</html>

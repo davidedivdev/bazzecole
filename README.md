@@ -7,6 +7,10 @@ Piccoli giochi e sciocchezze da fare in compagnia o da condividere. Sito statico
 ```
 index.html          home con tutti i giochi
 cinquina/           Cinquina, la parola del giorno (dizionario MIT an-array-of-italian-words)
+gruppo/             Non ho mai, Chi è più probabile che, Obbligo o verità (con modalità piccante 18+ su consenso)
+quiz/               Che … sei? (portico di Bologna, formato di pasta, coinquilino)
+tavolo/             Kit da tavolo (dadi, gira la bottiglia, testa o croce, chi inizia)
+politica/           Test politico neutrale su due assi (nessun partito, tutto sul dispositivo)
 scuse/              Generatore di scuse
 shared/altri.js     blocco "Altri giochi" in fondo a ogni pagina
 piatti/             Chi lava i piatti? (ruota dei turni)
@@ -24,7 +28,6 @@ robots.txt          indica ai motori di ricerca la mappa del sito
 favicon.svg
 fonts/              font ospitati sul sito (OFL), niente Google Fonts
 privacy/            informativa privacy e note legali
-netlify.toml        configurazione Netlify (publish = ".")
 ```
 
 Ogni gioco vive nella sua cartella con un `index.html` autonomo (HTML, CSS e JS nello stesso file).

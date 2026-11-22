@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test politico: dove ti collochi? Economia e società · Bazzecole</title>
+<meta name="description" content="Test politico gratuito in 30 domande: scopri dove ti collochi tra più Stato o più mercato e tra posizioni progressiste o tradizionaliste. Nessun partito, nessuna registrazione, le risposte restano sul tuo telefono.">
+<meta property="og:title" content="Test politico: dove ti collochi?">
+<meta property="og:description" content="Trenta affermazioni, due assi, nessun partito. Le risposte restano sul tuo telefono.">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://bazzecole.davide200410.workers.dev/politica/">
+<meta property="og:url" content="https://bazzecole.davide200410.workers.dev/politica/">
+<meta property="og:site_name" content="Bazzecole">
+<meta property="og:locale" content="it_IT">
+<meta property="og:image" content="https://bazzecole.davide200410.workers.dev/og/politica.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://bazzecole.davide200410.workers.dev/og/politica.png">
+<meta name="theme-color" content="#EFEDE8">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+/* VOICE: un questionario civico: sobrio, neutrale, mai giudicante
+   IDEA: la scheda di un sondaggio su carta, con il grafico a due assi come risultato
+   PICTURE: il piano con i due assi e il tuo punto
+   COLOUR and TYPE: 60 carta grigio chiaro, 30 inchiostro grafite, 10 verde acqua per le azioni; nessun colore legato a partiti; Figtree per tutto, Alfa Slab One solo per il logo
+   LAYOUT: una domanda per schermata, risposte grandi in colonna, progresso in alto */
+:root{color-scheme:light dark;--bg:light-dark(#EFEDE8,#16181B);--paper:light-dark(#FFFFFF,#202327);--ink:light-dark(#22262B,#E8EAED);--soft:light-dark(#5C636B,#A3AAB2);--line:light-dark(#DADDE1,#33383E);--acc:#1E6F78;--acc2:#165158}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:18px/1.55 Figtree,system-ui,sans-serif;overflow-x:clip}
+[hidden]{display:none!important}
+.wrap{max-width:680px;margin:0 auto;padding-left:max(4vw,16px);padding-right:max(4vw,16px)}
+.top{padding-top:14px;padding-bottom:6px}
+.brand{font:20px/1 'Alfa Slab One',serif;color:var(--ink);text-decoration:none}
+h1{font:800 clamp(36px,8vw,52px)/1.05 Figtree,sans-serif;letter-spacing:-.02em;margin:12px 0 0;text-wrap:balance}
+h2{font:800 24px/1.2 Figtree,sans-serif;margin:0 0 8px}
+p{margin:0}
+.lede{color:var(--soft);font-size:clamp(18px,2.3vw,20px);margin:12px 0 20px;max-width:58ch}
+button{font:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible{outline:3px solid var(--acc);outline-offset:3px}
+.card{background:var(--paper);border-radius:18px;padding:clamp(18px,4vw,28px);box-shadow:0 1px 0 var(--line),0 14px 30px rgba(20,25,30,.08)}
+.btn{border:0;border-radius:14px;background:var(--acc);color:#fff;font-weight:800;font-size:19px;padding:15px 22px;min-height:56px;box-shadow:0 4px 0 var(--acc2);transition:transform .15s ease-out,box-shadow .15s ease-out}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--acc2)}
+.btn.line{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px var(--line)}
+.btn.wide{width:100%}
+ul.pts{margin:14px 0;padding-left:1.2em;color:var(--soft)}ul.pts li{margin:6px 0}
+.prog{display:flex;align-items:center;gap:12px;margin-bottom:16px;font-weight:700;color:var(--soft);font-size:15px}
+.bar{flex:1;height:8px;border-radius:9px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--acc);transform-origin:left;transition:transform .25s ease-out}
+.q{font:800 clamp(22px,5vw,28px)/1.3 Figtree,sans-serif;min-height:4.2em;display:flex;align-items:center}
+.q.in{animation:in .2s ease-out}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.ans{display:grid;gap:8px;margin-top:18px}
+.ans button{border:2px solid var(--line);background:var(--paper);color:var(--ink);border-radius:14px;padding:13px 16px;min-height:54px;font-weight:700;font-size:17px;text-align:left;transition:border-color .15s ease-out,background-color .15s ease-out}
+.ans button:hover{border-color:var(--acc)}
+.ans button[aria-pressed=true]{background:var(--acc);border-color:var(--acc);color:#fff}
+.nav{display:flex;justify-content:space-between;margin-top:16px}
+.link{border:0;background:none;color:var(--soft);font-weight:700;text-decoration:underline;padding:10px 0;min-height:44px}
+.chart{position:relative;width:100%;max-width:480px;aspect-ratio:1;margin:6px auto 0}
+.chart svg{position:absolute;inset:0;width:100%;height:100%}
+.res h2{font-size:clamp(26px,6vw,34px)}
+.axes{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:12px;margin:16px 0}
+.axes div{border:2px solid var(--line);border-radius:14px;padding:12px 14px}
+.axes span{display:block;font-size:14px;color:var(--soft);font-weight:700}
+.axes b{font-size:22px;font-variant-numeric:tabular-nums}
+.axes small{display:block;color:var(--soft);font-size:15px}
+.disc{color:var(--soft);font-size:15px;margin-top:14px}
+.btns{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:10px;margin-top:18px}
+.toast{min-height:1.4em;font-weight:700;margin-top:10px}
+footer{color:var(--soft);font-size:15px;padding:30px 0 40px}footer a{color:inherit}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap top"><a class="brand" href="/">Bazzecole</a></div>
+<main class="wrap">
+  <section id="intro">
+    <h1>Test politico: dove ti collochi?</h1>
+    <p class="lede">Trenta affermazioni su economia e società. Dici quanto sei d'accordo e alla fine vedi dove ti collochi su due assi.</p>
+    <div class="card">
+      <h2>Prima di iniziare</h2>
+      <ul class="pts">
+        <li>Non ti dice chi votare e non ti abbina a nessun partito.</li>
+        <li>Le risposte restano sul tuo telefono: non le salviamo e non le vediamo.</li>
+        <li>È una semplificazione: due assi non bastano a descrivere le idee di nessuno.</li>
+      </ul>
+      <button class="btn wide" id="go">Inizia il test</button>
+    </div>
+  </section>
+
+  <section id="quiz" hidden>
+    <div class="card">
+      <div class="prog"><span id="pn"></span><div class="bar"><i id="pb"></i></div></div>
+      <p class="q" id="q" aria-live="polite"></p>
+      <div class="ans" id="ans"></div>
+      <div class="nav"><button class="link" id="back">Indietro</button><button class="link" id="skip">Salta</button></div>
+    </div>
+  </section>
+
+  <section id="res" class="res" hidden>
+    <div class="card">
+      <p style="color:var(--soft);font-weight:700">Il tuo risultato</p>
+      <h2 id="rt"></h2>
+      <p id="rd"></p>
+      <div class="chart"><svg id="chart" viewBox="0 0 400 400" role="img" aria-label="Il tuo punto sui due assi"></svg></div>
+      <div class="axes">
+        <div><span>Economia</span><b id="ve"></b><small id="le"></small></div>
+        <div><span>Società</span><b id="vs"></b><small id="ls"></small></div>
+      </div>
+      <p class="disc">I punteggi vanno da −10 a +10 per ciascun asse. Le etichette sono semplificazioni: servono a ragionare e a confrontarsi, non a dare giudizi.</p>
+      <div class="btns"><button class="btn" id="share">Condividi il risultato</button><button class="btn line" id="again">Rifai il test</button></div>
+      <p class="toast" id="toast" role="status"></p>
+    </div>
+  </section>
+</main>
+<div class="wrap"><footer>Fatto a Bologna. Altri giochi su <a href="/">Bazzecole</a>. <a href="/privacy/">Privacy</a>. <a href="https://www.paypal.me/DavideMazza626" target="_blank" rel="noopener">Offrici un caffè</a></footer></div>
+
+<script>
+{
+const $=id=>document.getElementById(id);
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* e = economia (+ mercato, − intervento pubblico); s = società (+ ordine e tradizione, − progressista e libertà civili)
+   d = verso: essere d'accordo sposta di +d sull'asse */
+const Q=[
+ ['e',-1,'Lo Stato dovrebbe garantire un reddito minimo a chi non ha lavoro.'],
+ ['s',-1,'Le coppie dello stesso sesso dovrebbero poter adottare figli.'],
+ ['e',1,'Le tasse sulle imprese andrebbero abbassate per favorire gli investimenti.'],
+ ['s',1,'Servirebbero pene più severe per chi commette reati.'],
+ ['e',-1,'La sanità dovrebbe restare interamente pubblica.'],
+ ['s',-1,'L\'uso personale di cannabis dovrebbe essere legale.'],
+ ['e',1,'Le aziende in crisi non dovrebbero essere salvate con soldi pubblici.'],
+ ['s',1,'L\'immigrazione andrebbe ridotta rispetto a oggi.'],
+ ['e',-1,'Servirebbe un salario minimo stabilito per legge.'],
+ ['s',-1,'Una persona malata in fase terminale dovrebbe poter scegliere di porre fine alla propria vita.'],
+ ['e',1,'Il mercato del lavoro funziona meglio con meno vincoli per chi assume.'],
+ ['s',1,'La famiglia tradizionale andrebbe tutelata più di altre forme di convivenza.'],
+ ['e',-1,'Chi guadagna molto dovrebbe pagare un\'aliquota molto più alta.'],
+ ['s',-1,'Chi nasce e cresce in Italia da genitori stranieri dovrebbe diventare cittadino più facilmente.'],
+ ['e',1,'Molti servizi pubblici funzionerebbero meglio se gestiti da privati.'],
+ ['s',1,'Le forze dell\'ordine dovrebbero avere più poteri per garantire la sicurezza.'],
+ ['e',-1,'Lo Stato dovrebbe intervenire sui prezzi degli affitti nelle città più care.'],
+ ['s',-1,'La scuola dovrebbe fare educazione sessuale e affettiva.'],
+ ['e',1,'Una tassa piatta, con la stessa aliquota per tutti, sarebbe più giusta.'],
+ ['s',1,'L\'identità nazionale e le tradizioni vanno difese dai cambiamenti troppo rapidi.'],
+ ['e',-1,'Le grandi eredità dovrebbero essere tassate di più.'],
+ ['s',-1,'Lo Stato non dovrebbe interferire nelle scelte personali, anche quando sono rischiose.'],
+ ['e',1,'Le pensioni dovrebbero dipendere di più da quanto ciascuno ha versato.'],
+ ['s',1,'Un servizio civile o militare obbligatorio sarebbe utile per i giovani.'],
+ ['e',-1,'Energia e trasporti dovrebbero essere in mano pubblica.'],
+ ['s',-1,'La religione dovrebbe avere meno influenza sulle leggi.'],
+ ['e',1,'Meno burocrazia e meno spesa pubblica farebbero crescere l\'economia.'],
+ ['s',1,'Il crocifisso nelle aule scolastiche andrebbe mantenuto.'],
+ ['e',-1,'I sindacati dovrebbero avere più peso nelle decisioni delle aziende.'],
+ ['s',-1,'Le persone transgender dovrebbero poter cambiare i documenti più facilmente.']
+];
+const OPTS=[[2,'Molto d\'accordo'],[1,'D\'accordo'],[0,'Né d\'accordo né in disaccordo'],[-1,'In disaccordo'],[-2,'Molto in disaccordo']];
+let A=Array(Q.length).fill(null),i=0;
+
+function show(id){for(const s of['intro','quiz','res'])$(s).hidden=s!==id;scrollTo(0,0)}
+function render(){
+  const [,,text]=Q[i];
+  $('pn').textContent=`${i+1} di ${Q.length}`;$('pb').style.transform=`scaleX(${i/Q.length})`;
+  const q=$('q');q.textContent=text;q.classList.remove('in');void q.offsetWidth;q.classList.add('in');
+  $('ans').innerHTML=OPTS.map(([v,l])=>`<button data-v="${v}" aria-pressed="${A[i]===v}">${l}</button>`).join('');
+  $('back').style.visibility=i?'visible':'hidden';
+}
+$('go').onclick=()=>{A=Array(Q.length).fill(null);i=0;show('quiz');render()};
+$('ans').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;A[i]=+b.dataset.v;for(const x of $('ans').children)x.setAttribute('aria-pressed',x===b);setTimeout(next,RM?0:160)});
+function next(){if(i<Q.length-1){i++;render()}else result()}
+$('skip').onclick=()=>{A[i]=null;next()};
+$('back').onclick=()=>{if(i>0){i--;render()}};
+
+function scores(){
+  const sum={e:0,s:0},cnt={e:0,s:0};
+  Q.forEach(([ax,d],k)=>{if(A[k]!==null){sum[ax]+=A[k]*d;cnt[ax]++}});
+  const sc=ax=>cnt[ax]?Math.round(sum[ax]/(2*cnt[ax])*100)/10:0;
+  return{e:sc('e'),s:sc('s'),n:cnt.e+cnt.s};
+}
+function label(e,s){
+  if(Math.abs(e)<2&&Math.abs(s)<2)return['Centro moderato','Su molti temi stai nel mezzo: né troppo Stato né troppo mercato, né rivoluzioni né nostalgie.'];
+  if(e<0&&s<0)return['Progressista solidale','Vorresti più intervento pubblico in economia e più spazio ai diritti e alle libertà individuali.'];
+  if(e>=0&&s<0)return['Liberale','Vorresti più libero mercato in economia e più spazio ai diritti e alle libertà individuali.'];
+  if(e<0&&s>=0)return['Solidale tradizionalista','Vorresti più intervento pubblico in economia e più attenzione a ordine, sicurezza e tradizioni.'];
+  return['Conservatore di mercato','Vorresti più libero mercato in economia e più attenzione a ordine, sicurezza e tradizioni.'];
+}
+const fmt=v=>(v>0?'+':v<0?'−':'')+Math.abs(v).toFixed(1).replace('.',',');
+function draw(e,s){
+  const cl=v=>Math.max(-9.3,Math.min(9.3,v)),x=200+cl(e)*18,y=200-cl(s)*18;
+  $('chart').innerHTML=`
+   <rect x="20" y="20" width="360" height="360" rx="14" fill="var(--bg)"/>
+   ${[...Array(9)].map((_,k)=>`<path d="M${56+k*36} 20v360M20 ${56+k*36}h360" stroke="var(--line)" stroke-width="1"/>`).join('')}
+   <path d="M200 20v360M20 200h360" stroke="var(--soft)" stroke-width="2"/>
+   <g font-family="Figtree, sans-serif" font-size="13" font-weight="700" fill="var(--soft)" text-anchor="middle">
+    <text x="200" y="14">Ordine e tradizione</text><text x="200" y="398">Progressista</text>
+    <text x="16" y="205" transform="rotate(-90 16 200)">Più Stato</text><text x="390" y="205" transform="rotate(90 390 200)">Più mercato</text>
+   </g>
+   <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="16" fill="#1E6F78" fill-opacity=".18"/>
+   <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="9" fill="#1E6F78" stroke="#fff" stroke-width="3"/>`;
+}
+let R=null;
+function result(){
+  const {e,s,n}=scores();
+  if(n<10){$('toast').textContent='';show('res');$('rt').textContent='Troppe domande saltate';$('rd').textContent='Rispondi ad almeno dieci affermazioni per avere un risultato.';$('chart').innerHTML='';$('ve').textContent=$('vs').textContent='';$('le').textContent=$('ls').textContent='';return}
+  const [t,d]=label(e,s);R={e,s,t};
+  $('rt').textContent=t;$('rd').textContent=d;draw(e,s);
+  $('ve').textContent=fmt(e);$('le').textContent=e>0?'verso il libero mercato':e<0?'verso l\'intervento pubblico':'al centro';
+  $('vs').textContent=fmt(s);$('ls').textContent=s>0?'verso ordine e tradizione':s<0?'verso progressismo e libertà civili':'al centro';
+  $('toast').textContent='';show('res');
+}
+$('again').onclick=()=>{A=Array(Q.length).fill(null);i=0;show('quiz');render()};
+
+/* immagine da condividere: disegnata sul telefono, non passa da nessun server */
+async function cardBlob(){try{await Promise.all(['800 64px Figtree','700 28px Figtree','600 26px Figtree'].map(f=>document.fonts.load(f)))}catch(e){}return new Promise(res=>{
+  const c=document.createElement('canvas');c.width=1080;c.height=1080;const g=c.getContext('2d');
+  g.fillStyle='#EFEDE8';g.fillRect(0,0,1080,1080);
+  g.fillStyle='#22262B';g.font='800 64px Figtree, sans-serif';g.fillText('Dove mi colloco?',80,130);
+  g.font='800 48px Figtree, sans-serif';g.fillStyle='#1E6F78';g.fillText(R.t,80,205);
+  const ox=220,oy=280,S=640;g.fillStyle='#FFFFFF';g.fillRect(ox,oy,S,S);
+  g.strokeStyle='#DADDE1';g.lineWidth=2;for(let k=1;k<10;k++){g.beginPath();g.moveTo(ox+k*S/10,oy);g.lineTo(ox+k*S/10,oy+S);g.moveTo(ox,oy+k*S/10);g.lineTo(ox+S,oy+k*S/10);g.stroke()}
+  g.strokeStyle='#5C636B';g.lineWidth=4;g.beginPath();g.moveTo(ox+S/2,oy);g.lineTo(ox+S/2,oy+S);g.moveTo(ox,oy+S/2);g.lineTo(ox+S,oy+S/2);g.stroke();
+  g.fillStyle='#5C636B';g.font='700 28px Figtree, sans-serif';g.textAlign='center';
+  g.fillText('Ordine e tradizione',ox+S/2,oy-16);g.fillText('Progressista',ox+S/2,oy+S+40);
+  g.save();g.translate(ox-24,oy+S/2);g.rotate(-Math.PI/2);g.fillText('Più Stato',0,0);g.restore();
+  g.save();g.translate(ox+S+24,oy+S/2);g.rotate(Math.PI/2);g.fillText('Più mercato',0,0);g.restore();
+  const cl=v=>Math.max(-9.3,Math.min(9.3,v)),px=ox+S/2+cl(R.e)*S/20,py=oy+S/2-cl(R.s)*S/20;
+  g.fillStyle='rgba(30,111,120,.2)';g.beginPath();g.arc(px,py,34,0,7);g.fill();
+  g.fillStyle='#1E6F78';g.strokeStyle='#fff';g.lineWidth=6;g.beginPath();g.arc(px,py,20,0,7);g.fill();g.stroke();
+  g.textAlign='left';g.fillStyle='#22262B';g.font='700 30px Figtree, sans-serif';
+  g.fillText(`Economia ${fmt(R.e)}   Società ${fmt(R.s)}`,80,1010);
+  g.fillStyle='#5C636B';g.font='600 26px Figtree, sans-serif';g.fillText(location.host+'/politica',80,1045);
+  c.toBlob(res,'image/png');
+});}
+$('share').onclick=async()=>{
+  const text=`Al test politico di Bazzecole mi viene "${R.t}" (economia ${fmt(R.e)}, società ${fmt(R.s)}). Tu dove ti collochi?`;
+  const url=location.origin+'/politica/';
+  try{
+    const blob=await cardBlob();const file=new File([blob],'dove-mi-colloco.png',{type:'image/png'});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],text:text+' '+url});return}
+    if(navigator.share){await navigator.share({text,url});return}
+  }catch(err){if(err&&err.name==='AbortError')return}
+  try{await navigator.clipboard.writeText(text+' '+url);$('toast').textContent='Copiato. Incollalo nel gruppo (e preparati al dibattito).'}catch(err){$('toast').textContent=text+' '+url}
+};
+}
+</script>
+<script src="/shared/altri.js"></script>
+</body>
+</html>

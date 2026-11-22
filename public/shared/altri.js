@@ -3,11 +3,15 @@
 (function(){
   var GAMES=[
     ['/cinquina/','Cinquina','La parola del giorno'],
+    ['/gruppo/','Giochi di gruppo','Non ho mai, obbligo o verità'],
     ['/tombola/','Tombola','Tabellone e cartelle sul telefono'],
     ['/impostore/','L\'Impostore','Chi sta bluffando?'],
     ['/parola/','Parola in fronte','Il telefono sulla fronte'],
+    ['/quiz/','Che … sei?','Portici, pasta e coinquilini'],
+    ['/tavolo/','Kit da tavolo','Dadi, bottiglia, testa o croce'],
     ['/scuse/','Generatore di scuse','Pronte da mandare'],
     ['/stanza/','Trova una stanza a Bologna','Sopravvivi agli affitti'],
+    ['/politica/','Test politico','Dove ti collochi?'],
     ['/piatti/','Chi lava i piatti?','La ruota dei turni'],
     ['/treni/','Quanto ti hanno rubato i treni','Il tempo perso in banchina'],
     ['/caffe/','Quanti caffè hai bevuto','Lo scontrino della vita']
