@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chi lava i piatti? La ruota dei coinquilini · Bazzecole</title>
+<meta name="description" content="Chi lava i piatti stasera? Scrivi i nomi dei coinquilini, scegli la faccenda e gira la ruota. Con il giro equo nessuno la scampa due volte. Gratis, senza app.">
+<meta property="og:title" content="Chi lava i piatti? Decide la ruota">
+<meta property="og:description" content="La ruota dei turni per coinquilini, famiglie e amici. Nessuna discussione, solo sfortuna.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#F4F6F8">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+/* VOICE: il coinquilino rassegnato che fa da arbitro: ironico, mai cattivo
+   IDEA: la cucina di casa: piastrelle bianche, la ruota appesa al frigo, il guanto giallo come premio
+   PICTURE: la ruota con i nomi, grande, e la freccia in cima
+   COLOUR and TYPE: 60 piastrelle bianche e fughe grigie, 30 spicchi colorati della ruota, 10 giallo guanto per le azioni; Alfa Slab One + Figtree
+   LAYOUT: titolo, ruota al centro; da 860px ruota a sinistra e comandi a destra */
+:root{color-scheme:light dark;
+ --bg:light-dark(#F4F6F8,#15191E);--line:light-dark(#DDE2E8,#232A33);--ink:light-dark(#1E2A36,#E9EEF3);--soft:light-dark(#5B6B7A,#9AAAB9);
+ --card:light-dark(#FFFFFF,#1D232B);--glove:#FFD23F;--glove2:#D9A900;--gink:#2A2100}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;color:var(--ink);font:18px/1.55 Figtree,system-ui,sans-serif;overflow-x:clip;background-color:var(--bg);background-image:linear-gradient(var(--line) 2px,transparent 2px),linear-gradient(90deg,var(--line) 2px,transparent 2px);background-size:56px 56px}
+[hidden]{display:none!important}
+.wrap{max-width:1040px;margin:0 auto;padding:0 max(4vw,16px)}
+.top{padding-top:14px;padding-bottom:6px}
+.brand{font:20px/1 'Alfa Slab One',serif;color:var(--ink);text-decoration:none}
+h1{font:clamp(40px,9vw,68px)/1.02 'Alfa Slab One',serif;margin:10px 0 0;text-wrap:balance}
+.lede{color:var(--soft);font-size:clamp(18px,2.3vw,20px);margin:10px 0 24px;max-width:56ch}
+p{margin:0}
+.lay{display:grid;gap:26px;align-items:start}
+@media(min-width:860px){.lay{grid-template-columns:minmax(0,1fr) minmax(0,420px)}}
+.stage{position:relative;width:min(100%,520px);aspect-ratio:1;margin:0 auto}
+.stage svg{position:absolute;inset:0;width:100%;height:100%}
+#wsvg{transition:transform 3.4s cubic-bezier(.12,.72,.12,1);transform-origin:50% 50%}
+.stage svg.pin{inset:auto;left:50%;top:-8px;width:46px;height:56px;margin-left:-23px;filter:drop-shadow(0 4px 4px rgba(0,0,0,.25))}
+.hub{position:absolute;left:50%;top:50%;width:22%;aspect-ratio:1;margin:-11% 0 0 -11%;border-radius:50%;background:var(--glove);border:0;box-shadow:0 6px 0 var(--glove2),0 10px 24px rgba(0,0,0,.25);font:clamp(16px,3.6vw,22px)/1 'Alfa Slab One',serif;color:var(--gink);cursor:pointer;transition:transform .15s ease-out}
+.hub:active{transform:translateY(3px)}
+.hub[disabled]{cursor:wait}
+.panel{background:var(--card);border-radius:20px;padding:clamp(16px,3vw,22px);box-shadow:0 1px 0 var(--line),0 12px 28px rgba(20,30,40,.08);margin-bottom:16px}
+.panel h2{font:400 24px/1.15 'Alfa Slab One',serif;margin:0 0 12px}
+.names{display:grid;gap:8px}
+.nrow{display:flex;gap:8px}
+.nrow input,.add input{flex:1;font:17px Figtree,sans-serif;padding:11px 12px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink);min-height:48px}
+.nrow input:focus,.add input:focus{outline:none;border-color:var(--glove2)}
+.nrow i{width:14px;border-radius:6px;flex:none}
+.x{width:48px;border:0;border-radius:12px;background:var(--bg);color:var(--ink);font-size:22px;cursor:pointer}
+.add{display:flex;gap:8px;margin-top:8px}
+.btn{border:0;border-radius:14px;background:var(--glove);color:var(--gink);font-weight:800;font-size:17px;padding:12px 18px;min-height:50px;box-shadow:0 4px 0 var(--glove2);cursor:pointer;transition:transform .15s ease-out,box-shadow .15s ease-out}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--glove2)}
+.btn.line{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px var(--line)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:8px 14px;font-weight:700;font-size:15px;min-height:44px;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.sw{display:flex;justify-content:space-between;align-items:center;gap:12px;font-weight:700;cursor:pointer;min-height:44px;margin-top:12px}
+.sw small{display:block;font-weight:400;color:var(--soft);font-size:15px}
+.sw input{appearance:none;width:52px;height:32px;border-radius:99px;background:var(--line);position:relative;margin:0;cursor:pointer;flex:none}
+.sw input::after{content:"";position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:50%;background:var(--card);transition:transform .15s ease-out}
+.sw input:checked{background:var(--glove2)}.sw input:checked::after{transform:translateX(20px)}
+.res{text-align:center;padding:22px 18px;border-radius:20px;background:var(--glove);color:var(--gink);margin:16px auto 0;max-width:520px;animation:pop .25s ease-out}
+.res p:first-child{font-weight:700}
+.res b{display:block;font:clamp(36px,9vw,54px)/1.05 'Alfa Slab One',serif;margin:6px 0}
+.res .why{font-size:17px;max-width:40ch;margin:6px auto 0}
+.res .btn{background:var(--gink);color:var(--glove);box-shadow:none;margin-top:14px}
+@keyframes pop{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:none}}
+.hist{list-style:none;margin:0;padding:0;display:grid;gap:6px;font-size:16px}
+.hist li{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid var(--line);padding:6px 0}
+.hist li span{white-space:nowrap}.hist li span.t{color:var(--soft)}.hist li span.w{white-space:normal}
+.note{color:var(--soft);font-size:15px;margin-top:8px}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid var(--glove2);outline-offset:3px}
+footer{color:var(--soft);font-size:15px;padding:30px 0 40px}footer a{color:inherit}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap top"><a class="brand" href="/">Bazzecole</a></div>
+<main class="wrap">
+  <h1>Chi lava i piatti?</h1>
+  <p class="lede">Scrivi i nomi, scegli la faccenda e gira la ruota. Il destino ha deciso, niente discussioni in chat di casa.</p>
+  <div class="lay">
+    <div>
+      <div class="stage">
+        <svg id="wsvg" viewBox="-110 -110 220 220" aria-hidden="true"><g id="wheel"></g></svg>
+        <svg class="pin" viewBox="0 0 46 56" aria-hidden="true"><path d="M23 54 4 14a20 20 0 1 1 38 0Z" fill="#1E2A36"/><circle cx="23" cy="20" r="8" fill="#FFD23F"/></svg>
+        <button class="hub" id="spin" aria-label="Gira la ruota">Gira</button>
+      </div>
+      <div id="result" aria-live="polite"></div>
+    </div>
+    <div>
+      <div class="panel">
+        <h2>Chi abita qui</h2>
+        <div class="names" id="names"></div>
+        <form class="add" id="addf"><input id="newname" maxlength="18" placeholder="Aggiungi un nome" autocomplete="off" aria-label="Nuovo nome"><button class="btn">Aggiungi</button></form>
+        <p class="note" id="nerr" role="alert"></p>
+      </div>
+      <div class="panel">
+        <h2>La faccenda</h2>
+        <div class="chips" id="chores"></div>
+        <form class="add" id="addc"><input id="newchore" maxlength="40" placeholder="Altra faccenda, es. Annaffiare la pianta" autocomplete="off" aria-label="Nuova faccenda"><button class="btn line">Usa questa</button></form>
+        <label class="sw"><span>Giro equo<small>Chi è già uscito non può uscire di nuovo finché non tocca a tutti.</small></span><input type="checkbox" id="fair"></label>
+      </div>
+      <div class="panel" id="histp" hidden>
+        <h2>Ultimi verdetti</h2>
+        <ul class="hist" id="hist"></ul>
+        <button class="btn line" id="clearh" style="margin-top:12px">Azzera</button>
+      </div>
+    </div>
+  </div>
+</main>
+<div class="wrap"><footer>Fatto a Bologna, in una casa con sei coinquilini e un lavandino. Altri giochi su <a href="/">Bazzecole</a>. <a href="/privacy/">Privacy</a>. <a href="https://www.paypal.me/DavideMazza626" target="_blank" rel="noopener">Offrici un caffè</a></footer></div>
+
+<script>
+{
+const $=id=>document.getElementById(id);
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const store={get(k,d){try{const v=localStorage.getItem('bz-piatti-'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem('bz-piatti-'+k,JSON.stringify(v))}catch(e){}}};
+const rint=n=>{try{const a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%n}catch(e){return Math.floor(Math.random()*n)}};
+const COLORS=['#E4572E','#2E86AB','#F3A712','#3B4A8C','#6BAA75','#B33F62','#1F8A8A','#D97B29','#7A5195','#C0392B','#2C7DA0','#8AA04A'];
+const CHORES={
+ 'Lavare i piatti':['Il guanto giallo ti aspetta. Sì, anche la padella di ieri.','Le teglie in ammollo da tre giorni non si lavano da sole. Purtroppo.','Pensala così: è meditazione, con lo sgrassatore.'],
+ 'Buttare la spazzatura':['Ricordati la differenziata: l\'umido non è un\'opinione.','Il sacco perde. Lo sanno tutti tranne te, fino a ora.','Se incontri il vicino, sorridi: ha visto tutto.'],
+ 'Pulire il bagno':['Coraggio. Porta rinforzi e una mascherina.','Chi ha lasciato i capelli nella doccia resterà un mistero. Il bagno no.','Lo specchio vuole vederti brillare. Lui per primo.'],
+ 'Fare la spesa':['Lista: latte, pane, carta igienica. Il resto è improvvisazione.','Torni con 14 cose, nessuna era nella lista. Classico.','Le borse riutilizzabili sono dietro la porta. Da sei mesi.'],
+ 'Pulire il frigo':['C\'è qualcosa di verde in fondo. Prima era un formaggio.','Apri, respira, butta. In quest\'ordine.','Quel vasetto senza etichetta ha diritto a un funerale dignitoso.'],
+ 'Chiamare il padrone di casa':['Ricordagli che la caldaia fa rumore da marzo.','Preparati: risponderà "ci penso io" e non ci penserà.','Chiedi anche della caparra. Così, per ridere.'],
+ 'Ritirare il pacco':['Sei l\'unico in casa. Il corriere lo sa.','Quinto piano senza ascensore: buon allenamento.','Il pacco non è tuo, ovviamente.']
+};
+let S={names:store.get('names',['Marta','Gigi','Fede','Lucia']),chore:store.get('chore','Lavare i piatti'),custom:store.get('custom',[]),fair:store.get('fair',true),done:store.get('done',[]),hist:store.get('hist',[]),rot:0};
+function save(){for(const k of['names','chore','custom','fair','done','hist'])store.set(k,S[k])}
+
+/* ---------- ruota ---------- */
+function pool(){const n=S.names.filter(Boolean);if(!S.fair)return n;let p=n.filter(x=>!S.done.includes(x));if(!p.length){S.done=[];p=n}return p}
+function drawWheel(){
+  const n=S.names.length,R=100,g=$('wheel');
+  if(n<2){g.innerHTML='<circle r="100" fill="var(--card)" stroke="var(--line)" stroke-width="2"/><text y="-48" text-anchor="middle" font-family="Figtree" font-weight="700" font-size="11" fill="var(--soft)">Servono almeno due nomi</text>';return}
+  const out=S.fair?S.done:[];let h='';
+  for(let i=0;i<n;i++){
+    const a0=(i/n)*2*Math.PI-Math.PI/2,a1=((i+1)/n)*2*Math.PI-Math.PI/2,mid=(a0+a1)/2,large=a1-a0>Math.PI?1:0;
+    const x0=R*Math.cos(a0),y0=R*Math.sin(a0),x1=R*Math.cos(a1),y1=R*Math.sin(a1);
+    const gone=out.includes(S.names[i]);
+    h+=`<path d="M0 0L${x0.toFixed(2)} ${y0.toFixed(2)}A${R} ${R} 0 ${large} 1 ${x1.toFixed(2)} ${y1.toFixed(2)}Z" fill="${COLORS[i%COLORS.length]}" opacity="${gone?.35:1}" stroke="#fff" stroke-width="1.5"/>`;
+    const deg=mid*180/Math.PI,fs=Math.max(7,Math.min(13,90/Math.max(4,S.names[i].length)));
+    h+=`<text transform="rotate(${deg.toFixed(2)}) translate(${(R*.6).toFixed(1)} 0)" text-anchor="middle" dominant-baseline="middle" font-family="Figtree" font-weight="800" font-size="${fs.toFixed(1)}" fill="#fff" opacity="${gone?.6:1}">${esc(S.names[i])}</text>`;
+  }
+  g.innerHTML=h+'<circle r="100" fill="none" stroke="#1E2A36" stroke-width="3"/>';
+}
+function spin(){
+  const names=S.names.filter(Boolean);
+  if(names.length<2){$('nerr').textContent='Servono almeno due nomi, altrimenti tocca sempre a te.';return}
+  const p=pool(),winner=p[rint(p.length)],idx=S.names.indexOf(winner),n=S.names.length;
+  const center=(idx+.5)/n*360,jitter=(Math.random()-.5)*(300/n)*.6;
+  const target=360-center+jitter,base=S.rot-(S.rot%360);
+  S.rot=base+360*(RM?1:6)+((target%360)+360)%360;
+  $('spin').disabled=true;$('result').innerHTML='';
+  $('wsvg').style.transform=`rotate(${S.rot}deg)`;
+  setTimeout(()=>{
+    $('spin').disabled=false;
+    if(S.fair&&!S.done.includes(winner))S.done.push(winner);
+    if(S.fair&&S.names.filter(Boolean).every(x=>S.done.includes(x)))S.done=[];
+    const lines=CHORES[S.chore]||['Il destino ha parlato. Nessun ricorso ammesso.','Fallo con il sorriso. O almeno fallo.','La casa ringrazia, gli altri esultano.'];
+    const why=lines[rint(lines.length)];
+    const d=new Date();S.hist.unshift([S.chore,winner,d.toLocaleDateString('it-IT',{day:'numeric',month:'short'})+' '+d.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'})]);S.hist=S.hist.slice(0,10);save();
+    $('result').innerHTML=`<div class="res"><p>${esc(S.chore)}: tocca a</p><b>${esc(winner)}</b><p class="why">${esc(why)}</p><button class="btn" id="share">Manda il verdetto nel gruppo</button><p class="note" id="shared" role="status" style="color:inherit"></p></div>`;
+    $('share').onclick=async()=>{const t=`La ruota ha parlato: ${S.chore.toLowerCase()} tocca a ${winner}. Nessun ricorso ammesso. ${location.origin}/piatti/`;try{if(navigator.share){await navigator.share({text:t});return}}catch(e){if(e.name==='AbortError')return}try{await navigator.clipboard.writeText(t);$('shared').textContent='Copiato. Incollalo nel gruppo di casa.'}catch(e){$('shared').textContent=t}};
+    drawWheel();renderHist();
+  },RM?100:3500);
+}
+$('spin').onclick=spin;
+
+/* ---------- nomi e faccende ---------- */
+function renderNames(){
+  $('names').innerHTML=S.names.map((n,i)=>`<div class="nrow"><i style="background:${COLORS[i%COLORS.length]}"></i><input value="${esc(n)}" data-i="${i}" maxlength="18" aria-label="Nome ${i+1}"><button class="x" data-del="${i}" aria-label="Togli ${esc(n)}">×</button></div>`).join('');
+  drawWheel();
+}
+$('names').addEventListener('input',e=>{const i=e.target.dataset.i;if(i==null)return;const old=S.names[i];S.names[i]=e.target.value.trim();S.done=S.done.map(x=>x===old?S.names[i]:x);save();drawWheel()});
+$('names').addEventListener('click',e=>{const d=e.target.dataset.del;if(d==null)return;const [gone]=S.names.splice(+d,1);S.done=S.done.filter(x=>x!==gone);save();renderNames()});
+$('addf').addEventListener('submit',e=>{e.preventDefault();const v=$('newname').value.trim();if(!v)return;if(S.names.length>=12){$('nerr').textContent='Massimo 12 nomi. Se siete di più, è un ostello.';return}if(S.names.includes(v)){$('nerr').textContent='Questo nome c\'è già.';return}$('nerr').textContent='';S.names.push(v);$('newname').value='';save();renderNames()});
+function renderChores(){
+  const all=[...Object.keys(CHORES),...S.custom];
+  $('chores').innerHTML=all.map(c=>`<button class="chip" data-c="${esc(c)}" aria-pressed="${c===S.chore}">${esc(c)}</button>`).join('');
+}
+$('chores').addEventListener('click',e=>{const c=e.target.dataset.c;if(!c)return;S.chore=c;save();renderChores()});
+$('addc').addEventListener('submit',e=>{e.preventDefault();const v=$('newchore').value.trim();if(!v)return;if(!S.custom.includes(v)&&!CHORES[v]){S.custom.push(v);S.custom=S.custom.slice(-6)}S.chore=v;$('newchore').value='';save();renderChores()});
+$('fair').checked=S.fair;$('fair').onchange=e=>{S.fair=e.target.checked;S.done=[];save();drawWheel()};
+function renderHist(){$('histp').hidden=!S.hist.length;$('hist').innerHTML=S.hist.map(([c,w,t])=>`<li><span class="w"><b>${esc(w)}</b>: ${esc(c.toLowerCase())}</span><span class="t">${esc(t)}</span></li>`).join('')}
+$('clearh').onclick=()=>{S.hist=[];S.done=[];save();renderHist();drawWheel()};
+
+renderNames();renderChores();renderHist();
+}
+</script>
+</body>
+</html>

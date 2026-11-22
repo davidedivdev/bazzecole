@@ -6,6 +6,8 @@ Piccoli giochi e sciocchezze da fare in compagnia o da condividere. Sito statico
 
 ```
 index.html          home con tutti i giochi
+cinquina/           Cinquina, la parola del giorno (dizionario MIT an-array-of-italian-words)
+piatti/             Chi lava i piatti? (ruota dei turni)
 tombola/            Tombola (tabellone, cartelle con codice, montepremi)
 parola/             Parola in fronte (telefono sulla fronte, inclinazione)
 shared/mazzi.js     categorie personalizzate comuni ai giochi di parole
