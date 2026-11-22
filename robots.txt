@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bazzecole.netlify.app/sitemap.xml

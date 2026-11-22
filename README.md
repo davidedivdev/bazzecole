@@ -18,6 +18,9 @@ stanza/             Trova una stanza a Bologna (gioco satirico)
 treni/              Quanto ti hanno rubato i treni (calcolatore)
 caffe/              Quanti caffè hai bevuto (calcolatore)
 404.html            pagina non trovata
+og/                 immagini di anteprima per le condivisioni (1200x630)
+sitemap.xml         mappa del sito per i motori di ricerca
+robots.txt          indica ai motori di ricerca la mappa del sito
 favicon.svg
 fonts/              font ospitati sul sito (OFL), niente Google Fonts
 privacy/            informativa privacy e note legali
