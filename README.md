@@ -7,6 +7,9 @@ Piccoli giochi e sciocchezze da fare in compagnia o da condividere. Sito statico
 ```
 index.html          home con tutti i giochi
 impostore/          L'Impostore (gioco della parola segreta, passa il telefono)
+stanza/             Trova una stanza a Bologna (gioco satirico)
+treni/              Quanto ti hanno rubato i treni (calcolatore)
+caffe/              Quanti caffè hai bevuto (calcolatore)
 404.html            pagina non trovata
 favicon.svg
 netlify.toml        configurazione Netlify (publish = ".")
@@ -26,8 +29,9 @@ poi apri http://localhost:8000
 
 Il repository è collegato a Netlify: ogni push su `main` va online da solo.
 
-## Prossimi giochi
+## Linee guida grafiche
 
-- Trova una stanza a Bologna (simulatore satirico)
-- Quanto ti hanno rubato i treni (calcolatore)
-- Quanti caffè hai bevuto (calcolatore)
+- Colori 60-30-10: un colore dominante, uno secondario, un solo accento per le azioni.
+- Niente nero o bianco puri: inchiostri scuri caldi su carta leggermente avorio.
+- Al massimo due famiglie di font per gioco (più il logo Bazzecole).
+- Animazioni da 150 a 300 ms, ease-out, solo su transform e opacity; disattivate con "riduci movimento".

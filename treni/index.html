@@ -12,17 +12,17 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Barlow+Condensed:wght@500;700&family=Figtree:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Barlow+Condensed:wght@500;700&family=Barlow:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 /* VOICE: rassegnazione ironica da pendolare, frasi da annuncio in stazione
    IDEA: il binario: il tabellone delle partenze sopra, la linea gialla da non oltrepassare, i comandi sotto
    PICTURE: il tabellone a palette che mostra il tempo rubato e le "destinazioni" che avresti raggiunto
-   COLOUR and TYPE: cemento della banchina, tabellone nero, lettere bianche, giallo linea di sicurezza, rosso ritardo; Barlow Condensed + Figtree
+   COLOUR and TYPE: cemento della banchina, tabellone nero, lettere bianche, giallo linea di sicurezza, rosso ritardo; Barlow Condensed + Barlow
    LAYOUT: colonna unica, titolo, tabellone, linea gialla, comandi, condivisione */
 :root{color-scheme:light dark;--bg:light-dark(#D3D5D8,#1B1E23);--ink:light-dark(#17191D,#ECEDEF);--soft:light-dark(#4A4F57,#A9AEB6);--panel:light-dark(#E6E7E9,#24282E);--board:#121418;--flap:#25282E;--letter:#F4F4EE;--yellow:#F6C700;--red:#E0362B}
 :root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
 *{box-sizing:border-box;min-width:0}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Figtree,system-ui,sans-serif;overflow-x:clip}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Barlow,system-ui,sans-serif;overflow-x:clip}
 .wrap{max-width:720px;margin:0 auto;padding:14px max(4vw,16px) 48px}
 header{padding:4px 0 14px}
 .brand{font:20px/1 'Alfa Slab One',serif;color:var(--ink);text-decoration:none}
@@ -36,7 +36,7 @@ h1{font:700 clamp(40px,10vw,64px)/1 'Barlow Condensed',sans-serif;margin:0;text-
 .tiles{display:flex;gap:4px}
 .tile{position:relative;width:clamp(38px,10vw,58px);height:clamp(54px,14vw,82px);background:var(--flap);border-radius:5px;display:grid;place-items:center;font:700 clamp(36px,10vw,58px)/1 'Barlow Condensed',sans-serif;overflow:hidden}
 .tile::after{content:"";position:absolute;left:0;right:0;top:50%;height:2px;background:var(--board)}
-.tile.flip{animation:flip .32s ease-out}
+.tile.flip{animation:flip .25s ease-out}
 @keyframes flip{0%{transform:rotateX(70deg);filter:brightness(.6)}100%{transform:none}}
 .unit span{font:500 15px 'Barlow Condensed',sans-serif;color:#9BA1AA}
 .verdict{font:700 clamp(20px,5vw,26px)/1.15 'Barlow Condensed',sans-serif;color:var(--yellow);margin:12px 0 4px}
@@ -53,10 +53,10 @@ td:last-child{color:var(--yellow);font-weight:700;padding-left:12px;font-variant
 .row label,.row .lb{font-weight:600;flex:1 1 200px}
 .row small{display:block;font-weight:400;color:var(--soft);font-size:14px}
 .step{display:flex;align-items:center;gap:6px}
-.step button{width:44px;height:44px;border-radius:10px;border:0;background:var(--ink);color:var(--bg);font:800 22px Figtree,sans-serif;cursor:pointer}
+.step button{width:44px;height:44px;border-radius:10px;border:0;background:var(--ink);color:var(--bg);font:700 22px Barlow,sans-serif;cursor:pointer}
 .step input{width:64px;height:44px;text-align:center;font:700 22px 'Barlow Condensed',sans-serif;border:2px solid transparent;border-radius:10px;background:var(--bg);color:var(--ink)}
 .chips{display:flex;flex-wrap:wrap;gap:8px;flex:1 1 100%}
-.chip{border:2px solid var(--ink);background:none;color:var(--ink);border-radius:999px;padding:8px 14px;font:600 15px Figtree,sans-serif;min-height:44px;cursor:pointer}
+.chip{border:2px solid var(--ink);background:none;color:var(--ink);border-radius:999px;padding:8px 14px;font:600 15px Barlow,sans-serif;min-height:44px;cursor:pointer}
 .chip[aria-pressed=true]{background:var(--ink);color:var(--bg)}
 .share{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
 .go{flex:1 1 220px;border:0;border-radius:12px;background:var(--yellow);color:#17191D;font:700 22px 'Barlow Condensed',sans-serif;padding:16px;min-height:56px;cursor:pointer;box-shadow:0 4px 0 #B89400}
