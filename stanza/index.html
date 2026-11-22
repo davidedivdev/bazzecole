@@ -87,7 +87,7 @@ details ul{margin:0;padding-left:1.2em}details li{margin:6px 0}
 .news.fade{opacity:0}
 .tip{background:var(--wall2);border-radius:14px;padding:14px 18px;font-size:17px;margin-bottom:18px;max-width:75ch}
 .wall{background:var(--terra) repeating-linear-gradient(90deg,transparent 0 120px,rgba(0,0,0,.05) 120px 122px);border-radius:22px;padding:clamp(24px,4vw,40px) clamp(14px,3vw,34px)}
-.board{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:30px 24px;align-items:start}
+.board{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:30px clamp(24px,4vw,48px);align-items:start;max-width:860px;margin:0 auto}
 .ad{position:relative;background:var(--paper);color:var(--pink);padding:26px 22px 0;transform:rotate(var(--r,0deg));box-shadow:0 2px 0 rgba(0,0,0,.07),0 12px 26px rgba(40,10,0,.32);transition:transform .2s ease-out}
 .ad:hover{transform:rotate(var(--r,0deg)) translateY(-3px)}
 .ad .kind{font:800 23px/1.15 Figtree,sans-serif}
@@ -187,7 +187,7 @@ footer{color:var(--soft);font-size:15px;padding:0 0 40px}footer a{color:inherit}
     <details>
       <summary>Come si gioca</summary>
       <ul>
-        <li>Ogni giorno sulla bacheca compaiono tre annunci. Puoi contattarne uno solo al giorno.</li>
+        <li>Ogni giorno sulla bacheca compaiono due annunci. Puoi contattarne uno solo al giorno.</li>
         <li>Ogni annuncio dice quante persone hanno già chiamato: più sono, più è facile trovarla già presa.</li>
         <li>Leggi i requisiti e lo stile della casa. Al colloquio con i coinquilini ti serviranno.</li>
         <li>Per entrare servono un mese di caparra e il primo affitto. Ogni notte in ostello costa 35 €, e anche la visita a una stanza ti costa un giorno.</li>
@@ -207,7 +207,7 @@ footer{color:var(--soft);font-size:15px;padding:0 0 40px}footer a{color:inherit}
   <div class="wrap">
     <div class="day"><h2 id="dayt">Giorno 1</h2><p id="dayn"></p></div>
     <p class="news" id="news" role="status"></p>
-    <p class="tip" id="tip">Tre annunci freschi sotto il portico di via Zamboni. Scegline uno e strappa il numero, oppure scrivi nel gruppo e aspetta domani.</p>
+    <p class="tip" id="tip">Due annunci freschi sotto il portico di via Zamboni. Scegline uno e strappa il numero, oppure scrivi nel gruppo e aspetta domani.</p>
     <div class="wall"><div class="board" id="board"></div></div>
     <div class="actions">
       <button class="btn line" id="post">Scrivi nel gruppo "Cerco stanza"</button>
@@ -366,7 +366,7 @@ function adHTML(ad,i,static_){
 function deal(){
   S.ads=[];
   if(S.lead){S.ads.push(gen(true));S.lead=false}
-  while(S.ads.length<3)S.ads.push(gen(false));
+  while(S.ads.length<2)S.ads.push(gen(false));
   S.ads=shuffle(S.ads);
   $('board').innerHTML=S.ads.map((a,i)=>adHTML(a,i)).join('');
   hud();
