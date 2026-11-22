@@ -39,7 +39,10 @@ poi apri http://localhost:8000
 
 ## Pubblicazione
 
-Il repository è collegato a Netlify: ogni push su `main` va online da solo.
+Il sito è pubblicato su Cloudflare Workers (file statici, configurazione in `wrangler.jsonc`, file esclusi in `.assetsignore`): ogni push su `main` va online da solo.
+Indirizzo: https://bazzecole.davide200410.workers.dev
+
+Per non sprecare pubblicazioni, meglio raccogliere le modifiche e fare un solo push alla volta.
 
 ## Linee guida grafiche
 

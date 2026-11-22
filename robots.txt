@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://bazzecole.netlify.app/sitemap.xml
+Sitemap: https://bazzecole.davide200410.workers.dev/sitemap.xml
