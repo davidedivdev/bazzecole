@@ -1,9 +1,9 @@
-// Configurazione per Cloudflare Workers (sito statico, nessuna build).
+// Configurazione per Cloudflare Workers (sito statico, nessuna build). I file del sito sono in public/.
 {
   "name": "bazzecole",
   "compatibility_date": "2026-11-01",
   "assets": {
-    "directory": "./",
+    "directory": "./public",
     "not_found_handling": "404-page",
     "html_handling": "auto-trailing-slash"
   }

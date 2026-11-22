@@ -1,6 +1,6 @@
 # Bazzecole
 
-Piccoli giochi e sciocchezze da fare in compagnia o da condividere. Sito statico, nessuna build.
+Piccoli giochi e sciocchezze da fare in compagnia o da condividere. Sito statico, nessuna build: tutto ciò che va online sta nella cartella `public/`.
 
 ## Struttura
 
@@ -32,14 +32,14 @@ Ogni gioco vive nella sua cartella con un `index.html` autonomo (HTML, CSS e JS 
 ## Provare in locale
 
 ```
-python3 -m http.server 8000
+cd public && python3 -m http.server 8000
 ```
 
 poi apri http://localhost:8000
 
 ## Pubblicazione
 
-Il sito è pubblicato su Cloudflare Workers (file statici, configurazione in `wrangler.jsonc`, file esclusi in `.assetsignore`): ogni push su `main` va online da solo.
+Il sito è pubblicato su Cloudflare Workers (file statici della cartella `public/`, configurazione in `wrangler.jsonc`): ogni push su `main` va online da solo.
 Indirizzo: https://bazzecole.davide200410.workers.dev
 
 Per non sprecare pubblicazioni, meglio raccogliere le modifiche e fare un solo push alla volta.

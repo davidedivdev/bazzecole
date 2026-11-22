@@ -1,6 +1,6 @@
 # Sito statico: nessun comando di build, si pubblica la cartella principale.
 [build]
-  publish = "."
+  publish = "public"
   command = ""
 
 [[headers]]
