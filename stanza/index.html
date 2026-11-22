@@ -250,7 +250,7 @@ footer{color:var(--soft);font-size:15px;padding:0 0 40px}footer a{color:inherit}
 <!-- FINALE -->
 <section id="end" class="wrap" hidden><div class="end" id="endbox"></div></section>
 
-<div class="wrap"><footer>Personaggi, annunci e proprietari in Scozia sono inventati. Le truffe sugli affitti invece esistono: mai pagare prima di aver visto la stanza e firmato. Altri giochi su <a href="/">Bazzecole</a>. <a href="/privacy/">Privacy</a></footer></div>
+<div class="wrap"><footer>Personaggi, annunci e proprietari in Scozia sono inventati. Le truffe sugli affitti invece esistono: mai pagare prima di aver visto la stanza e firmato. Altri giochi su <a href="/">Bazzecole</a>. <a href="/privacy/">Privacy</a>. <a href="https://www.paypal.me/DavideMazza626" target="_blank" rel="noopener">Offrimi un caffè</a></footer></div>
 
 <div class="scene" id="scene" hidden role="dialog" aria-modal="true" aria-labelledby="who-t">
   <div class="phone">
@@ -578,7 +578,7 @@ function endFound(){
    ${endNote(TITLE_ID[title])}${stats()}<div class="kept">${adHTML(ad,null,true)}</div>${buttons()}${WHY}`;
   wire(txt);
 }
-function buttons(){return`<div class="endbtns"><button class="btn" id="share">Condividi il finale</button><button class="btn line" id="again">Gioca ancora</button></div><p class="toast" id="toast" role="status"></p>`}
+function buttons(){return`<div class="endbtns"><button class="btn" id="share">Condividi il finale</button><button class="btn line" id="again">Gioca ancora</button></div><p class="toast" id="toast" role="status"></p><p class="count">Ti è piaciuto? <a href="https://www.paypal.me/DavideMazza626" target="_blank" rel="noopener" style="color:var(--green);font-weight:700">Offrimi un caffè</a>. A Bologna costa 1,30 €, una stanza no.</p>`}
 function wire(txt){
   $('again').onclick=()=>show('intro');
   $('whybtn').onclick=()=>{show('intro');$('perche').scrollIntoView({behavior:RM?'auto':'smooth'})};
